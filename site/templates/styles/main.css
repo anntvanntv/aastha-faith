@@ -227,6 +227,10 @@ nav ul li a.active,
   list-style: none;
 }
 
+html {
+  background-color: #fff; 
+}
+
 /*margin for big screens*/
 
 .page-wrapper {
@@ -980,11 +984,11 @@ textarea:focus {
   gap: 46px;
 }
 
-.picture-quote {
+.picture-quote, .picture-quote2 {
   width: 553px;
 }
 
-.picture-quote img {
+.picture-quote img, .picture-quote2 img {
   width: 100%;
 }
 
@@ -1741,7 +1745,7 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 100px;
+  padding-top: 100px;
 }
 
 .impact-header-content .title-section {
@@ -3039,11 +3043,11 @@ textarea {
     height: 300px;
   }
 
-  .quote {
+  .quote, .quote2 {
     padding: 60px 16px;
   }
 
-  .picture-quote {
+  .picture-quote, .picture-quote2 {
     width: 40%;
   }
 
@@ -3434,14 +3438,14 @@ textarea {
     left: 30px;
   }
 
-  .quote {
+  .quote, .quote2 {
     flex-direction: column;
   }
   .title-quote {
     width: auto;
     height: auto;
   }
-  .picture-quote {
+  .picture-quote, .picture-quote2 {
     width: auto;
   }
 

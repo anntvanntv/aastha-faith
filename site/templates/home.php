@@ -211,7 +211,7 @@ namespace ProcessWire;
             </div>
         </section>
         <section id="quote2" class="quote2" data-nav-color="dark">
-            <div class="picture-quote">
+            <div class="picture-quote2">
                 <img src="<?= $config->urls->templates ?>images/woman_young.jpg" alt="photo">
             </div>
             <div class="title-quote">
