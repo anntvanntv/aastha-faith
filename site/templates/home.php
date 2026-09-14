@@ -211,20 +211,20 @@ namespace ProcessWire;
             </div>
         </section>
         <section id="quote2" class="quote2" data-nav-color="dark">
-            <div class="picture-quote2">
-                <img src="<?= $config->urls->templates ?>images/woman_young.jpg" alt="photo">
+            <div edit="quote2_image" class="picture-quote2">
+                <img src="<?= $page->quote2_image->url ?>" alt="">
             </div>
             <div class="title-quote">
                 <div class="box">
-                    <h2>Title</h2>
-                    <h3 class="w-500">text text text text text texttext text texttext text texttext text texttext text texttext text texttext text text.</h3>
+                    <h2 edit="quote2_title"><?= $page->quote2_title ?></h2>
+                    <h3 edit="quote2_text" class="w-500"><?= $page->quote2_title ?></h3>
                 </div>
                 <div class="box">
                     <div class="subtitle">
                         
                         <div class="text-subtitle">
-                            <h4>Sunita Tamang</h4>
-                            <p>subtitle subtitlesubtitle subtitle subtitle subtitle subtitle </p>
+                            <h4 edit="signature"><?= $page->signature ?></h4>
+                            <p edit="quote2_subtitle"><?= $page->quote2_subtitle ?></p>
                         </div>
                     </div>
                 </div>

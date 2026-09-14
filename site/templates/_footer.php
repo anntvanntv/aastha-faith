@@ -36,11 +36,14 @@ namespace ProcessWire;
                             </g>
                             <defs>
                                 <clipPath id="clip0_748_597">
-                                    <rect width="22" height="8.8" fill="white" />
+                                    <rect width="22" height="8.8" fill="none" />
                                 </clipPath>
                             </defs>
                         </svg>
                     </a>
+                </div>
+                <div class="privacy-link">
+                    <a href="<?= $pages->get('/privacy-policy/')->url ?>">Privacy Policy</a>
                 </div>
             </div> <!--end fcard a-->
 

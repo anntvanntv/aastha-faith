@@ -66,7 +66,7 @@ namespace ProcessWire;
                     </div>
                     <div class="text">
                         <p edit="card_title4" class="body-bold"><?= $page->card_title4 ?></p>
-                        <p edit="card_number4"><?= $page->card_number4 ?>000000 000000</p>
+                        <p edit="card_number4"><?= $page->card_number4 ?></p>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,17 @@ if(!defined("PROCESSWIRE")) die();
 
 $rm = $modules->get('RockMigrations');
 
+
+
+$rm->createTemplate('privacy-policy');
+
+$rm->createPage(
+    template: 'privacy-policy',
+    parent: '/',
+    name: 'privacy-policy',
+    title: 'Privacy Policy'
+);
+
 $rm->createTemplate('accountability');
 
 $rm->createPage(
@@ -32,44 +43,6 @@ $rm->createPage(
     name: 'accountability',
     title: 'Accountability',
 );
-
-$rm->createTemplate('partnership-volunteers');
-
-$rm->createPage(
-    template: 'partnership-volunteers',
-    parent: '/',
-    name: 'partnership-volunteers',
-    title: 'Partnership Volunteers'
-);
-
-$rm->createTemplate('partnership-companies');
-
-$rm->createPage(
-    template: 'partnership-companies',
-    parent: '/',
-    name: 'partnership-companies',
-    title: 'Partnership Companies'
-);
-
-$rm->createTemplate('partnership-researchers');
-
-$rm->createPage(
-    template: 'partnership-researchers',
-    parent: '/',
-    name: 'partnership-researchers',
-    title: 'Partnership Researchers'
-);
-
-$rm->createTemplate('partnership-ngo'); 
-
-$rm->createPage(
-    template: 'partnership-ngo',
-    parent: '/',
-    name: 'partnership-ngo',
-    title: 'Partnership NGO'
-);  
-
-
 
 $rm->createTemplate('individual-giving');
 
@@ -360,7 +333,29 @@ $rm->migrate([
             'extensions' => 'jpg jpeg png gif svg',
             'outputFormat' => FieldtypeFile::outputFormatSingle,
         ],
-
+        'quote2_image' => [
+            'type' => 'image',
+            'label' => 'Quote2 Image',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'quote2_title' => [
+            'type' => 'text',
+            'label' => 'Quote2 Title',
+        ],
+        'quote2_text' => [
+            'type' => 'textarea',
+            'label' => 'Quote2 Text',
+        ],
+        'signature' => [
+            'type' => 'text',
+            'label' => 'Signature',
+        ],
+        'quote2_subtitle' =>[
+            'type' => 'textarea',
+            'label' => 'Quote2 Subtitle',
+        ],
         'born_title' => [
             'type' => 'text',
             'label' => 'Born Title',
@@ -452,6 +447,11 @@ $rm->migrate([
 
 ]);
 
+$rm->addFieldToTemplate('quote2_subtitle', 'home');
+$rm->addFieldToTemplate('signature', 'home');
+$rm->addFieldToTemplate('quote2_text', 'home');
+$rm->addFieldToTemplate('quote2_title', 'home');
+$rm->addFieldToTemplate('quote2_image', 'home');
 $rm->addFieldToTemplate('quote_image', 'home');
 $rm->addFieldToTemplate('quote_subtitle', 'home');
 $rm->addFieldToTemplate('quote_title', 'home');

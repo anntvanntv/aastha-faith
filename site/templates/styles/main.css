@@ -104,10 +104,8 @@
   fill: var(--amber-400);
 }
 
-.partnership-volunteers svg.icon,
-.partnership-researchers svg.icon,
-.partnership-companies svg.icon,
-.partnership-ngo svg.icon,
+.donors svg.icon,
+.privacy-policy svg.icon,
 .individual-giving svg.icon,
 .donors svg.icon,
 .onework svg.icon,
@@ -123,9 +121,8 @@
   fill: var(--neutral-900);
 }
 
-.partnership-researchers svg.icon:hover,
-.partnership-ngo svg.icon:hover,
-.individual-giving svg.icon:hover,
+.donors svg.icon:hover,
+.privacy-policy svg.icon:hover,
 .donors svg.icon:hover,
 .onework svg.icon:hover,
 .onestory svg.icon:hover,
@@ -135,8 +132,7 @@
 .media svg.icon:hover,
 .about-us svg.icon:hover,
 .page404 svg.icon:hover,
-.photo-gallery svg.icon:hover,
-.videos svg.icon:hover {
+ {
   fill: var(--green-800);
 }
 
@@ -154,10 +150,6 @@
   color: var(--amber-400);
 }
 
-.partnership-volunteers nav ul li a,
-.partnership-companies nav ul li a,
-.partnership-researchers nav ul li a,
-.partnership-ngo nav ul li a,
 .individual-giving nav ul li a,
 .donors nav ul li a,
 .stories nav ul li a,
@@ -168,15 +160,10 @@
 .impact nav ul li a,
 .onework nav ul li a,
 .page404 ul li a,
-.photo-gallery nav ul li a,
-.videos nav ul li a {
+.privacy-policy nav ul li a {
   color: var(--text-body);
 }
 
-.partnership-volunteers nav ul li a:hover,
-.partnership-companies nav ul li a:hover,
-.partnership-researchers nav ul li a:hover,
-.partnership-ngo nav ul li a:hover,
 .individual-giving nav ul li a:hover,
 .donors nav ul li a:hover,
 .stories nav ul li a:hover,
@@ -187,14 +174,11 @@
 .impact nav ul li a:hover,
 .onework nav ul li a:hover,
 .page404 nav ul li a:hover,
-.photo-gallery nav ul li a:hover,
-.videos nav ul li a:hover,
-.media-nav nav a:hover {
+.privacy-policy nav ul li a:hover{
   color: var(--green-800);
 }
 
-nav ul li a.active,
-.partnership-title.active {
+nav ul li a.active {
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
@@ -339,6 +323,7 @@ a {
   height: 100%;
 }
 
+.privacy-link a,
 .quick-links a,
 .contact-content a {
   color: var(--white-800);
@@ -349,6 +334,7 @@ a {
   transition: all 0.7s;
 }
 
+.privacy-link a:hover,
 .quick-links a:hover {
   color: var(--amber-400);
 }
@@ -434,17 +420,6 @@ nav ul li a{
   cursor: pointer;
 }
 
-.media-nav a {
-  text-decoration: none;
-  color: var(--text-heading);
-  font-family: var(--font-sans);
-}
-
-.media-nav a.active {
-  border-bottom: 2px solid currentColor;
-  font-weight: 700;
-}
-
 .logo {
   width: 96px;
   height: 37px;
@@ -455,7 +430,7 @@ nav ul li a{
   height: 100%;
 }
 
-/*----- footer home ---------*/
+/* footer */
 
 footer {
   background-color: var(--green-900);
@@ -525,18 +500,19 @@ footer input {
   align-items: center;
   padding: 0px;
   gap: 16px;
-
   width: 176px;
   height: 32px;
 }
+
 .icon-sm {
   width: 32px;
   height: 32px;
   padding: 6px;
   border-radius: 50%;
-
   border: 1px solid var(--white-800);
 }
+
+
 .footer-footer {
   margin-top: 100px;
 }
@@ -686,7 +662,7 @@ footer button:hover {
   gap: 16px;
 }
 
-/* eyebrow */
+/* shared elements */
 
 .eyebrow {
   display: flex;
@@ -723,6 +699,13 @@ footer button:hover {
   height: 24px;
 }
 
+.header-central {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /*------ input contact form -----------*/
 
@@ -738,12 +721,7 @@ textarea:focus {
   outline: none;
 }
 
-.header-central {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 
 /*------------------------------------------ home ---------------------------------------------*/
 
@@ -1583,13 +1561,14 @@ textarea:focus {
 .our-work-main {
   background-color: var(--body-color-grey);
   padding: 80px 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  gap: 30px;
+  display: grid;
+ grid-template-columns: 0.9fr 1.1fr;
+ align-items: start;
+
 }
 
 .our-work-main .content-right h2 {
-  margin-bottom: 30px;
   line-height: 60px;
 }
 
@@ -1598,16 +1577,17 @@ textarea:focus {
   margin-bottom: 15px;
 }
 
-.image-left {
-  width: 40%;
+.image-left, .content-right {
+  min-width: 0;
 }
 
 .image-left img {
   width: 100%;
+  display: block;
+  height: auto;
 }
 
 .our-work-card {
-  width: 668px;
   margin-bottom: 40px;
 }
 
@@ -2473,7 +2453,7 @@ textarea {
 
 .donors .header-central {
   width: 98%;
-  margin: 200px auto;
+  padding: 200px 0;
   text-align: center;
 }
 
@@ -2533,6 +2513,38 @@ textarea {
 .individual-giving .bank-details ul li {
   color: var(--text-body);
   list-style: disc !important;
+}
+
+/*------ privacy policy ----------*/
+
+.privacy-policy {
+  background-color: var(--white-800);
+}
+
+.privacy-policy .header-central {
+  padding: 130px 0;
+  gap:25px;
+}
+
+.privacy-policy .header-central > :nth-child(2) {
+  width: 566px;
+  text-align: center;
+}
+
+.privacy-policy main {
+  padding: 0 212px 80px;
+}
+
+.paragraph {
+  margin-bottom: 40px;
+}
+
+.privacy-policy h2, .privacy-policy h4 {
+  color: var(--text-heading);
+}
+
+.privacy-policy .header-central p, .privacy-policy main p {
+  color: var(--text-body);
 }
 
 
@@ -2822,6 +2834,32 @@ textarea {
     font-size: 2rem;
   }
 
+  /*----- our work ---------*/
+
+  .our-work-main {
+    grid-template-columns: 1fr;
+  }
+
+ .image-left {
+  padding-right: 240px;
+ }
+
+ .content-right {
+  padding-right: 115px;
+ }
+
+ .our-work-card {
+  margin-bottom: 8px;
+ }
+
+ .our-work-card p {
+  margin-bottom: 2px;
+ }
+
+ .ow-btn {
+  margin-top: 7px;
+ }
+
   /*-------- accountability -----------*/
 
   .legal {
@@ -2923,6 +2961,18 @@ textarea {
   .content-contact {
     padding: 100px 50px;
   }
+
+  /*------ privacy policy --------*/
+
+
+.privacy-policy .header-central {
+  padding: 100px 0 80px;
+  gap:15px;
+}
+
+.privacy-policy main {
+  padding: 0 20px 50px;
+}
 }
 
 @media (max-width: 920px) {
@@ -2968,21 +3018,15 @@ textarea {
     color: var(--text-body-light);
   }
 
-  .partnership-volunteers nav ul,
-  .partnership-companies nav ul,
-  .partnership-researchers nav ul,
-  .partnership-ngo nav ul,
-  .individual-giving nav ul,
+  .donors nav ul,
+  .privacy-policy nav ul,
   .our-work nav ul,
   .onework nav ul,
   .impact nav ul,
   .stories nav ul,
   .onestory nav ul,
-  .media nav ul,
   .about-us nav ul,
-  .page404 nav ul,
-  .photo-gallery nav ul,
-  .videos nav ul {
+  .page404 nav ul {
     background-color: var(--white-800);
     color: var(--text-heading);
   }
@@ -3216,6 +3260,7 @@ textarea {
   }
 
   /*------- contact icons -------*/
+
   .contact-icons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -3235,6 +3280,7 @@ textarea {
   }
 
   /*----- stories ----*/
+
   .title-stories {
     padding: 100px 27px;
   }
@@ -3246,15 +3292,36 @@ textarea {
   }
 
   /*----- pivotal -----*/
+
   .years .tl .tl-right p {
     width: 300px;
   }
 
   /*--- accountability -----*/
+
   .accountability header .header-central h2 {
     text-align: center;
     line-height: 51px;
     margin-bottom: 30px;
+  }
+
+  /*---- donors ---------*/
+
+  .donors {
+    padding: 5px;
+  }
+
+  .donors .header-central {
+    width: auto;
+    padding: 200px 0 100px;
+  }
+
+  .donors .header-central h1 {
+    line-height: 70px;
+  }
+
+  .donors .header-central p {
+    width: 82%;
   }
 }
 
@@ -3272,16 +3339,6 @@ textarea {
     gap: 20px;
   }
 
-  /*---- impact in numbers ------*/
-
-  /* .sticky-element {                     BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  top: 210px;
-  justify-content: start;
-} */
-
-  /* .sticky-element .heading-left h2 {     BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  margin-bottom: 20px;
-} */
 
   .in-numbers-heading .heading-left {
     margin-top: 20px;
@@ -3292,10 +3349,6 @@ textarea {
     padding-right: 10px;
     padding-top: 10px;
   }
-
-  /* .in-numbers-wrap {                  BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  
-  padding-bottom: 50px;
-} */
 
   .heading-left {
     width: auto;
@@ -3477,31 +3530,17 @@ textarea {
     padding-bottom: 180px;
   }
 
-  /*   .static-cards {
-    display: grid;                                  BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    grid-template-columns: repeat(2,1fr);
-    gap: 5px;
-  } */
-
   .static-card {
     width: auto;
     min-height: 127px;
   }
-  /*
-  .static-card:nth-child(2)::after{                 BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 2px;
-    bottom: 2px;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.2);
-  } */
 
   .vector-footer {
     left: 55%;
   }
+
   /*------ nav ------*/
+
   .herobtn {
     margin-left: 250px;
   }
@@ -3518,12 +3557,14 @@ textarea {
   }
 
   /*--- accountability ----*/
+
   .policies .header-central h2 {
     line-height: 50px;
   }
 }
 
 @media (max-width: 566px) {
+
   .header-left {
     width: auto;
   }
@@ -3701,6 +3742,21 @@ textarea {
     height: 400px;
     width: 383px;
   }
+
+  /*-------- privacy-policy -------*/
+
+  .privacy-policy .header-central > :nth-child(2) {
+    width: auto;
+  }
+
+  .privacy-policy .header-central {
+    padding: 100px 40px 80px;
+}
+
+/*------ donors ----------*/
+.donors .donors-section .card-section-donors {
+  flex-direction: column;;
+}
 }
 /*----------------------------------------------- PHONE ---------------------------------------------------*/
 @media (max-width: 495px) {
@@ -3775,10 +3831,12 @@ textarea {
   .areas {
     padding: 80px 20px;
   }
+
   .cards-section-area {
     display: flex;
     flex-direction: column;
   }
+
   .areas-text {
     width: auto;
   }
@@ -3822,7 +3880,16 @@ textarea {
     padding: 10px;
   }
 
+  .content-right {
+    padding-right: inherit;
+  }
+
+  .image-left {
+    padding-right: inherit;
+  }
+
   /*----- stories ------*/
+
   .title-stories {
     padding: 100px 10px 48px;
   }
@@ -3861,6 +3928,7 @@ textarea {
   }
 
   /*------ nav ------*/
+
   .herobtn {
     margin-left: 10px;
   }
@@ -3885,6 +3953,7 @@ textarea {
   }
 
   /*---- impact -----*/
+  
   .title-section h1 {
     line-height: 43px;
   }
