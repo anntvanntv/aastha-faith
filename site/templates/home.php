@@ -38,9 +38,6 @@ namespace ProcessWire;
                 </a>
 
             </div>
-            <div class="highlight">
-                <img src="<?= $config->urls->templates ?>icons/highlight-hero-home.svg" alt="icon">
-            </div>
 
         </section>
     </header>
@@ -239,7 +236,7 @@ namespace ProcessWire;
                         <h5 style="text-transform: uppercase;">Latest News</h5>
                     </div>
                     <div class="field-title">
-                        <h2>From the field</h2>
+                        <h2 edit="field_title"><?= $page->field_title ?></h2>
                         <?php if($user->isLoggedin()): ?>
                     
                     <button edit="album_card">double-click to add a card</button>

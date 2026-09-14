@@ -16,17 +16,12 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
                     <h5 style="text-transform: uppercase;">OUR COMMITMENT</h5>
                 </div>
-                <h2 edit="hero_title1"><?= $page->hero_title1 ?>Accountability & <span  edit="born_orange_title"class="orange-text"><?= $page->born_orange_title ?>Transparency</span></h2>
+                <h2 edit="hero_title1"><?= $page->hero_title1 ?> <span  edit="born_orange_title"class="orange-text"><?= $page->born_orange_title ?></span></h2>
             </div>
             <div class="header-account">
-                <p edit="hero_description"><?= $page->hero_description ?>We believe trust is earned through openness. Here you'll find information about our governance,
-                    finances,
-                    policies, and the people responsible for leading FAITH.</p>
+                <p edit="hero_description"><?= $page->hero_description ?></p>
                 <div class="galerie-account">
-                    <div edit="born_image,image_description" class="photo-s">
-                        <img  src="<?= $page->born_image->url ?>"
-                            alt="<?= htmlspecialchars($page->image_description) ?>">
-                    </div>
+                   
                     <div edit="hero_image,image_description2" class="photo-l">
                         <img src="<?= $page->hero_image->url ?>"
                             alt="<?= htmlspecialchars($page->image_description2) ?>">

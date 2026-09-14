@@ -440,6 +440,10 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Quote Subtitle',
         ],
+        'field_title' => [
+            'type' => 'text',
+            'label' => 'Field Title',
+        ],
     
         
        
@@ -447,6 +451,7 @@ $rm->migrate([
 
 ]);
 
+$rm->addFieldToTemplate('field_title', 'home');
 $rm->addFieldToTemplate('quote2_subtitle', 'home');
 $rm->addFieldToTemplate('signature', 'home');
 $rm->addFieldToTemplate('quote2_text', 'home');
