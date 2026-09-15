@@ -270,7 +270,10 @@ namespace ProcessWire;
                         <div class="ncard-content">
                             <div class="title-content">
                                 <h4 edit="<?= $card ?>.album_card_title "><?= $card->album_card_title ?></h4>
-                                <p edit="<?= $card ?>.album_card_text"><?= $card->album_card_text ?></p>
+                                <div class="clamp-wrap">
+                                    <p edit="<?= $card ?>.album_card_text" class="clamp-text"><?= $card->album_card_text ?></p>
+                                    <button class="expand-text-btn" aria-expanded="false">Read more</button>
+                                </div>
                             </div>
                         
                         </div>
