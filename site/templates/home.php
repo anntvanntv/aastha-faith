@@ -147,10 +147,9 @@ namespace ProcessWire;
                 <img src="<?= $page->born_image->url ?>" alt="">
             </div>
 
-            <div class="percent">
+            <!-- <div class="percent">
                 <img src="<?= $config->urls->templates ?>icons/percent.svg" alt="">
-            </div>
-
+            </div> -->
 
         </section>
         <section id="areas" class="areas" data-nav-color="dark">
