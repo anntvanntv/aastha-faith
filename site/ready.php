@@ -490,8 +490,24 @@ $rm->addFieldToTemplate('areas_cards', 'home');
 
 
 /* adding Field to Template OUR-WORK  */
+// Section titles for the two sections on Our Work page
+$rm->migrate([
+    'fields' => [
+        'change_section_title' => [
+            'type' => 'text',
+            'label' => 'Change Section Title',
+        ],
+        'projects_section_title' => [
+            'type' => 'text',
+            'label' => 'Projects Section Title',
+        ],
+    ],
+]);
 $rm->addFieldToTemplate('image_left', 'our-work');
 $rm->addFieldToTemplate('title_content', 'our-work');
+$rm->addFieldToTemplate('areas_cards', 'our-work');
+$rm->addFieldToTemplate('change_section_title', 'our-work');
+$rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 
 /* adding Fields to Template INDIVIDUAL-GIVING */
