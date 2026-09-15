@@ -218,8 +218,10 @@ namespace ProcessWire;
             <div class="title-quote">
                 <div class="box">
                     <img src="<?= $config->urls->templates ?>icons/Vector_quote.png" alt="icon">
-                    <h2 edit="quote2_title"><?= $page->quote2_title ?></h2>
+                    <h3 edit="quote2_title" class="w-500"><?= $page->quote2_title ?></h3>
+                    <?php if($page->quote2_text): ?>
                     <h3 edit="quote2_text" class="w-500"><?= $page->quote2_text ?></h3>
+                    <?php endif; ?>
                 </div>
                 <div class="box">
                     <div class="subtitle">
