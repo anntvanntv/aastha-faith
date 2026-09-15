@@ -445,6 +445,26 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Quote Subtitle',
         ],
+        // Quote2 fields — mirrors quote fields for the second quote section (#quote2) on homepage
+        'quote2_image' => [
+            'type' => 'image',
+            'label' => 'Quote2 Image',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'quote2_text' => [
+            'type' => 'textarea',
+            'label' => 'Quote2 Text',
+        ],
+        'quote2_title' => [
+            'type' => 'text',
+            'label' => 'Quote2 Title',
+        ],
+        'quote2_subtitle' => [
+            'type' => 'text',
+            'label' => 'Quote2 Subtitle',
+        ],
     
         
        
@@ -456,6 +476,11 @@ $rm->addFieldToTemplate('quote_image', 'home');
 $rm->addFieldToTemplate('quote_subtitle', 'home');
 $rm->addFieldToTemplate('quote_title', 'home');
 $rm->addFieldToTemplate('quote_text', 'home');
+// Quote2 fields — for second quote section on homepage
+$rm->addFieldToTemplate('quote2_image', 'home');
+$rm->addFieldToTemplate('quote2_text', 'home');
+$rm->addFieldToTemplate('quote2_title', 'home');
+$rm->addFieldToTemplate('quote2_subtitle', 'home');
 $rm->addFieldToTemplate('album_card', 'home');
 $rm->addFieldToTemplate('born_title', 'home');
 $rm->addFieldToTemplate('born_orange_title', 'home');

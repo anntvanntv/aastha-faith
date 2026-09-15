@@ -982,10 +982,14 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 46px;
+  /* Cap text column at image width so space-between leaves a gap on wide screens */
+  max-width: 553px;
 }
 
 .picture-quote, .picture-quote2 {
   width: 553px;
+  /* Never let the image shrink when the text column is wide (quote2 has long text) */
+  flex-shrink: 0;
 }
 
 .picture-quote img, .picture-quote2 img {
@@ -3043,17 +3047,20 @@ textarea {
     height: 300px;
   }
 
+  /* Stack quote sections below 900px — the old 50%/550px row made long text overflow */
   .quote, .quote2 {
     padding: 60px 16px;
+    flex-direction: column;
   }
 
   .picture-quote, .picture-quote2 {
-    width: 40%;
+    width: 100%;
+    max-width: 553px;
   }
 
   .title-quote {
-    width: 50%;
-    height: 550px;
+    width: 100%;
+    height: auto;
   }
 
   /*----- footer ----*/
