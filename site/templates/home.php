@@ -209,21 +209,22 @@ namespace ProcessWire;
                 </div>
             </div>
         </section>
+        <!-- Quote2 section — made dynamic with editable fields (quote2_image, quote2_text, quote2_title, quote2_subtitle). Mirrors #quote section with image/text swapped left-right. -->
         <section id="quote2" class="quote2" data-nav-color="dark">
             <div class="picture-quote2">
-                <img src="<?= $config->urls->templates ?>images/woman_young.jpg" alt="photo">
+                <img edit="quote2_image" src="<?= $page->quote2_image->url ?>" alt="">
             </div>
             <div class="title-quote">
                 <div class="box">
-                    <h2>Title</h2>
-                    <h3 class="w-500">text text text text text texttext text texttext text texttext text texttext text texttext text texttext text text.</h3>
+                    <img src="<?= $config->urls->templates ?>icons/Vector_quote.png" alt="icon">
+                    <h3 edit="quote2_text" class="w-500"><?= $page->quote2_text ?></h3>
                 </div>
                 <div class="box">
                     <div class="subtitle">
-                        
+                        <img src="<?= $config->urls->templates ?>icons/wave.png" alt="icon">
                         <div class="text-subtitle">
-                            <h4>Sunita Tamang</h4>
-                            <p>subtitle subtitlesubtitle subtitle subtitle subtitle subtitle </p>
+                            <h4 edit="quote2_title"><?= $page->quote2_title ?></h4>
+                            <p edit="quote2_subtitle" class="small"><?= $page->quote2_subtitle ?></p>
                         </div>
                     </div>
                 </div>
