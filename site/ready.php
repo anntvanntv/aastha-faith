@@ -24,17 +24,6 @@ if(!defined("PROCESSWIRE")) die();
 
 $rm = $modules->get('RockMigrations');
 
-
-
-$rm->createTemplate('privacy-policy');
-
-$rm->createPage(
-    template: 'privacy-policy',
-    parent: '/',
-    name: 'privacy-policy',
-    title: 'Privacy Policy'
-);
-
 $rm->createTemplate('accountability');
 
 $rm->createPage(
@@ -43,6 +32,44 @@ $rm->createPage(
     name: 'accountability',
     title: 'Accountability',
 );
+
+$rm->createTemplate('partnership-volunteers');
+
+$rm->createPage(
+    template: 'partnership-volunteers',
+    parent: '/',
+    name: 'partnership-volunteers',
+    title: 'Partnership Volunteers'
+);
+
+$rm->createTemplate('partnership-companies');
+
+$rm->createPage(
+    template: 'partnership-companies',
+    parent: '/',
+    name: 'partnership-companies',
+    title: 'Partnership Companies'
+);
+
+$rm->createTemplate('partnership-researchers');
+
+$rm->createPage(
+    template: 'partnership-researchers',
+    parent: '/',
+    name: 'partnership-researchers',
+    title: 'Partnership Researchers'
+);
+
+$rm->createTemplate('partnership-ngo'); 
+
+$rm->createPage(
+    template: 'partnership-ngo',
+    parent: '/',
+    name: 'partnership-ngo',
+    title: 'Partnership NGO'
+);  
+
+
 
 $rm->createTemplate('individual-giving');
 
@@ -326,6 +353,50 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Card Number5'
         ],
+        'card_number10' => [
+            'type' => 'text',
+            'label' => 'Card Number10'
+        ],
+        'card_title11' => [
+            'type' => 'text',
+            'label' => 'Card Title11'
+        ],
+        'card_number11' => [
+            'type' => 'text',
+            'label' => 'Card Number11'
+        ],
+        'card_title12' => [
+            'type' => 'text',
+            'label' => 'Card Title12'
+        ],
+        'card_number12' => [
+            'type' => 'text',
+            'label' => 'Card Number12'
+        ],
+        'card_title13' => [
+            'type' => 'text',
+            'label' => 'Card Title13'
+        ],
+        'card_number13' => [
+            'type' => 'text',
+            'label' => 'Card Number13'
+        ],
+        'card_title14' => [
+            'type' => 'text',
+            'label' => 'Card Title14'
+        ],
+        'card_number14' => [
+            'type' => 'text',
+            'label' => 'Card Number14'
+        ],
+        'card_title15' => [
+            'type' => 'text',
+            'label' => 'Card Title15'
+        ],
+        'card_number15' => [
+            'type' => 'text',
+            'label' => 'Card Number15'
+        ],
         'quote_image' => [
             'type' => 'image',
             'label' => 'Quote Image',
@@ -333,29 +404,7 @@ $rm->migrate([
             'extensions' => 'jpg jpeg png gif svg',
             'outputFormat' => FieldtypeFile::outputFormatSingle,
         ],
-        'quote2_image' => [
-            'type' => 'image',
-            'label' => 'Quote2 Image',
-            'maxFiles' => 1,
-            'extensions' => 'jpg jpeg png gif svg',
-            'outputFormat' => FieldtypeFile::outputFormatSingle,
-        ],
-        'quote2_title' => [
-            'type' => 'text',
-            'label' => 'Quote2 Title',
-        ],
-        'quote2_text' => [
-            'type' => 'textarea',
-            'label' => 'Quote2 Text',
-        ],
-        'signature' => [
-            'type' => 'text',
-            'label' => 'Signature',
-        ],
-        'quote2_subtitle' =>[
-            'type' => 'textarea',
-            'label' => 'Quote2 Subtitle',
-        ],
+
         'born_title' => [
             'type' => 'text',
             'label' => 'Born Title',
@@ -440,9 +489,25 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Quote Subtitle',
         ],
-        'field_title' => [
+        // Quote2 fields — mirrors quote fields for the second quote section (#quote2) on homepage
+        'quote2_image' => [
+            'type' => 'image',
+            'label' => 'Quote2 Image',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'quote2_text' => [
+            'type' => 'textarea',
+            'label' => 'Quote2 Text',
+        ],
+        'quote2_title' => [
             'type' => 'text',
-            'label' => 'Field Title',
+            'label' => 'Quote2 Title',
+        ],
+        'quote2_subtitle' => [
+            'type' => 'text',
+            'label' => 'Quote2 Subtitle',
         ],
     
         
@@ -451,16 +516,15 @@ $rm->migrate([
 
 ]);
 
-$rm->addFieldToTemplate('field_title', 'home');
-$rm->addFieldToTemplate('quote2_subtitle', 'home');
-$rm->addFieldToTemplate('signature', 'home');
-$rm->addFieldToTemplate('quote2_text', 'home');
-$rm->addFieldToTemplate('quote2_title', 'home');
-$rm->addFieldToTemplate('quote2_image', 'home');
 $rm->addFieldToTemplate('quote_image', 'home');
 $rm->addFieldToTemplate('quote_subtitle', 'home');
 $rm->addFieldToTemplate('quote_title', 'home');
 $rm->addFieldToTemplate('quote_text', 'home');
+// Quote2 fields — for second quote section on homepage
+$rm->addFieldToTemplate('quote2_image', 'home');
+$rm->addFieldToTemplate('quote2_text', 'home');
+$rm->addFieldToTemplate('quote2_title', 'home');
+$rm->addFieldToTemplate('quote2_subtitle', 'home');
 $rm->addFieldToTemplate('album_card', 'home');
 $rm->addFieldToTemplate('born_title', 'home');
 $rm->addFieldToTemplate('born_orange_title', 'home');
@@ -470,8 +534,24 @@ $rm->addFieldToTemplate('areas_cards', 'home');
 
 
 /* adding Field to Template OUR-WORK  */
+// Section titles for the two sections on Our Work page
+$rm->migrate([
+    'fields' => [
+        'change_section_title' => [
+            'type' => 'text',
+            'label' => 'Change Section Title',
+        ],
+        'projects_section_title' => [
+            'type' => 'text',
+            'label' => 'Projects Section Title',
+        ],
+    ],
+]);
 $rm->addFieldToTemplate('image_left', 'our-work');
 $rm->addFieldToTemplate('title_content', 'our-work');
+$rm->addFieldToTemplate('areas_cards', 'our-work');
+$rm->addFieldToTemplate('change_section_title', 'our-work');
+$rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 
 /* adding Fields to Template INDIVIDUAL-GIVING */
@@ -508,12 +588,24 @@ $impactFields = [
     'card_title5',
     'card_number6',
     'card_title6',
-    'card_title7',
     'card_number7',
+    'card_title7',
     'card_number8',
     'card_title8',
     'card_number9',
     'card_title9',
+    'card_number10',
+    'card_title10',
+    'card_number11',
+    'card_title11',
+    'card_number12',
+    'card_title12',
+    'card_number13',
+    'card_title13',
+    'card_number14',
+    'card_title14',
+    'card_number15',
+    'card_title15',
 
 
 ];
@@ -521,6 +613,28 @@ $impactFields = [
 forEach($impactFields as $field){
     $rm->addFieldToTemplate($field, 'impact');
 }
+
+/* keep admin field order matching the list above; only write when order differs */
+$impactFg = wire('templates')->get('impact')->fieldgroup;
+$fieldOrder = [];
+foreach($impactFg as $fgField) $fieldOrder[] = $fgField->name;
+
+$prevField = null;
+$orderChanged = false;
+foreach($impactFields as $field){
+    if($prevField){
+        $i = array_search($field, $fieldOrder);
+        $j = array_search($prevField, $fieldOrder);
+        if($i !== false && $j !== false && $i !== $j + 1){
+            $impactFg->insertAfter(wire('fields')->get($field), wire('fields')->get($prevField));
+            $orderChanged = true;
+            $fieldOrder = [];
+            foreach($impactFg as $fgField) $fieldOrder[] = $fgField->name;
+        }
+    }
+    $prevField = $field;
+}
+if($orderChanged) $impactFg->save();
 
 
 

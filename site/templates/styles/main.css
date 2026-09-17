@@ -287,6 +287,28 @@ h2 {
   flex: none;
 }
 
+/* Clamp long text to 6 lines; JS removes .clamped on "Read more" */
+.clamp-text.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* Hidden by default — JS shows it only when the text actually overflows */
+.expand-text-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--green-900);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  text-decoration: underline;
+  margin-top: 12px;
+}
+
 .heading-left h2 {
   color: var(--green-900);
 }
@@ -953,17 +975,21 @@ textarea:focus {
   justify-content: space-between;
   padding: 0px;
   gap: 24px;
-  padding: 80px 40px;
+  padding: 48px 40px;
 }
 
 .title-quote {
   display: flex;
   flex-direction: column;
-  gap: 46px;
+  gap: 32px;
+  /* Cap text column at image width so space-between leaves a gap on wide screens */
+  max-width: 450px;
 }
 
 .picture-quote, .picture-quote2 {
-  width: 553px;
+  width: 450px;
+  /* Never let the image shrink when the text column is wide (quote2 has long text) */
+  flex-shrink: 0;
 }
 
 .picture-quote img, .picture-quote2 img {
@@ -992,7 +1018,7 @@ textarea:focus {
   justify-content: space-between;
   padding: 0px;
   gap: 24px;
-  padding: 80px 40px;
+  padding: 48px 40px;
 }
 
 /*------------from the field + STORIES---------*/
@@ -1764,7 +1790,8 @@ textarea:focus {
   background-color: var(--green-900);
   padding-top: 100px;
   padding-left: 50px;
-  height: 400vh;
+  padding-bottom: 80px;
+  height: auto;
 }
 
 .in-numbers h5,
@@ -1778,15 +1805,10 @@ textarea:focus {
 }
 
 .sticky-element {
-  position: sticky;
-  top: 100px;
-  height: calc(100vh - 100px);
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  overflow: hidden;
+  gap: 60px;
 }
 
 .heading-left {
@@ -1795,23 +1817,40 @@ textarea:focus {
 
 .reach,
 .economic,
-.people {
-  position: absolute;
-  width: 100%;
-
+.people,
+.extra-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 40px;
+  margin-top: 48px;
 }
 
-.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Extra card rows hidden behind expand arrow */
+.more-cards {
+  display: none;
+}
+.more-cards.open {
+  display: block;
 }
 
-.hidden {
-  opacity: 0;
-  transform: translateY(32px);
+.expand-cards-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 48px auto 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--white-800);
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+.expand-cards-btn .expand-cards-arrow {
+  transition: transform 0.2s;
+}
+.expand-cards-btn.open .expand-cards-arrow {
+  transform: rotate(180deg);
 }
 
 .reach h5,
@@ -1865,7 +1904,7 @@ textarea:focus {
 }
 
 .in-numbers-wrap {
-  padding-bottom: 245px;
+  padding-bottom: 0;
 }
 
 .static-card h2,
@@ -2627,7 +2666,8 @@ textarea {
 
   .reach,
   .economic,
-  .people {
+  .people,
+  .extra-row {
     display: flex;
     flex-direction: column;
   }
@@ -3089,17 +3129,20 @@ textarea {
     height: 300px;
   }
 
+  /* Stack quote sections below 900px — the old 50%/550px row made long text overflow */
   .quote, .quote2 {
     padding: 60px 16px;
+    flex-direction: column;
   }
 
   .picture-quote, .picture-quote2 {
-    width: 40%;
+    width: 100%;
+    max-width: 450px;
   }
 
   .title-quote {
-    width: 50%;
-    height: 550px;
+    width: 100%;
+    height: auto;
   }
 
   /*----- footer ----*/
@@ -3529,7 +3572,7 @@ textarea {
   }
 
   .in-numbers-wrap {
-    padding-bottom: 180px;
+    padding-bottom: 0;
   }
 
   .static-card {
@@ -4097,7 +4140,8 @@ textarea {
 
   .people,
   .economic,
-  .reach {
+  .reach,
+  .extra-row {
     align-items: center;
   }
 }

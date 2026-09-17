@@ -207,21 +207,22 @@ namespace ProcessWire;
                 </div>
             </div>
         </section>
+        <!-- Mirrored version of #quote: image right, text left (.quote2 uses row-reverse) -->
         <section id="quote2" class="quote2" data-nav-color="dark">
-            <div edit="quote2_image" class="picture-quote2">
-                <img src="<?= $page->quote2_image->url ?>" alt="">
+            <div class="picture-quote2">
+                <img src="<?= $config->urls->templates ?>images/woman_young.jpg" alt="photo">
             </div>
             <div class="title-quote">
                 <div class="box">
-                    <h2 edit="quote2_title"><?= $page->quote2_title ?></h2>
-                    <h3 edit="quote2_text" class="w-500"><?= $page->quote2_title ?></h3>
+                    <h2>Title</h2>
+                    <h3 class="w-500">text text text text text texttext text texttext text texttext text texttext text texttext text texttext text text.</h3>
                 </div>
                 <div class="box">
                     <div class="subtitle">
-                        
+                        <img src="<?= $config->urls->templates ?>icons/wave.png" alt="icon">
                         <div class="text-subtitle">
-                            <h4 edit="signature"><?= $page->signature ?></h4>
-                            <p edit="quote2_subtitle"><?= $page->quote2_subtitle ?></p>
+                            <h4>Sunita Tamang</h4>
+                            <p>subtitle subtitlesubtitle subtitle subtitle subtitle subtitle </p>
                         </div>
                     </div>
                 </div>
@@ -265,7 +266,10 @@ namespace ProcessWire;
                         <div class="ncard-content">
                             <div class="title-content">
                                 <h4 edit="<?= $card ?>.album_card_title "><?= $card->album_card_title ?></h4>
-                                <p edit="<?= $card ?>.album_card_text"><?= $card->album_card_text ?></p>
+                                <div class="clamp-wrap">
+                                    <p edit="<?= $card ?>.album_card_text" class="clamp-text"><?= $card->album_card_text ?></p>
+                                    <button class="expand-text-btn" aria-expanded="false">Read more</button>
+                                </div>
                             </div>
                         
                         </div>
