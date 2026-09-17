@@ -1,7 +1,7 @@
 <?php
 namespace ProcessWire;
 
-
+$footer = $pages->get('/footer/');
 
 ?>
 
@@ -13,17 +13,24 @@ namespace ProcessWire;
                 </div>
                 <p>Feminist Approaches in Transforming Health. Women-led. Community-rooted. Internationally trusted.</p>
                 <div class="social-media">
-                    <a href="#">
+                    <?php if($footer->footer_facebook): ?>
+                    <a href="<?= $footer->footer_facebook ?>" target="_blank" rel="noopener">
                         <img class="icon-sm" src="<?= $config->urls->templates ?>icons/facebook.png"
                             alt="icon-facebook">
                     </a>
-                    <a href="#">
+                    <?php endif; ?>
+                    <?php if($footer->footer_instagram): ?>
+                    <a href="<?= $footer->footer_instagram ?>" target="_blank" rel="noopener">
                         <img class="icon-sm" src="<?= $config->urls->templates ?>icons/IG.png" alt="icon-IG">
                     </a>
-                    <a href="#">
+                    <?php endif; ?>
+                    <?php if($footer->footer_vimeo): ?>
+                    <a href="<?= $footer->footer_vimeo ?>" target="_blank" rel="noopener">
                         <img class="icon-sm" src="<?= $config->urls->templates ?>icons/vimeo.png" alt="icon-vimeo">
                     </a>
-                    <a href="#">
+                    <?php endif; ?>
+                    <?php if($footer->footer_youtube): ?>
+                    <a href="<?= $footer->footer_youtube ?>" target="_blank" rel="noopener">
                         <svg class="icon-sm" width="22" height="9" viewBox="0 0 22 9" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_748_597)">
@@ -41,6 +48,7 @@ namespace ProcessWire;
                             </defs>
                         </svg>
                     </a>
+                    <?php endif; ?>
                 </div>
                 <div class="privacy-link">
                     <a href="<?= $pages->get('/privacy-policy/')->url ?>">Privacy Policy</a>
@@ -56,7 +64,9 @@ namespace ProcessWire;
                         <a href="<?= $pages->get('/our-work/')->url ?>">Our Work</a>
                         <a href="<?= $pages->get('/impact/')->url ?>">Impact</a>
                         <a href="<?= $pages->get('/stories/')->url ?>">Stories</a>
-                        <a href="<?= $pages->get('/accountability/')->url ?>">Transparency</a>
+                        <?php if($footer->footer_publications): ?>
+                        <a href="<?= $footer->footer_publications ?>">Publications</a>
+                        <?php endif; ?>
                         <a href="<?= $pages->get('/about-us/')->url ?>">About</a>
                         <a href="<?= $pages->get('/contact/')->url ?>">Contact</a>
                     </div>
@@ -66,9 +76,21 @@ namespace ProcessWire;
                         <h5 style="text-transform: uppercase;">Contact</h5>
                     </div>
                     <div class="contact-content">
-                        <p>Kupondole, Lalitpur, Kathmandu, Nepal</p>
-                        <p>+977-01-5412012</p>
-                        <a href="mailto:faithinitiative@gmail.com">faithinitiative@gmail.com</a>
+                        <?php if($footer->footer_address): ?>
+                        <p><?= $footer->footer_address ?></p>
+                        <?php endif; ?>
+                        <?php
+                        $phone = trim($footer->footer_phone_code . '-' . $footer->footer_phone, '-');
+                        if($phone):
+                        ?>
+                        <p><a href="tel:<?= $footer->footer_phone_code . $footer->footer_phone ?>"><?= $phone ?></a></p>
+                        <?php endif; ?>
+                        <?php if($footer->footer_email): ?>
+                        <a href="mailto:<?= $footer->footer_email ?>"><?= $footer->footer_email ?></a>
+                        <?php endif; ?>
+                        <?php if($footer->footer_email2): ?>
+                        <a href="mailto:<?= $footer->footer_email2 ?>"><?= $footer->footer_email2 ?></a>
+                        <?php endif; ?>
                         <a class="btn orange" href="#">Book partnership call <img
                                 src="<?= $config->urls->templates ?>icons/arrow_forward_white.png" alt="icon"></a>
                     </div>

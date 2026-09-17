@@ -710,5 +710,49 @@ foreach($impactFields as $field){
 }
 if($orderChanged) $impactFg->save();
 
+/*  -----  footer  ---- */
+
+$rm->createTemplate('footer');
+
+$rm->createPage(
+    template: 'footer',
+    parent: '/',
+    name: 'footer',
+    title: 'Footer',
+    status: [Page::statusUnpublished],
+);
+
+$rm->migrate([
+    'fields' => [
+        'footer_facebook' => ['type' => 'text', 'label' => 'Facebook URL'],
+        'footer_instagram' => ['type' => 'text', 'label' => 'Instagram URL'],
+        'footer_vimeo' => ['type' => 'text', 'label' => 'Vimeo URL'],
+        'footer_youtube' => ['type' => 'text', 'label' => 'YouTube URL'],
+        'footer_email' => ['type' => 'text', 'label' => 'Primary Email'],
+        'footer_email2' => ['type' => 'text', 'label' => 'Secondary Email'],
+        'footer_phone_code' => ['type' => 'text', 'label' => 'Phone Country Code'],
+        'footer_phone' => ['type' => 'text', 'label' => 'Phone Number'],
+        'footer_address' => ['type' => 'text', 'label' => 'Address'],
+        'footer_publications' => ['type' => 'text', 'label' => 'Publications Link'],
+    ],
+]);
+
+$footerFields = [
+    'footer_address',
+    'footer_phone_code',
+    'footer_phone',
+    'footer_email',
+    'footer_email2',
+    'footer_facebook',
+    'footer_instagram',
+    'footer_vimeo',
+    'footer_youtube',
+    'footer_publications',
+];
+
+foreach($footerFields as $field){
+    $rm->addFieldToTemplate($field, 'footer');
+}
+
 
 
