@@ -104,6 +104,7 @@
   fill: var(--amber-400);
 }
 
+.past-projects svg.icon,
 .donors svg.icon,
 .privacy-policy svg.icon,
 .individual-giving svg.icon,
@@ -121,6 +122,7 @@
   fill: var(--neutral-900);
 }
 
+.past-projects svg.icon:hover,
 .donors svg.icon:hover,
 .privacy-policy svg.icon:hover,
 .donors svg.icon:hover,
@@ -131,7 +133,7 @@
 .stories svg.icon:hover,
 .media svg.icon:hover,
 .about-us svg.icon:hover,
-.page404 svg.icon:hover,
+.page404 svg.icon:hover
  {
   fill: var(--green-800);
 }
@@ -150,6 +152,7 @@
   color: var(--amber-400);
 }
 
+.past-projects nav ul li a,
 .individual-giving nav ul li a,
 .donors nav ul li a,
 .stories nav ul li a,
@@ -164,6 +167,7 @@
   color: var(--text-body);
 }
 
+.past-projects nav ul li a:hover,
 .individual-giving nav ul li a:hover,
 .donors nav ul li a:hover,
 .stories nav ul li a:hover,
@@ -178,7 +182,7 @@
   color: var(--green-800);
 }
 
-nav ul li a.active {
+nav ul li a.active, .past-projects-links ul li a.active {
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
@@ -1586,6 +1590,10 @@ textarea:focus {
   width: auto;
 }
 
+.titles-projects {
+  background-color: var(--body-color-grey);
+}
+
 .our-work-main {
   background-color: var(--body-color-grey);
   padding: 80px 30px;
@@ -1643,6 +1651,12 @@ textarea:focus {
 .ow-btn:hover {
   color: var(--green-600);
 }
+
+.titles-projects h2 {
+  text-align: center;
+  padding: 115px 0 40px;
+}
+
 
 /*----------  one work -----------------*/
 
@@ -1718,6 +1732,67 @@ textarea:focus {
 
 .one-work-content h5 {
   color: var(--neutral-400);
+}
+
+
+/*----------- past-projects -----------*/
+
+.past-projects {
+  background-color: var(--white-800);
+  color: var(--text-heading);
+}
+.past-projects-links {
+  padding-bottom: 80px;
+}
+
+.past-projects-links ul {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+}
+
+ .past-projects-links ul li a {
+  color: var(--text-heading);
+  font-family: var(--font-sans);
+}
+
+.past-projects-links ul li a.active {
+  font-weight: 700;
+}
+
+.past-projects .header-central {
+  padding: 100px 0;
+}
+
+.past-projects-area {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 40px;
+}
+
+.past-projects-card {
+  width: 100%;
+}
+
+
+
+.past-projects-card h5 {
+  background-color: var(--mustard-200);
+  width: fit-content;
+  padding: 8px 10px;
+  border-radius: 14px;
+  margin: 16px 0;
+}
+
+.past-projects-card p {
+  line-height: 17px;
+  color: var(--text-body);
+}
+
+.past-projects-card span {
+  font-size: 16px;
+  font-weight: 400;
 }
 
 /*-------------------------------------------- Impact ------------------------------------------*/
@@ -2587,7 +2662,6 @@ textarea {
 .privacy-policy .header-central p, .privacy-policy main p {
   color: var(--text-body);
 }
-
 
 
 /*---------------------------------------------------- responsive ------------------------------------------------------*/
@@ -4171,6 +4245,13 @@ textarea {
     height: 310px;
     width: 316px;
   }
+
+  /*---- past-projects -----*/
+
+  .past-projects-area {
+    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
 }
 
 @media (max-width: 380px) {
@@ -4213,6 +4294,8 @@ textarea {
   .title-one-story .fr-sb .programme-title {
     gap: 10px;
   }
+
+  
 
   @media (max-width: 320px) {
     /*----- impact ----*/

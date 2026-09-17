@@ -24,6 +24,15 @@ if(!defined("PROCESSWIRE")) die();
 
 $rm = $modules->get('RockMigrations');
 
+$rm->createTemplate('past-projects');
+
+$rm->createPage(
+    template: 'past-projects',
+    parent: '/',
+    name: 'past-projects',
+    title: 'Past Projects',
+);
+
 $rm->createTemplate('accountability');
 
 $rm->createPage(
@@ -88,6 +97,61 @@ $rm->createPage(
     name: 'donors',
     title: 'Donors',
 );
+
+/*--- past projects -----*/
+
+$rm->migrate([
+    'fields' => [
+        'projects_card' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Projects Card',
+            'fields' => [
+                'title_past_project',
+                'budget_past_project',
+                'duration_past_project',
+                'target_past_project',
+                'donor_past_project',
+                'beneficiaries_past_project',
+            ],
+        ],
+        'title_past_project' => [
+            'type' => 'text',
+            'label' => 'Title Past Project',
+        ],
+        'budget_past_project' => [
+            'type' => 'text',
+            'label' => 'Budget Past Project',
+        ],
+        'duration_past_project' => [
+            'type' => 'text',
+            'label' => 'Duration Past Project',
+        ],
+        'target_past_project' => [
+            'type' => 'text',
+            'label' => 'Target Past Project',
+        ],
+        'donor_past_project' => [
+            'type' => 'text',
+            'label' => 'Donor Past Project',
+        ],
+        'beneficiaries_past_project' => [
+            'type' => 'text',
+            'label' => 'Beneficiaries Past Project',
+        ],
+
+    ],
+]);
+
+$pastprojectsField = [
+    'projects_card',
+    'hero_title1'
+];
+
+
+
+forEach($pastprojectsField as $field) {
+    $rm->addFieldToTemplate($field, 'past-projects');
+}
 
 /*  -----  about-us  ---- */
 

@@ -43,19 +43,31 @@ namespace ProcessWire;
    
 
  
-
-
+                <section class="titles-projects"> <h2 edit="title_content"><?= $page->title_content ?>Our Projects</h2>
+                    <section class="past-projects-links">
+                        <ul>
+                            <li>
+                                <a href="<?= $page->url ?>" class="active">Ongoing Projects</a>
+                            </li>
+                            <li>
+                                <a href="<?= $pages->get('/past-projects/')->url ?>">Past Projects</a>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
     <section class="our-work-main">
+    
         <div edit="image_left" class="image-left">
             <img src="<?= $page->image_left->url ?>" alt="">
         </div>
         <div class="content-right">       
-            <!-- <h2 edit="title_content"><?= $page->title_content ?></h2> -->
+             
                 <?php if ($user->isLoggedin()): ?>
                     <a href="<?= $config->urls->admin ?>page/add/?parent_id=<?= $page->id ?>" class="btn add-story-btn">
                         Add New Work
                     </a>
                 <?php endif; ?>
+            
             <?php foreach ($page->children() as $work): ?>
                 <div class="our-work-card">
                     <h3><?= $work->title ?></h3>
