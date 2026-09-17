@@ -278,7 +278,7 @@ namespace ProcessWire;
               
             </div>
         </section>
-        <section class="logo-carousel">
+        <section class="logo-carousel" data-nav-color="dark">
             <h5>TRUSTED PARTNERS</h5>
             <div class="car-prev-ar">
                 <img src="<?= $config->urls->templates ?>icons/carousel_prev_arrow.svg" alt="">
