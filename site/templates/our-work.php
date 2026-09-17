@@ -50,12 +50,12 @@ namespace ProcessWire;
             <img src="<?= $page->image_left->url ?>" alt="">
         </div>
         <div class="content-right">       
-            <h2 edit="title_content"><?= $page->title_content ?></h2>
-            <?php if ($user->isLoggedin()): ?>
-                <a href="<?= $config->urls->admin ?>page/add/?parent_id=<?= $page->id ?>" class="btn add-story-btn">
-                    Add New Work
-                </a>
-            <?php endif; ?>
+            <!-- <h2 edit="title_content"><?= $page->title_content ?></h2> -->
+                <?php if ($user->isLoggedin()): ?>
+                    <a href="<?= $config->urls->admin ?>page/add/?parent_id=<?= $page->id ?>" class="btn add-story-btn">
+                        Add New Work
+                    </a>
+                <?php endif; ?>
             <?php foreach ($page->children() as $work): ?>
                 <div class="our-work-card">
                     <h3><?= $work->title ?></h3>
