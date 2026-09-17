@@ -353,6 +353,50 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Card Number5'
         ],
+        'card_number10' => [
+            'type' => 'text',
+            'label' => 'Card Number10'
+        ],
+        'card_title11' => [
+            'type' => 'text',
+            'label' => 'Card Title11'
+        ],
+        'card_number11' => [
+            'type' => 'text',
+            'label' => 'Card Number11'
+        ],
+        'card_title12' => [
+            'type' => 'text',
+            'label' => 'Card Title12'
+        ],
+        'card_number12' => [
+            'type' => 'text',
+            'label' => 'Card Number12'
+        ],
+        'card_title13' => [
+            'type' => 'text',
+            'label' => 'Card Title13'
+        ],
+        'card_number13' => [
+            'type' => 'text',
+            'label' => 'Card Number13'
+        ],
+        'card_title14' => [
+            'type' => 'text',
+            'label' => 'Card Title14'
+        ],
+        'card_number14' => [
+            'type' => 'text',
+            'label' => 'Card Number14'
+        ],
+        'card_title15' => [
+            'type' => 'text',
+            'label' => 'Card Title15'
+        ],
+        'card_number15' => [
+            'type' => 'text',
+            'label' => 'Card Number15'
+        ],
         'quote_image' => [
             'type' => 'image',
             'label' => 'Quote Image',
@@ -544,12 +588,24 @@ $impactFields = [
     'card_title5',
     'card_number6',
     'card_title6',
-    'card_title7',
     'card_number7',
+    'card_title7',
     'card_number8',
     'card_title8',
     'card_number9',
     'card_title9',
+    'card_number10',
+    'card_title10',
+    'card_number11',
+    'card_title11',
+    'card_number12',
+    'card_title12',
+    'card_number13',
+    'card_title13',
+    'card_number14',
+    'card_title14',
+    'card_number15',
+    'card_title15',
 
 
 ];
@@ -557,6 +613,28 @@ $impactFields = [
 forEach($impactFields as $field){
     $rm->addFieldToTemplate($field, 'impact');
 }
+
+/* keep admin field order matching the list above; only write when order differs */
+$impactFg = wire('templates')->get('impact')->fieldgroup;
+$fieldOrder = [];
+foreach($impactFg as $fgField) $fieldOrder[] = $fgField->name;
+
+$prevField = null;
+$orderChanged = false;
+foreach($impactFields as $field){
+    if($prevField){
+        $i = array_search($field, $fieldOrder);
+        $j = array_search($prevField, $fieldOrder);
+        if($i !== false && $j !== false && $i !== $j + 1){
+            $impactFg->insertAfter(wire('fields')->get($field), wire('fields')->get($prevField));
+            $orderChanged = true;
+            $fieldOrder = [];
+            foreach($impactFg as $fgField) $fieldOrder[] = $fgField->name;
+        }
+    }
+    $prevField = $field;
+}
+if($orderChanged) $impactFg->save();
 
 
 
