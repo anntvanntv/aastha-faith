@@ -47,10 +47,10 @@ namespace ProcessWire;
                     <section class="past-projects-links">
                         <ul>
                             <li>
-                                <a href="<?= $page->url ?>" class="active">Ongoing Projects</a>
+                                <a href="<?= $page->url ?>" class="active">Ongoing</a>
                             </li>
                             <li>
-                                <a href="<?= $pages->get('/past-projects/')->url ?>">Past Projects</a>
+                                <a href="<?= $pages->get('/past-projects/')->url ?>">Past</a>
                             </li>
                         </ul>
                     </section>
