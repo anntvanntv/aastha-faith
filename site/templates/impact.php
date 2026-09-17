@@ -42,9 +42,8 @@ namespace ProcessWire;
                 <p class="admin-info">If you need to change the numbers or subtitles in this section, click this button to open the Impact
                     admin area.
 
-                    Look for the fields labelled card_number and card_title, through to card_number9 and card_title9. They
-                    correspond to the cards on the page in this order: from left to right on the first row, then from left
-                    to right on the second row, and finally from left to right on the third row.
+                    Look for the fields labelled card_number and card_title, through to card_number15 and card_title15. Cards
+                    1–9 show on the page in rows of three; cards 10–15 sit behind the “Show more” arrow. Empty fields are hidden.
                     Please don’t edit the cards in this section directly on the page.
                 </p>
                 <a href="<?= $config->urls->admin ?>page/edit/?id=1027=<?= $page->id ?>" class="btn change-impact-btn">
@@ -52,60 +51,60 @@ namespace ProcessWire;
                 </a>
             <?php endif; ?>
             <div class="in-numbers-wrap">
-                <div class="reach visible">
+                <?php
+                // card 1 uses unsuffixed fields (card_number/card_title); cards 2-15 are suffixed
+                $renderCard = function($n) use ($page) {
+                    $sfx = $n === 1 ? '' : $n;
+                    if(!$page->get("card_number$sfx") && !$page->get("card_title$sfx")) return;
+                    ?>
+                    <div class="static-card">
+                        <h2 edit="card_number<?= $sfx ?>" class="light-orange-text"><?= $page->get("card_number$sfx") ?></h2>
+                        <p edit="card_title<?= $sfx ?>"><?= $page->get("card_title$sfx") ?></p>
+                    </div>
+                    <?php
+                };
 
+                $cardGroups = [
+                    ['reach', [1,2,3]],
+                    ['economic', [4,5,6]],
+                    ['people', [7,8,9]],
+                ];
+                $extraRows = [[10,11,12],[13,14,15]];
+
+                $hasExtra = false;
+                foreach($extraRows as $row){
+                    foreach($row as $n){
+                        if($page->get("card_number$n") || $page->get("card_title$n")){ $hasExtra = true; break 2; }
+                    }
+                }
+                ?>
+
+                <?php foreach($cardGroups as [$cls, $nums]): ?>
+                <div class="<?= $cls ?>">
                     <div class="static-cards">
-                        <div class="static-card">
-                            <h2 edit="card_number" class="light-orange-text"><?= $page->card_number ?></h2>
-                            <p edit="card_title"><?= $page->card_title ?></p>
-                        </div>
-                        <div class="static-card">
-                            <h2 edit="card_number2" class="light-orange-text"><?= $page->card_number2 ?></h2>
-                            <p edit="card_title2"><?= $page->card_title2 ?></p>
-                        </div>
-                        <div class="static-card">
-                            <h2 edit="card_number3" class="light-orange-text"><?= $page->card_number3 ?></h2>
-                            <p edit="card_title3"><?= $page->card_title3 ?></p>
-                        </div>
-
+                        <?php foreach($nums as $n) $renderCard($n); ?>
                     </div>
                 </div>
-                <div class="economic hidden">
+                <?php endforeach; ?>
 
-                    <div class="static-cards">
-                        <div class="static-card">
-                            <h2 edit="card_number4" class="light-orange-text"><?= $page->card_number4 ?></h2>
-                            <p edit="card_title4"><?= $page->card_title4 ?></p>
+                <!-- Extra card rows collapse behind the expand arrow -->
+                <?php if($hasExtra): ?>
+                <div class="more-cards" id="moreCards">
+                    <?php foreach($extraRows as $row): ?>
+                    <div class="extra-row">
+                        <div class="static-cards">
+                            <?php foreach($row as $n) $renderCard($n); ?>
                         </div>
-                        <div class="static-card">
-                            <h2 edit="card_number5" class="light-orange-text"><?= $page->card_number5 ?></h2>
-                            <p edit="card_title5"><?= $page->card_title5 ?></p>
-                        </div>
-                        <div class="static-card">
-                            <h2 edit="card_number6" class="light-orange-text"><?= $page->card_number6 ?></h2>
-                            <p edit="card_title6"><?= $page->card_title6 ?></p>
-                        </div>
-
                     </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="people hidden">
-
-                    <div class="static-cards">
-                        <div class="static-card">
-                            <h2 edit="card_number7" class="light-orange-text"><?= $page->card_number7 ?></h2>
-                            <p edit="card_title7"><?= $page->card_title7 ?></p>
-                        </div>
-                        <div class="static-card">
-                            <h2 edit="card_number8" class="light-orange-text"><?= $page->card_number8 ?></h2>
-                            <p edit="card_title8"><?= $page->card_title8 ?></p>
-                        </div>
-                        <div class="static-card">
-                            <h2 edit="card_number9" class="light-orange-text"><?= $page->card_number9 ?></h2>
-                            <p edit="card_title9"><?= $page->card_title9 ?></p>
-                        </div>
-
-                    </div>
-                </div>
+                <button class="expand-cards-btn" id="expandCardsBtn" aria-expanded="false">
+                    <span class="expand-cards-label">Show more</span>
+                    <svg class="expand-cards-arrow" width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <?php endif; ?>
             </div>
         </div>
     </section>

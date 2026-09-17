@@ -1808,7 +1808,8 @@ textarea:focus {
   background-color: var(--green-900);
   padding-top: 100px;
   padding-left: 50px;
-  height: 400vh;
+  padding-bottom: 80px;
+  height: auto;
 }
 
 .in-numbers h5,
@@ -1822,15 +1823,10 @@ textarea:focus {
 }
 
 .sticky-element {
-  position: sticky;
-  top: 100px;
-  height: calc(100vh - 100px);
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  overflow: hidden;
+  gap: 60px;
 }
 
 .heading-left {
@@ -1839,23 +1835,40 @@ textarea:focus {
 
 .reach,
 .economic,
-.people {
-  position: absolute;
-  width: 100%;
-
+.people,
+.extra-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 40px;
+  margin-top: 48px;
 }
 
-.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Extra card rows hidden behind expand arrow */
+.more-cards {
+  display: none;
+}
+.more-cards.open {
+  display: block;
 }
 
-.hidden {
-  opacity: 0;
-  transform: translateY(32px);
+.expand-cards-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 48px auto 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--white-800);
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+.expand-cards-btn .expand-cards-arrow {
+  transition: transform 0.2s;
+}
+.expand-cards-btn.open .expand-cards-arrow {
+  transform: rotate(180deg);
 }
 
 .reach h5,
@@ -1909,7 +1922,7 @@ textarea:focus {
 }
 
 .in-numbers-wrap {
-  padding-bottom: 245px;
+  padding-bottom: 0;
 }
 
 .static-card h2,
@@ -2639,7 +2652,8 @@ textarea {
 
   .reach,
   .economic,
-  .people {
+  .people,
+  .extra-row {
     display: flex;
     flex-direction: column;
   }
@@ -3503,7 +3517,7 @@ textarea {
   }
 
   .in-numbers-wrap {
-    padding-bottom: 180px;
+    padding-bottom: 0;
   }
 
   /*   .static-cards {
@@ -4055,7 +4069,8 @@ textarea {
 
   .people,
   .economic,
-  .reach {
+  .reach,
+  .extra-row {
     align-items: center;
   }
 }
