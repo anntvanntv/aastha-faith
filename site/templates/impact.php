@@ -38,18 +38,7 @@ namespace ProcessWire;
                     <h2 edit="hero_title2"><?= $page->hero_title2 ?></h2>
                 </div>
             </div>
-            <?php if ($user->isLoggedin()): ?>
-                <p class="admin-info">If you need to change the numbers or subtitles in this section, click this button to open the Impact
-                    admin area.
-
-                    Look for the fields labelled card_number and card_title, through to card_number15 and card_title15. Cards
-                    1–9 show on the page in rows of three; cards 10–15 sit behind the “Show more” arrow. Empty fields are hidden.
-                    Please don’t edit the cards in this section directly on the page.
-                </p>
-                <a href="<?= $config->urls->admin ?>page/edit/?id=1027=<?= $page->id ?>" class="btn change-impact-btn">
-                    Change Impact Numbers ->
-                </a>
-            <?php endif; ?>
+           
             <div class="in-numbers-wrap">
                 <?php
                 // card 1 uses unsuffixed fields (card_number/card_title); cards 2-15 are suffixed

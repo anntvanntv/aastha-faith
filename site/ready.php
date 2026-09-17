@@ -215,6 +215,7 @@ $rm->migrate([
             'label' => 'About Card Function',
         ],
 
+
     ],
 ]);
 
@@ -573,6 +574,14 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Quote2 Subtitle',
         ],
+
+        'logos' => [
+            'type' => 'FieldtypeImage',
+            'label' => 'Logos',
+            'maxFiles' => 0,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatArray,
+        ],
     
         
        
@@ -580,6 +589,7 @@ $rm->migrate([
 
 ]);
 
+$rm->addFieldToTemplate('logos', 'home');
 $rm->addFieldToTemplate('quote_image', 'home');
 $rm->addFieldToTemplate('quote_subtitle', 'home');
 $rm->addFieldToTemplate('quote_title', 'home');

@@ -275,50 +275,29 @@ namespace ProcessWire;
                         </div>
                     </div> <!--end news-card-->
                 <?php endforeach; ?>
-               <!--  <div class="news-card b">
-                    <div class="ncard-picture"></div>
-                    <div class="programme-title">
-                        <p class="small">programme</p>
-                        <h5 class="date" style="text-transform: uppercase;">may 2026</h5>
-                    </div>
-                    <div class="ncard-content">
-                        <div class="title-content">
-                            <h4>Heading</h4>
-                            <p>New outreach brings trained counselors to Nepal's most remote regions through
-                                partnerships
-                                with local government health posts.</p>
-                        </div>
-                        <div class="btn-content">
-                            <div class="btn emptyblack">
-                                Button text
-                                <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                            </div>
-                        </div>
-                    </div>
-                </div> --><!--end news-card b-->
-               <!--  <div class="news-card c">
-                    <div class="ncard-picture"></div>
-                    <div class="programme-title">
-                        <p class="small">programme</p>
-                        <h5 class="date" style="text-transform: uppercase;">may 2026</h5>
-                    </div>
-                    <div class="ncard-content">
-                        <div class="title-content">
-                            <h4>Heading</h4>
-                            <p>New outreach brings trained counselors to Nepal's most remote regions through
-                                partnerships
-                                with local government health posts.</p>
-                        </div>
-                        <div class="btn-content">
-                            <div class="btn emptyblack">
-                                Button text
-                                <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                            </div>
-                        </div>
-                    </div>
-                </div> --><!--end news-card c-->
+              
             </div>
         </section>
+        <section class="logo-carousel">
+            <h5>TRUSTED PARTNERS</h5>
+            <div class="car-prev-ar">
+                <img src="<?= $config->urls->templates ?>icons/carousel_prev_arrow.svg" alt="">
+            </div>
+                <div class="logo-carousel-panoramic">
+                    <div class="carousel-track">
+                        <?php foreach ($page->logos as $logo): ?>
+                            <div class="logo-item">
+                                <img edit="logos" src="<?= $logo->url ?>" alt="">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+            <div class="car-next-ar">
+                <img src="<?= $config->urls->templates ?>icons/carousel_next_arrow.svg" alt="">
+            </div>
+        </section>
+
     </main>
 
     <?php include('./_footer.php'); ?>

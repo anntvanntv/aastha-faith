@@ -53,3 +53,25 @@ links.forEach(link => {
     })
 
 })
+
+
+/* logo carousel */
+
+const track = document.querySelector('.carousel-track');
+const prevButton = document.querySelector('.car-prev-ar');
+const nextButton = document.querySelector('.car-next-ar');
+
+prevButton.addEventListener('click', () => {
+    console.log("funciona");
+    track.scrollBy({
+        left: -400,
+        behavior: 'smooth'
+    })
+})
+
+nextButton.addEventListener('click', () => {
+    track.scrollBy({
+        left: 400,
+        behavior: 'smooth'
+    })
+})
