@@ -43,7 +43,7 @@ namespace ProcessWire;
    
 
  
-                <section class="titles-projects"> <h2 edit="title_content"><?= $page->title_content ?>Our Projects</h2>
+                <section class="titles-projects"> <h2 edit="title_content"><?= $page->title_content ?></h2>
                     <section class="past-projects-links">
                         <ul>
                             <li>
