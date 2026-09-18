@@ -127,6 +127,7 @@ namespace ProcessWire;
                      <?php endforeach; ?>
                 </div>
             </div>
+            <?php if($page->account_cards->find("member_type=1")->count()): ?>
             <div class="executive">
                 <h4>Executive Team</h4>
                 <div class="horizontal-cards">
@@ -205,6 +206,7 @@ namespace ProcessWire;
                     <!-- </div> -->
                 </div> <!-- horizontal cards ---->
             </div> <!---- executive ---->
+            <?php endif; ?>
         </div>
     </section>
     <section class="financial" data-nav-color="light">
