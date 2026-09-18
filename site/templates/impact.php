@@ -158,7 +158,7 @@ namespace ProcessWire;
             <h2>Support our work</h2>
             <p>Every contribution helps FAITH reach more women, open more doors, and create more pathways to dignity
                 and independence across Nepal.</p>
-            <a class="btn green" href="/donate">
+            <a class="btn green" href="<?= $pages->get('/donors/')->url ?>">
                 Donate now
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
