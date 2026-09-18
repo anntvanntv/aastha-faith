@@ -107,69 +107,43 @@ namespace ProcessWire;
                 <h2 edit="areas_title"><?= $page->areas_title ?></h2>
             </div>
             <div class="cards-beyond">
-                <div class="news-card a">
-                    <div class="ncard-picture"></div>
+                <?php
+                $cardClasses = ['a', 'b', 'c'];
+                $latestStories = $pages->get('/stories/')->children("sort=-date,limit=3");
+                $i = 0;
+                foreach($latestStories as $story):
+                    $cls = $cardClasses[$i] ?? 'a';
+                ?>
+                <div class="news-card <?= $cls ?>">
+                    <div class="ncard-picture">
+                        <?php if($story->image): ?>
+                        <img src="<?= $story->image->url ?>" alt="<?= $story->title ?>">
+                        <?php endif; ?>
+                    </div>
                     <div class="programme-title">
-                        <p class="small">programme</p>
-                        <h5 class="date" style="text-transform: uppercase;">may 2026</h5>
+                        <p class="small"><?= $story->category ?></p>
+                        <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F Y", $story->date)) : '' ?></h5>
                     </div>
                     <div class="ncard-content">
                         <div class="title-content">
-                            <h4>Heading</h4>
-                            <p>New outreach brings trained counselors to Nepal's most remote regions through
-                                partnerships
-                                with local government health posts.</p>
+                            <h4><?= $story->title ?></h4>
+                            <p><?= substr(strip_tags($story->body), 0, 180) ?>...</p>
                         </div>
                         <div class="btn-content">
-                            <div class="btn emptyblack">
-                                Button text
+                            <a href="<?= $story->url ?>" class="btn emptyblack">
+                                Read more
                                 <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="news-card b">
-                    <div class="ncard-picture"></div>
-                    <div class="programme-title">
-                        <p class="small">programme</p>
-                        <h5 class="date" style="text-transform: uppercase;">may 2026</h5>
-                    </div>
-                    <div class="ncard-content">
-                        <div class="title-content">
-                            <h4>Heading</h4>
-                            <p>New outreach brings trained counselors to Nepal's most remote regions through
-                                partnerships
-                                with local government health posts.</p>
-                        </div>
-                        <div class="btn-content">
-                            <div class="btn emptyblack">
-                                Button text
-                                <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card c">
-                    <div class="ncard-picture"></div>
-                    <div class="programme-title">
-                        <p class="small">programme</p>
-                        <h5 class="date" style="text-transform: uppercase;">may 2026</h5>
-                    </div>
-                    <div class="ncard-content">
-                        <div class="title-content">
-                            <h4>Heading</h4>
-                            <p>New outreach brings trained counselors to Nepal's most remote regions through
-                                partnerships
-                                with local government health posts.</p>
-                        </div>
-                        <div class="btn-content">
-                            <div class="btn emptyblack">
-                                Button text
-                                <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php $i++; endforeach; ?>
+            </div>
+            <div class="see-more-stories">
+                <a href="<?= $pages->get('/stories/')->url ?>" class="btn emptyblack">
+                    See More Stories
+                    <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
+                </a>
             </div>
 
         </div>

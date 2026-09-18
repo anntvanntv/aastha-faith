@@ -295,6 +295,7 @@ h2 {
 .clamp-text.clamped {
   display: -webkit-box;
   -webkit-line-clamp: 6;
+  line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin: 0;
@@ -2065,6 +2066,7 @@ padding: 80px 0;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 30px;
+  margin-top: 40px;
   background-color: var(--white-800);
 }
 
@@ -2075,13 +2077,20 @@ padding: 80px 0;
   gap: 12px;
 }
 
-.cards-beyond .news-card.a .ncard-picture,
-.cards-beyond .news-card.c .ncard-picture {
+.cards-beyond .news-card .ncard-picture {
   height: 240px;
 }
 
-.beyond-content .news-card.b .ncard-picture {
-  height: 535px;
+.cards-beyond .news-card .ncard-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.see-more-stories {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 .beyond-content h2,
@@ -3182,6 +3191,10 @@ textarea {
 @media (max-width: 900px) {
   /*-------- nav ------*/
 
+  .cards-beyond .news-card {
+    flex: 0 1 calc(50% - 15px);
+  }
+
   .herobtn {
     margin-left: 500px;
   }
@@ -3595,11 +3608,12 @@ textarea {
   }
 
   .cards-beyond .news-card {
-    flex: 0 1 250px;
+    flex: 1 1 100%;
   }
 
   .beyond-content .header-left {
     gap: 0;
+    width: 100%;
   }
 
   .beyond-content .header-left h2 {
