@@ -91,7 +91,7 @@ $footer = $pages->get('/footer/');
                         <?php if($footer->footer_email2): ?>
                         <a href="mailto:<?= $footer->footer_email2 ?>"><?= $footer->footer_email2 ?></a>
                         <?php endif; ?>
-                        <a class="btn orange" href="#">Book partnership call <img
+                        <a class="btn orange" href="<?= $pages->get('/contact/')->url ?>">Contact Us <img
                                 src="<?= $config->urls->templates ?>icons/arrow_forward_white.png" alt="icon"></a>
                     </div>
                 </div>
