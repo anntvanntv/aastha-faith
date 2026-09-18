@@ -26,10 +26,12 @@ namespace ProcessWire
                     <h5 style="text-transform:uppercase">OBJECTIVE</h5>
                     <p><?= $page->objective ?></p>
                 </div>
+                <?php if($page->outputs): ?>
                 <div edit="outputs">
                     <h5 style="text-transform:uppercase">Outputs</h5>
                     <p><?= $page->outputs ?></p>
                 </div>
+                <?php endif; ?>
             </div>
             <div class="infos-one-work">
                 <div edit="duration">
