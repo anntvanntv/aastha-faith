@@ -89,6 +89,20 @@ $rm->createPage(
     title: 'Individual Giving'
 );
 
+$rm->createPage(
+    template: 'individual-giving',
+    parent: '/donors/',
+    name: 'institutional-funders',
+    title: 'Institutional & Technical Funders'
+);
+
+$rm->createPage(
+    template: 'individual-giving',
+    parent: '/donors/',
+    name: 'philanthropists',
+    title: 'For Philanthropists'
+);
+
 $rm->createTemplate('donors');
 
 $rm->createPage(
@@ -753,6 +767,44 @@ $footerFields = [
 foreach($footerFields as $field){
     $rm->addFieldToTemplate($field, 'footer');
 }
+
+/*  -----  donor path cards  ---- */
+
+$rm->migrate([
+    'fields' => [
+        'donor_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Donor Cards',
+            'fields' => [
+                'donor_card_icon',
+                'donor_card_title',
+                'donor_card_text',
+                'donor_card_url',
+            ],
+        ],
+        'donor_card_icon' => [
+            'type' => 'image',
+            'label' => 'Donor Card Icon',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'donor_card_title' => [
+            'type' => 'text',
+            'label' => 'Donor Card Title',
+        ],
+        'donor_card_text' => [
+            'type' => 'textArea',
+            'label' => 'Donor Card Text',
+        ],
+        'donor_card_url' => [
+            'type' => 'text',
+            'label' => 'Donor Card URL',
+        ],
+    ],
+]);
+
+$rm->addFieldToTemplate('donor_cards', 'donors');
 
 
 
