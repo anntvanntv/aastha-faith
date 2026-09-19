@@ -3971,6 +3971,10 @@ textarea {
 /*accountability*/
 
 @media (max-width: 530px) {
+  .policies .horizontal-card {
+    height: 114px;
+  }
+
  .policies .horizontal-card .body-bold {
   width: 200px;
  }
@@ -4387,6 +4391,14 @@ textarea {
   .theory {
     padding: 60px 10px;
   }
+
+  .policies .horizontal-card {
+    height: 120px;
+  }
+
+  .policies .horizontal-card .body-bold {
+    width: 171px;
+  }
 }
 
 @media (max-width: 358px) {
@@ -4401,6 +4413,14 @@ textarea {
   .required .warning-message {
     width: 268px;
     padding: 6px 7px;
+  }
+
+  .policies .horizontal-card {
+    padding: 10px;
+  }
+
+  .policies .card-left {
+    gap: 6px;
   }
 }
 
