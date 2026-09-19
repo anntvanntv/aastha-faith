@@ -2251,30 +2251,18 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   margin-bottom: 3px;
 }
 
+/* horizontal cards legal & policies */
 .horizontal-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
 }
 
-.horizontal-card {
-  width: 100%;
-}
-
-/* .horizontal-cards {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-content: flex-start;
-  padding: 0px;
-  gap: 10px;
-} */
-
 .executive {
   margin-top: 35px;
 }
 
-.legal .horizontal-card {
+.legal .horizontal-card, .policies .horizontal-card {
   width: 228px;
   padding: 25px 23px 14px;
 }
@@ -2295,7 +2283,7 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   gap: 10px;
   justify-content: flex-start;
   flex-wrap: nowrap;
-
+  width: 100%;
   box-shadow: 0px 2px 20px 0px #00000012;
   border-radius: 12px;
 
@@ -2311,13 +2299,6 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   width: 100%;
 }
 
-/* .column-right,
-.column-left {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-} */
-
 .horizontal-cards .small {
   color: var(--neutral-400);
 }
@@ -2329,9 +2310,8 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   color: var(--text-body-light);
   display: flex;
   flex-direction: column;
-
   align-items: flex-start;
-  padding: 80px 40px;
+  padding: 80px 40px 156px 40px;
   gap: 40px;
 }
 
@@ -2341,7 +2321,7 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   align-items: flex-start;
   padding: 0px;
   gap: 34px;
-  width: 550px; /*38% of 1440px*/
+  width: 550px;
 }
 
 .financial .header-left h2 {
@@ -2401,9 +2381,6 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   gap: 20px;
 }
 
-.column {
-  align-self: end;
-}
 
 .policies .header-central p {
   width: 60%;
@@ -2420,6 +2397,14 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
 .policies h4 {
   color: var(--text-heading);
   font-weight: 600;
+}
+
+.policies .horizontal-cards {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.policie .column {
+  align-self: inherit;
 }
 
 .horizontal-card {
@@ -3118,8 +3103,8 @@ textarea {
     width: 66%;
   }
 
-  .financial-content .horizontal-card {
-    width: 250px;
+  .financial-content .horizontal-card, .policies .horizontal-card {
+    width: 279px;
     padding: 12px 9px 0px 9px;
   }
 
@@ -3194,6 +3179,8 @@ textarea {
     gap: 10px;
   }
 }
+
+
 
 @media (max-width: 900px) {
   /*-------- nav ------*/
