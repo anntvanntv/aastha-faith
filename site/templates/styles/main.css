@@ -1026,6 +1026,10 @@ textarea:focus {
   padding: 48px 40px;
 }
 
+.quote2 .title-quote h2 {
+  line-height: 49px;
+}
+
 /*------------from the field + STORIES---------*/
 
 .field {
