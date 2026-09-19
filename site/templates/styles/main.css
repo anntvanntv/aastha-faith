@@ -3083,10 +3083,6 @@ textarea {
     width: 80%;
   }
 
-  .financial {
-    padding: 78px 20px;
-  }
-
   .header-left {
     gap: 24px;
   }
@@ -3096,7 +3092,7 @@ textarea {
     width: 66%;
   }
 
-  .financial-content .horizontal-card, .policies .horizontal-card {
+  .financial-content .horizontal-card {
     width: 279px;
     padding: 12px 9px 0px 9px;
   }
@@ -3760,9 +3756,71 @@ textarea {
 
   /*--- accountability ----*/
 
+  .financial {
+    padding: 80px 15px 156px 10px;
+  }
+
   .policies .header-central h2 {
     line-height: 50px;
   }
+}
+@media (max-width: 595px) {
+ /*----- accountability -------*/
+
+ .members,
+ .executive {
+   width: 100%;
+ }
+
+ .content-policies,
+ .financial-content,
+ .container-right,
+ .members .horizontal-cards,
+ .executive .horizontal-cards {
+   display: flex;
+   flex-direction: column;
+   align-items: start;
+   padding: 0;
+   width: 100%;
+ }
+
+ .horizontal-cards {
+   gap: 24px;
+ }
+
+ .horizontal-cards .column-left .horizontal-card,
+ .horizontal-cards .column-right .horizontal-card {
+   justify-content: start;
+ }
+
+ .content-policies .column-right,
+ .content-policies .column-left,
+ .horizontal-cards .column-left,
+ .horizontal-cards .column-right {
+   width: 100%;
+ }
+
+ .column-left .horizontal-card,
+ .column-right .horizontal-card {
+   width: 100%;
+ }
+
+ .financial,
+ .legal {
+   padding: 40px 20px;
+ }
+
+ .policies {
+   padding: 60px 20px;
+ }
+
+ .legal .container-right {
+   margin-left: 0;
+ }
+
+ .policies .header-central p {
+   width: auto;
+ }
 }
 
 @media (max-width: 566px) {
@@ -3828,62 +3886,7 @@ textarea {
     left: 45%;
   }
 
-  /*----- accountability -------*/
-
-  .members,
-  .executive {
-    width: 100%;
-  }
-
-  .content-policies,
-  .financial-content,
-  .container-right,
-  .members .horizontal-cards,
-  .executive .horizontal-cards {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding: 0;
-    width: 100%;
-  }
-
-  .horizontal-cards {
-    gap: 24px;
-  }
-
-  .horizontal-cards .column-left .horizontal-card,
-  .horizontal-cards .column-right .horizontal-card {
-    justify-content: start;
-  }
-
-  .content-policies .column-right,
-  .content-policies .column-left,
-  .horizontal-cards .column-left,
-  .horizontal-cards .column-right {
-    width: 100%;
-  }
-
-  .column-left .horizontal-card,
-  .column-right .horizontal-card {
-    width: 100%;
-  }
-
-  .financial,
-  .legal {
-    padding: 40px 20px;
-  }
-
-  .policies {
-    padding: 60px 20px;
-  }
-
-  .legal .container-right {
-    margin-left: 0;
-  }
-
-  .policies .header-central p {
-    width: auto;
-  }
+ 
 
   /*------ nav ------*/
 
