@@ -3968,6 +3968,14 @@ textarea {
   flex-direction: column;;
 }
 }
+/*accountability*/
+
+@media (max-width: 530px) {
+ .policies .horizontal-card .body-bold {
+  width: 200px;
+ }
+}
+
 /*----------------------------------------------- PHONE ---------------------------------------------------*/
 @media (max-width: 495px) {
   h1 {
