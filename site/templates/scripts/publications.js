@@ -53,6 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let soundOn = true;
     let audioCtx = null;
 
+    // rendered-page cache so reopening a PDF skips the pdf.js render pass
+    const pdfCache = new Map();
+    const CACHE_MAX = 4;
+    const cloneCanvas = (src) => {
+        const c = document.createElement('canvas');
+        c.width = src.width;
+        c.height = src.height;
+        c.getContext('2d').drawImage(src, 0, 0);
+        return c;
+    };
+
     // rustled noise with flutter approximating a newspaper page turn
     function playFlipSound() {
         if (!soundOn) return;
@@ -129,6 +140,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function calcPageSize(pageRatio) {
+        const stageRect = viewer.querySelector('.pdf-viewer-stage').getBoundingClientRect();
+        let w = Math.min(stageRect.width / 2 - 20, (stageRect.height - 20) * pageRatio);
+        if (stageRect.width < 700) {
+            w = Math.min(stageRect.width - 40, (stageRect.height - 20) * pageRatio);
+        }
+        return { w, h: w / pageRatio };
+    }
+
     async function openViewer(url, title) {
         viewer.hidden = false;
         document.body.style.overflow = 'hidden';
@@ -145,40 +165,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await loadLibs();
-            const doc = await window.pdfjsLib.getDocument(url).promise;
-            const numPages = doc.numPages;
+            let cached = pdfCache.get(url);
 
-            const first = await doc.getPage(1);
-            const vp = first.getViewport({ scale: 1 });
-            const pageRatio = vp.width / vp.height;
+            if (!cached) {
+                const doc = await window.pdfjsLib.getDocument(url).promise;
+                const numPages = doc.numPages;
 
-            const stage = viewer.querySelector('.pdf-viewer-stage');
-            const stageRect = stage.getBoundingClientRect();
-            let pageWCalc = Math.min(stageRect.width / 2 - 20, (stageRect.height - 20) * pageRatio);
-            if (stageRect.width < 700) {
-                pageWCalc = Math.min(stageRect.width - 40, (stageRect.height - 20) * pageRatio);
+                const first = await doc.getPage(1);
+                const vp = first.getViewport({ scale: 1 });
+                const pageRatio = vp.width / vp.height;
+
+                ({ w: pageW, h: pageH } = calcPageSize(pageRatio));
+                const renderScale = (pageW * Math.min(window.devicePixelRatio || 1, 2)) / vp.width;
+
+                const canvases = [];
+                const thumbSrcs = [];
+                for (let i = 1; i <= numPages; i++) {
+                    const page = await doc.getPage(i);
+                    const viewport = page.getViewport({ scale: Math.max(renderScale, 1) });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+                    canvases.push(canvas);
+                    thumbSrcs.push(canvas.toDataURL('image/jpeg', 0.5));
+                    loadingText.textContent = `Loading PDF… ${i}/${numPages}`;
+                }
+                cached = { pageRatio, canvases, thumbSrcs };
+                pdfCache.set(url, cached);
+                // drop oldest entry when over the cap
+                if (pdfCache.size > CACHE_MAX) pdfCache.delete(pdfCache.keys().next().value);
+            } else {
+                ({ w: pageW, h: pageH } = calcPageSize(cached.pageRatio));
+                loadingText.textContent = 'Loading PDF…';
             }
-            pageW = pageWCalc;
-            pageH = pageW / pageRatio;
 
-            const renderScale = (pageW * Math.min(window.devicePixelRatio || 1, 2)) / vp.width;
-            const pages = [];
-            for (let i = 1; i <= numPages; i++) {
-                const page = await doc.getPage(i);
-                const viewport = page.getViewport({ scale: Math.max(renderScale, 1) });
-                const canvas = document.createElement('canvas');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-                pages.push(canvas);
-
+            const pages = cached.canvases.map(cloneCanvas);
+            cached.thumbSrcs.forEach((src, i) => {
                 const thumb = document.createElement('img');
-                thumb.src = canvas.toDataURL('image/jpeg', 0.5);
-                thumb.alt = `Page ${i}`;
-                thumb.dataset.page = i - 1;
+                thumb.src = src;
+                thumb.alt = `Page ${i + 1}`;
+                thumb.dataset.page = i;
                 thumbsRail.appendChild(thumb);
-                loadingText.textContent = `Loading PDF… ${i}/${numPages}`;
-            }
+            });
 
             flip = new St.PageFlip(book, {
                 width: pageW,
