@@ -629,6 +629,14 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Stat Title',
         ],
+        'hero_slides' => [
+            'type' => 'FieldtypeImage',
+            'label' => 'Hero Slideshow Images',
+            'description' => 'Upload multiple photos — they auto-rotate every 3 seconds. When empty, the single Hero image above is used instead.',
+            'maxFiles' => 0,
+            'extensions' => 'jpg jpeg png gif svg webp',
+            'outputFormat' => FieldtypeFile::outputFormatArray,
+        ],
         'album_card' => [
             'type' => 'FieldtypeRepeater',
             'label' => 'Album Card',
@@ -718,6 +726,7 @@ $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
 $rm->addFieldToTemplate('title_change2', 'home');
 $rm->addFieldToTemplate('stats_cards', 'home');
+$rm->addFieldToTemplate('hero_slides', 'home');
 
 // Group home stats fields together in admin and push legacy card_* fields to the end.
 // Guarded: only touches the fieldgroup when the order is actually wrong.
@@ -732,6 +741,13 @@ $t2i = array_search('title_change2', $names, true);
 if ($ti !== false && $si !== false && $t2i !== false && !($si === $ti + 1 && $t2i === $ti + 2)) {
     $homeFg->insertAfter($fields->get('stats_cards'), $fields->get('title_change'));
     $homeFg->insertAfter($fields->get('title_change2'), $fields->get('stats_cards'));
+    $dirty = true;
+}
+
+$hi = array_search('hero_image', $names, true);
+$hs = array_search('hero_slides', $names, true);
+if ($hi !== false && $hs !== false && $hs !== $hi + 1) {
+    $homeFg->insertAfter($fields->get('hero_slides'), $fields->get('hero_image'));
     $dirty = true;
 }
 
