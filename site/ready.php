@@ -719,6 +719,35 @@ $rm->addFieldToTemplate('areas_cards', 'home');
 $rm->addFieldToTemplate('title_change2', 'home');
 $rm->addFieldToTemplate('stats_cards', 'home');
 
+// Group home stats fields together in admin and push legacy card_* fields to the end.
+// Guarded: only touches the fieldgroup when the order is actually wrong.
+$homeFg = $templates->get('home')->fieldgroup;
+$names = [];
+foreach ($homeFg as $f) $names[] = $f->name;
+$dirty = false;
+
+$ti = array_search('title_change', $names, true);
+$si = array_search('stats_cards', $names, true);
+$t2i = array_search('title_change2', $names, true);
+if ($ti !== false && $si !== false && $t2i !== false && !($si === $ti + 1 && $t2i === $ti + 2)) {
+    $homeFg->insertAfter($fields->get('stats_cards'), $fields->get('title_change'));
+    $homeFg->insertAfter($fields->get('title_change2'), $fields->get('stats_cards'));
+    $dirty = true;
+}
+
+$legacy = ['card_number','card_title','card_number2','card_title2','card_number3','card_title3','card_number4','card_title4'];
+$present = array_values(array_intersect($legacy, $names));
+if ($present && array_slice($names, -count($present)) !== $present) {
+    foreach ($present as $cf) {
+        $f = $fields->get($cf);
+        $homeFg->remove($f);
+        $homeFg->add($f);
+    }
+    $dirty = true;
+}
+
+if ($dirty) $homeFg->save();
+
 
 /* adding Field to Template OUR-WORK  */
 // Section titles for the two sections on Our Work page
