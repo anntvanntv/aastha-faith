@@ -14,40 +14,43 @@
 </header>
 
 <section class="container">
-    <?php
-    $types = [
-        1 => 'Annual Reports',
-        2 => 'Financial Statements',
-        3 => 'Policy Documents',
-    ];
-    foreach ($types as $id => $label):
-        $cards = $page->pdf_cards->find("info_type=$id");
-        if ($cards->count()):
-    ?>
     <div class="publications-group">
-        <h4><?= $label ?></h4>
-        <div class="horizontal-cards">
-            <?php foreach ($cards as $card): ?>
-            <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                <div class="card-left">
-                    <div class="icon pdf">
-                        <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                    </div>
-                    <div class="text-card">
-                        <p edit='title' class="body-bold"><?= $card->title ?></p>
-                        <p class="small">PDF</p>
-                    </div>
+        <h4 edit="publication_section1"><?= $page->publication_section1 ?: 'Digital Booklets' ?></h4>
+        <div class="publications-cards" edit="booklet_cards">
+            <?php foreach ($page->booklet_cards as $card): ?>
+            <div class="publication-card">
+                <?php if ($card->cover_image): ?>
+                    <img class="cover" src="<?= $card->cover_image->url ?>" alt="<?= $card->title ?>">
+                <?php endif; ?>
+                <div class="publication-info">
+                    <h4><?= $card->title ?></h4>
                 </div>
-                <div class="icon download">
-                    <a href="<?= $card->pdf_file->url ?>" download>
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </a>
-                </div>
+                <a class="publication-download" href="<?= $card->pdf_file->url ?>" download>
+                    Click to Download
+                </a>
             </div>
             <?php endforeach; ?>
         </div>
     </div>
-    <?php endif; endforeach; ?>
+
+    <div class="publications-group">
+        <h4 edit="publication_section2"><?= $page->publication_section2 ?: 'Case Studies and Research' ?></h4>
+        <div class="publications-cards" edit="research_cards">
+            <?php foreach ($page->research_cards as $card): ?>
+            <div class="publication-card">
+                <?php if ($card->cover_image): ?>
+                    <img class="cover" src="<?= $card->cover_image->url ?>" alt="<?= $card->title ?>">
+                <?php endif; ?>
+                <div class="publication-info">
+                    <h4><?= $card->title ?></h4>
+                </div>
+                <a class="publication-download" href="<?= $card->pdf_file->url ?>" download>
+                    Click to Download
+                </a>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
 </section>
 
 <?php include('./_footer.php'); ?>

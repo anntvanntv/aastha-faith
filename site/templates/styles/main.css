@@ -1904,7 +1904,7 @@ padding: 80px 0;
 }
 
 .title-publications {
-  padding: 200px 27px;
+  padding: 200px 27px 60px;
 }
 
 .publications .container {
@@ -1928,36 +1928,91 @@ padding: 80px 0;
   color: var(--text-heading);
 }
 
-.publications .horizontal-cards {
+.publications-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
   width: 100%;
 }
 
-.publications .horizontal-card {
+.publication-card {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  height: auto;
-  min-height: 80px;
-  width: 100%;
+  align-items: center;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--amber-500);
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.07);
 }
 
-.publications .horizontal-card .text-card {
-  overflow-wrap: anywhere;
+.publication-card img.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.publication-info {
+  position: relative;
+  z-index: 1;
+  padding: 40px 24px;
+  width: 100%;
+  text-align: center;
+}
+
+.publication-info h4 {
+  color: var(--text-heading);
+  line-height: 1.2;
+}
+
+.publication-download {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 18px 24px;
+  background-color: var(--green-900);
+  color: var(--white-800);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.publication-download:hover {
+  background-color: var(--green-800);
 }
 
 @media (max-width: 900px) {
   .title-publications {
-    padding: 100px 27px;
+    padding: 100px 27px 40px;
+  }
+
+  .publications-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 566px) {
   .title-publications {
-    padding: 100px 10px 48px;
+    padding: 100px 10px 24px;
   }
 
   .publications .container {
     margin: 20px;
     gap: 40px;
     padding-bottom: 60px;
+  }
+
+  .publications-cards {
+    grid-template-columns: 1fr;
   }
 }
 
