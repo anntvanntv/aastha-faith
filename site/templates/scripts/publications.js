@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let panX = 0;
     let panY = 0;
     let dragging = null;
+    let openToken = 0;
     let soundOn = true;
     let audioCtx = null;
 
@@ -162,9 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loading.style.display = 'flex';
         loadingText.textContent = 'Loading PDF…';
         pageInput.value = '';
+        const token = ++openToken;
+        const stale = () => token !== openToken || viewer.hidden;
 
         try {
             await loadLibs();
+            if (stale()) return;
             let cached = pdfCache.get(url);
 
             if (!cached) {
@@ -200,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadingText.textContent = 'Loading PDF…';
             }
 
+            if (stale()) return;
             const pages = cached.canvases.map(cloneCanvas);
             cached.thumbSrcs.forEach((src, i) => {
                 const thumb = document.createElement('img');
@@ -231,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeViewer() {
         viewer.hidden = true;
+        openToken++;
         document.body.style.overflow = '';
         if (flip) {
             try { flip.destroy(); } catch (e) { /* ui may not exist if closed mid-load */ }
