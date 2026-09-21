@@ -23,10 +23,10 @@
                     <img class="cover" src="<?= $card->cover_image->url ?>" alt="<?= $card->title ?>">
                 <?php endif; ?>
                 <div class="publication-info">
-                    <h4><?= $card->title ?></h4>
+                    <h4><svg class="doc-icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/></svg><?= $card->title ?></h4>
                 </div>
                 <a class="publication-download" href="<?= $card->pdf_file->url ?>" download>
-                    Click to Download
+                    <svg class="dl-icon" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="15"/><polyline points="7 11 12 16 17 11"/><line x1="5" y1="20" x2="19" y2="20"/></svg>Click to Download
                 </a>
             </div>
             <?php endforeach; ?>
@@ -42,10 +42,10 @@
                     <img class="cover" src="<?= $card->cover_image->url ?>" alt="<?= $card->title ?>">
                 <?php endif; ?>
                 <div class="publication-info">
-                    <h4><?= $card->title ?></h4>
+                    <h4><svg class="doc-icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/></svg><?= $card->title ?></h4>
                 </div>
                 <a class="publication-download" href="<?= $card->pdf_file->url ?>" download>
-                    Click to Download
+                    <svg class="dl-icon" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="15"/><polyline points="7 11 12 16 17 11"/><line x1="5" y1="20" x2="19" y2="20"/></svg>Click to Download
                 </a>
             </div>
             <?php endforeach; ?>
