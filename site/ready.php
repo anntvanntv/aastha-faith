@@ -646,12 +646,18 @@ $rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 $rm->addFieldToTemplate('title', 'individual-giving');
 $rm->addFieldToTemplate('hero_description', 'individual-giving');
-$rm->addFieldToTemplate('card_number', 'individual-giving');
-$rm->addFieldToTemplate('card_number2', 'individual-giving');
-$rm->addFieldToTemplate('card_number3', 'individual-giving');
-$rm->addFieldToTemplate('card_number4', 'individual-giving');
-$rm->addFieldToTemplate('card_title', 'individual-giving');
-$rm->addFieldToTemplate('born_title', 'individual-giving');
+$rm->addFieldToTemplate('card_number', 'donors');
+$rm->addFieldToTemplate('card_number2', 'donors');
+$rm->addFieldToTemplate('card_number3', 'donors');
+$rm->addFieldToTemplate('card_number4', 'donors');
+$rm->addFieldToTemplate('card_title', 'donors');
+$rm->addFieldToTemplate('born_title', 'donors');
+$rm->removeFieldFromTemplate('card_number', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number2', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number3', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number4', 'individual-giving');
+$rm->removeFieldFromTemplate('card_title', 'individual-giving');
+$rm->removeFieldFromTemplate('born_title', 'individual-giving');
 
 
 /* adding Fields to Template IMPACT */
@@ -801,10 +807,20 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Donor Card URL',
         ],
+        'cta_label' => [
+            'type' => 'text',
+            'label' => 'CTA Label',
+        ],
+        'cta_url' => [
+            'type' => 'text',
+            'label' => 'CTA URL',
+        ],
     ],
 ]);
 
 $rm->addFieldToTemplate('donor_cards', 'donors');
+$rm->addFieldToTemplate('cta_label', 'individual-giving');
+$rm->addFieldToTemplate('cta_url', 'individual-giving');
 
 
 
