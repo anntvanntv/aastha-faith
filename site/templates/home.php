@@ -12,7 +12,15 @@ namespace ProcessWire;
 ?>
 
 <div id="content">
-    <header edit="hero_image" style="background-image: url('<?= $page->hero_image->url ?>');">
+    <header <?php if (!$page->hero_slides->count()): ?>edit="hero_image" style="background-image: url('<?= $page->hero_image->url ?>');"<?php endif; ?>>
+        <?php if ($page->hero_slides->count()): ?>
+            <div class="hero-slides" edit="hero_slides">
+                <?php $first = $page->hero_slides->first(); ?>
+                <?php foreach ($page->hero_slides as $slide): ?>
+                    <div class="hero-slide<?= $slide === $first ? ' active' : '' ?>" style="background-image: url('<?= $slide->url ?>');"></div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
         <?php include('./_nav.php'); ?>
         <section class="hero-content">
 

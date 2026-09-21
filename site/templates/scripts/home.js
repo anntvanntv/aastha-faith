@@ -5,6 +5,17 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+// Hero slideshow — auto-rotate background slides every 3s
+const heroSlides = document.querySelectorAll(".hero-slide");
+if (heroSlides.length > 1) {
+    let cur = 0;
+    setInterval(() => {
+        heroSlides[cur].classList.remove("active");
+        cur = (cur + 1) % heroSlides.length;
+        heroSlides[cur].classList.add("active");
+    }, 3000);
+}
+
 const video = document.getElementById("myVideo");
 const btn = document.querySelector(".play-btn");
 
