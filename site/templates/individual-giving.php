@@ -9,7 +9,7 @@ namespace ProcessWire;
     <header>
         <?php include('./_nav.php'); ?>
     </header>
-    <section>
+    <section data-nav-color="light">
         <div class="heading-left">
             <h1 edit="title"><?= $page->title ?></h1>
             <p edit="hero_description"><?= $page->hero_description ?: "Your gift reaches the women other systems leave behind. Women living with HIV. Survivors of violence. Women in Nepal's entertainment sector facing stigma every day. For twenty years, FAITH's outreach workers, counselors, and community paralegals have reached them — because people like you made it possible." ?></p>
@@ -20,7 +20,7 @@ namespace ProcessWire;
             </a>
         </div>
     </section>
-    <section class="bank-details">
+    <section class="bank-details" data-nav-color="light">
         <h3 edit="<?= $donors->id ?>:born_title"><?= $donors->born_title ?: 'Bank details' ?></h3>
         <ul>
             <li edit="<?= $donors->id ?>:card_number"><?= $donors->card_number ?: 'Account holder: FAITH Nepal' ?></li>
