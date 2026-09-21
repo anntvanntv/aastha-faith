@@ -4126,6 +4126,23 @@ textarea {
     height: 80px;
   }
 
+  .car-next-ar {
+    right: 10px;
+  }
+
+  .car-prev-ar {
+    left: 10px;
+  }
+
+  .logo-carousel-panoramic {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .logo-carousel {
+    padding: 60px;
+  }
+
   /*----- stories ------*/
 
   .title-stories {
