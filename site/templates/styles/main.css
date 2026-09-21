@@ -1896,6 +1896,71 @@ padding: 80px 0;
   font-weight: 400;
 }
 
+/*----------- publications -----------*/
+
+.publications {
+  background-color: var(--white-800);
+  color: var(--text-heading);
+}
+
+.title-publications {
+  padding: 200px 27px;
+}
+
+.publications .container {
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+  padding-bottom: 80px;
+}
+
+.publications-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.publications-group h4 {
+  color: var(--text-heading);
+}
+
+.publications .horizontal-cards {
+  width: 100%;
+}
+
+.publications .horizontal-card {
+  justify-content: space-between;
+  height: auto;
+  min-height: 80px;
+  width: 100%;
+}
+
+.publications .horizontal-card .text-card {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .title-publications {
+    padding: 100px 27px;
+  }
+}
+
+@media (max-width: 566px) {
+  .title-publications {
+    padding: 100px 10px 48px;
+  }
+
+  .publications .container {
+    margin: 20px;
+    gap: 40px;
+    padding-bottom: 60px;
+  }
+}
+
 /*-------------------------------------------- Impact ------------------------------------------*/
 
 .impact {

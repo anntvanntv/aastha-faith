@@ -76,7 +76,24 @@ $rm->createPage(
     parent: '/',
     name: 'partnership-ngo',
     title: 'Partnership NGO'
-);  
+);   
+
+$rm->createTemplate('publications');
+
+$rm->createPage(
+    template: 'publications',
+    parent: '/',
+    name: 'publications',
+    title: 'Publications',
+);
+
+$publicationsFields = [
+    'pdf_cards',
+];
+
+foreach($publicationsFields as $field){
+    $rm->addFieldToTemplate($field, 'publications');
+}
 
 
 
