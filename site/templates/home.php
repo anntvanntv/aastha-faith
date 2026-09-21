@@ -61,17 +61,17 @@ namespace ProcessWire;
             </div>
         </section>
 
-        <section id="stats" class="stats" data-nav-color="dark">
+        <section id="stats" class="stats stats-dark" data-nav-color="dark">
             <div class="stats-heading">
                 <div class="heading-left">
                     <div class="eyebrow">
-                        <img class="wave" src="<?= $config->urls->templates ?>icons/wave.png" alt="icon-wave">
-                        <img class="our" src="<?= $config->urls->templates ?>icons/ourimpact.png" alt="icon">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">our impact</h5>
                     </div>
                     <h2 edit="title_change"><?= $page->title_change ?></h2>
                 </div>
                 <div class="heading-right">
-                    <a class="btn white statsbtn" href="<?= $pages->get('/impact/')->url ?>">
+                    <a class="btn green statsbtn" href="<?= $pages->get('/impact/')->url ?>">
                         Learn about impact
                         <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -84,27 +84,14 @@ namespace ProcessWire;
                 </div>
             </div> <!---end stats-heading-->
             <div class="cards-section">
-            <div class="map-area"><iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7065.95801099961!2d85.30852979709088!3d27.687043755168673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b4ad7096dd%3A0x29fa3d73b99dcc97!2sKupondole%2C%20Patan%2C%20Zona%20de%20Bagmati%2044600%2C%20Nepal!5e0!3m2!1ses!2sde!4v1789045329645!5m2!1sen!2sde"
-                    style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <div class="static-cards" edit="stats_cards">
+                <?php foreach ($page->stats_cards as $card): ?>
+                <div class="static-card">
+                    <h2 edit="<?= $card->id ?>.stat_number" class="light-orange-text"><?= $card->stat_number ?></h2>
+                    <p edit="<?= $card->id ?>.stat_title"><?= $card->stat_title ?></p>
+                </div>
+                <?php endforeach; ?>
             </div>
-               <!--  <div class="card">
-                    <h2 edit="card_number"><?= $page->card_number ?></h2>
-                    <p edit="card_title"><?= $page->card_title ?></p>
-                </div>
-                <div class="card">
-                    <h2 edit="card_number2"><?= $page->card_number2 ?></h2>
-                    <p edit="card_title2"><?= $page->card_title2 ?></p>
-                </div>
-                <div class="card">
-                    <h2 edit="card_number3"><?= $page->card_number3 ?></h2>
-                    <p edit="card_title3"><?= $page->card_title3 ?></p>
-                </div>
-                <div class="card">
-                    <h2 edit="card_number4"><?= $page->card_number4 ?></h2>
-                    <p edit="card_title4"><?= $page->card_title4 ?></p>
-                </div> -->
             </div>
 
         </section>
