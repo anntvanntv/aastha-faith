@@ -18,9 +18,24 @@ namespace ProcessWire;
     <section class="donors-section">
         <div class="header-section">
             <h3>Choose your path</h3>
-            
+            <?php if($user->isLoggedin() && !$page->donor_cards->count()): ?>
+                <button edit="donor_cards">double-click to add a card</button>
+            <?php endif; ?>
         </div>
         <div class="card-section-donors">
+          <?php if($page->donor_cards->count()): ?>
+            <?php foreach($page->donor_cards as $card): ?>
+          <a class="vertical-card-link" href="<?= $card->donor_card_url ?: $pages->get('/donors/')->url ?>" edit="donor_cards">
+            <div class="vertical-card">
+                <div class="icon">
+                    <img src="<?= $card->donor_card_icon ? $card->donor_card_icon->url : $config->urls->templates . 'icons/cor.png' ?>" alt="icon">
+                </div>
+                <h4><?= $card->donor_card_title ?></h4>
+                <p><?= $card->donor_card_text ?></p>
+            </div>
+          </a>
+            <?php endforeach; ?>
+          <?php else: ?>
           <a class="vertical-card-link" href="<?= $pages->get('/donors/individual-giving/')->url ?>">
             <div class="vertical-card">
                 <div class="icon">
@@ -30,7 +45,7 @@ namespace ProcessWire;
                 <p>Make a direct impact with a one-time or recurring donation.</p>
             </div>
           </a>
-          <a class="vertical-card-link" href="<?= $pages->get('/donors/individual-giving/')->url ?>">
+          <a class="vertical-card-link" href="<?= $pages->get('/donors/institutional-funders/')->url ?>">
             <div class="vertical-card">
                 <div class="icon">
                     <img src="<?= $config->urls->templates ?>icons/cor.png" alt="icon">
@@ -39,7 +54,7 @@ namespace ProcessWire;
                 <p>Partner with us to deliver sustainable, community-led programmes.</p>
             </div>
           </a>
-          <a class="vertical-card-link" href="<?= $pages->get('/donors/individual-giving/')->url ?>">
+          <a class="vertical-card-link" href="<?= $pages->get('/donors/philanthropists/')->url ?>">
             <div class="vertical-card">
                 <div class="icon">
                     <img src="<?= $config->urls->templates ?>icons/cor.png" alt="icon">
@@ -48,6 +63,7 @@ namespace ProcessWire;
                 <p>Support long-term initiatives that create lasting change.</p>
             </div>
           </a>
+          <?php endif; ?>
              
         </div>
     </section>

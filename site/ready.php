@@ -76,7 +76,84 @@ $rm->createPage(
     parent: '/',
     name: 'partnership-ngo',
     title: 'Partnership NGO'
-);  
+);   
+
+$rm->createTemplate('publications');
+
+$publicationsPage = $rm->createPage(
+    template: 'publications',
+    parent: '/',
+    name: 'publications',
+);
+if ($publicationsPage && !$publicationsPage->title) {
+    $publicationsPage->setAndSave('title', 'Publications');
+}
+
+$rm->migrate([
+    'fields' => [
+        'publication_section1' => [
+            'type' => 'text',
+            'label' => 'Section 1 Title',
+        ],
+        'publication_section2' => [
+            'type' => 'text',
+            'label' => 'Section 2 Title',
+        ],
+        'pdf_file' => [
+            'type' => 'file',
+            'label' => 'Pdf File',
+            'maxFiles' => 1,
+            'extensions' => 'pdf',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'cover_image' => [
+            'type' => 'image',
+            'label' => 'Cover Image',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png webp',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'booklet_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Digital Booklets',
+            'fields' => [
+                'title',
+                'pdf_file',
+                'cover_image',
+            ],
+        ],
+        'research_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Case Studies and Research',
+            'fields' => [
+                'title',
+                'pdf_file',
+                'cover_image',
+            ],
+        ],
+    ],
+]);
+
+$publicationsFields = [
+    'publication_section1',
+    'booklet_cards',
+    'publication_section2',
+    'research_cards',
+];
+
+foreach($publicationsFields as $field){
+    $rm->addFieldToTemplate($field, 'publications');
+}
+
+$rm->removeFieldFromTemplate('pdf_cards', 'publications');
+$rm->removeFieldFromTemplate('hero_title1', 'publications');
+$rm->removeFieldFromTemplate('hero_description', 'publications');
+$rm->removeFieldFromTemplate('cover_image', 'repeater_pdf_cards');
+
+/* onestory fields must stay attached; re-attach if the fieldgroup lost them */
+foreach (['image', 'category', 'date', 'body'] as $f) {
+    $rm->addFieldToTemplate($f, 'onestory');
+}
 
 
 
@@ -87,6 +164,20 @@ $rm->createPage(
     parent: '/donors/',
     name: 'individual-giving',
     title: 'Individual Giving'
+);
+
+$rm->createPage(
+    template: 'individual-giving',
+    parent: '/donors/',
+    name: 'institutional-funders',
+    title: 'Institutional & Technical Funders'
+);
+
+$rm->createPage(
+    template: 'individual-giving',
+    parent: '/donors/',
+    name: 'philanthropists',
+    title: 'For Philanthropists'
 );
 
 $rm->createTemplate('donors');
@@ -478,6 +569,10 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Born Orange Title',
         ],
+        'title_change2' => [
+            'type' => 'text',
+            'label' => 'Title Change 2',
+        ],
         'born_image' => [
             'type' => 'image',
             'label' => 'Born Image',
@@ -517,6 +612,22 @@ $rm->migrate([
         'areas_card_text' => [
                 'type' => 'textarea',
                 'label' => 'Areas Card Text',
+        ],
+        'stats_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Stats Cards',
+            'fields' => [
+                'stat_number',
+                'stat_title',
+            ],
+        ],
+        'stat_number' => [
+            'type' => 'text',
+            'label' => 'Stat Number',
+        ],
+        'stat_title' => [
+            'type' => 'text',
+            'label' => 'Stat Title',
         ],
         'album_card' => [
             'type' => 'FieldtypeRepeater',
@@ -605,6 +716,8 @@ $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
 $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
+$rm->addFieldToTemplate('title_change2', 'home');
+$rm->addFieldToTemplate('stats_cards', 'home');
 
 
 /* adding Field to Template OUR-WORK  */
@@ -632,12 +745,18 @@ $rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 $rm->addFieldToTemplate('title', 'individual-giving');
 $rm->addFieldToTemplate('hero_description', 'individual-giving');
-$rm->addFieldToTemplate('card_number', 'individual-giving');
-$rm->addFieldToTemplate('card_number2', 'individual-giving');
-$rm->addFieldToTemplate('card_number3', 'individual-giving');
-$rm->addFieldToTemplate('card_number4', 'individual-giving');
-$rm->addFieldToTemplate('card_title', 'individual-giving');
-$rm->addFieldToTemplate('born_title', 'individual-giving');
+$rm->addFieldToTemplate('card_number', 'donors');
+$rm->addFieldToTemplate('card_number2', 'donors');
+$rm->addFieldToTemplate('card_number3', 'donors');
+$rm->addFieldToTemplate('card_number4', 'donors');
+$rm->addFieldToTemplate('card_title', 'donors');
+$rm->addFieldToTemplate('born_title', 'donors');
+$rm->removeFieldFromTemplate('card_number', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number2', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number3', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number4', 'individual-giving');
+$rm->removeFieldFromTemplate('card_title', 'individual-giving');
+$rm->removeFieldFromTemplate('born_title', 'individual-giving');
 
 
 /* adding Fields to Template IMPACT */
@@ -753,6 +872,54 @@ $footerFields = [
 foreach($footerFields as $field){
     $rm->addFieldToTemplate($field, 'footer');
 }
+
+/*  -----  donor path cards  ---- */
+
+$rm->migrate([
+    'fields' => [
+        'donor_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Donor Cards',
+            'fields' => [
+                'donor_card_icon',
+                'donor_card_title',
+                'donor_card_text',
+                'donor_card_url',
+            ],
+        ],
+        'donor_card_icon' => [
+            'type' => 'image',
+            'label' => 'Donor Card Icon',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'donor_card_title' => [
+            'type' => 'text',
+            'label' => 'Donor Card Title',
+        ],
+        'donor_card_text' => [
+            'type' => 'textArea',
+            'label' => 'Donor Card Text',
+        ],
+        'donor_card_url' => [
+            'type' => 'text',
+            'label' => 'Donor Card URL',
+        ],
+        'cta_label' => [
+            'type' => 'text',
+            'label' => 'CTA Label',
+        ],
+        'cta_url' => [
+            'type' => 'text',
+            'label' => 'CTA URL',
+        ],
+    ],
+]);
+
+$rm->addFieldToTemplate('donor_cards', 'donors');
+$rm->addFieldToTemplate('cta_label', 'individual-giving');
+$rm->addFieldToTemplate('cta_url', 'individual-giving');
 
 
 

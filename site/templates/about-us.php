@@ -16,7 +16,7 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
                     <h5 style="text-transform: uppercase;">how it started</h5>
                 </div>
-                <h1 edit="hero_title1"><?= $page->hero_title1 ?>Built by women. <span edit="born_orange_title" class="orange-text"><?= $page->orange_title ?>Led by community.</span></h1>
+                <h1 edit="hero_title1"><?= $page->hero_title1 ?: 'Built by women.' ?> <span edit="born_orange_title" class="orange-text"><?= $page->born_orange_title ?: 'Led by community.' ?></span></h1>
 
             </div>
             <div class="description-about">
