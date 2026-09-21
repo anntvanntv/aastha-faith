@@ -244,6 +244,7 @@ html {
 
 .w-500 {
   width: 500px;
+  max-width: 100%;
 }
 
 .w100 {
@@ -726,6 +727,11 @@ footer button:hover {
   height: 24px;
 }
 
+.map-icon {
+  width: 24px;
+  height: 24px;
+}
+
 .header-central {
   display: flex;
   flex-direction: column;
@@ -811,6 +817,38 @@ textarea:focus {
   align-items: center;
   padding: 0px;
   gap: 24px;
+}
+
+/* first stats section reuses impact in-numbers theme: dark green, centered cards */
+.stats-dark {
+  background-color: var(--green-900);
+  /* heading → cards spacing mirrors .sticky-element (in-numbers) */
+  gap: 60px;
+}
+
+.stats-dark .stats-heading h2 {
+  color: var(--white-800);
+}
+
+/* matches .b-heading .eyebrow on the dark born section */
+.stats-dark .eyebrow {
+  color: var(--white-800);
+}
+
+.stats-dark .cards-section {
+  display: flex;
+  justify-content: center;
+}
+
+.stats-dark .static-cards {
+  justify-content: center;
+  padding-right: 0;
+  flex-wrap: wrap;
+  row-gap: 32px;
+}
+
+.stats-dark .static-card p {
+  color: var(--text-body-light);
 }
 
 .card {

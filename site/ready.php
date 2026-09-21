@@ -492,6 +492,10 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Born Orange Title',
         ],
+        'title_change2' => [
+            'type' => 'text',
+            'label' => 'Title Change 2',
+        ],
         'born_image' => [
             'type' => 'image',
             'label' => 'Born Image',
@@ -531,6 +535,22 @@ $rm->migrate([
         'areas_card_text' => [
                 'type' => 'textarea',
                 'label' => 'Areas Card Text',
+        ],
+        'stats_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Stats Cards',
+            'fields' => [
+                'stat_number',
+                'stat_title',
+            ],
+        ],
+        'stat_number' => [
+            'type' => 'text',
+            'label' => 'Stat Number',
+        ],
+        'stat_title' => [
+            'type' => 'text',
+            'label' => 'Stat Title',
         ],
         'album_card' => [
             'type' => 'FieldtypeRepeater',
@@ -619,6 +639,8 @@ $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
 $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
+$rm->addFieldToTemplate('title_change2', 'home');
+$rm->addFieldToTemplate('stats_cards', 'home');
 
 
 /* adding Field to Template OUR-WORK  */
