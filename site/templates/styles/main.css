@@ -2045,20 +2045,25 @@ padding: 80px 0;
 
 .publications .pdf-viewer-close {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 10px;
+  right: 12px;
   z-index: 30;
   border: none;
-  background: none;
-  font-size: 30px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.45);
+  color: #e74c3c;
   cursor: pointer;
-  padding: 4px 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
 .publications .pdf-viewer-close:hover {
-  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ff5a48;
 }
 
 .publications .pdf-viewer-stage {
