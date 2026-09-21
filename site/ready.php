@@ -492,6 +492,10 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Born Orange Title',
         ],
+        'title_change2' => [
+            'type' => 'text',
+            'label' => 'Title Change 2',
+        ],
         'born_image' => [
             'type' => 'image',
             'label' => 'Born Image',
@@ -619,6 +623,7 @@ $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
 $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
+$rm->addFieldToTemplate('title_change2', 'home');
 
 
 /* adding Field to Template OUR-WORK  */

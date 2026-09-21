@@ -108,6 +108,25 @@ namespace ProcessWire;
             </div>
 
         </section>
+        <section id="stats2" class="stats" data-nav-color="dark">
+            <div class="stats-heading">
+                <div class="heading-left">
+                    <div class="eyebrow">
+                        <img class="wave" src="<?= $config->urls->templates ?>icons/wave.png" alt="icon-wave">
+                        <img class="map-icon" src="<?= $config->urls->templates ?>icons/map.png" alt="icon">
+                    </div>
+                    <h2 edit="title_change2"><?= $page->title_change2 ?: 'Find us.' ?></h2>
+                </div>
+            </div> <!---end stats-heading-->
+            <div class="cards-section">
+            <div class="map-area"><iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7065.95801099961!2d85.30852979709088!3d27.687043755168673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b4ad7096dd%3A0x29fa3d73b99dcc97!2sKupondole%2C%20Patan%2C%20Zona%20de%20Bagmati%2044600%2C%20Nepal!5e0!3m2!1ses!2sde!4v1789045329645!5m2!1sen!2sde"
+                    style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+            </div>
+
+        </section>
         <section id="born" class="born" data-nav-color="light">
             <div class="born-container">
                 <div class="b-heading">

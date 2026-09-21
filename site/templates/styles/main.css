@@ -726,6 +726,11 @@ footer button:hover {
   height: 24px;
 }
 
+.map-icon {
+  width: 24px;
+  height: 24px;
+}
+
 .header-central {
   display: flex;
   flex-direction: column;
