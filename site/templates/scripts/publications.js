@@ -203,7 +203,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeViewer() {
         viewer.hidden = true;
         document.body.style.overflow = '';
-        if (flip) { flip.destroy(); flip = null; }
+        if (flip) {
+            try { flip.destroy(); } catch (e) { /* ui may not exist if closed mid-load */ }
+            flip = null;
+            // PageFlip.destroy() removes the .pdf-book element itself — re-attach it
+            viewer.querySelector('.pdf-viewer-stage').prepend(book);
+        }
         book.innerHTML = '';
         thumbsRail.innerHTML = '';
         zoom = 1;
