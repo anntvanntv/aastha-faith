@@ -1975,20 +1975,13 @@ padding: 80px 0;
 .publication-info h4 {
   color: var(--text-heading);
   line-height: 1.2;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .publication-info h4 .doc-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  height: 1em;
+  width: auto;
+  vertical-align: -0.15em;
+  margin-right: 6px;
 }
 
 .publication-download {
