@@ -2639,7 +2639,7 @@ textarea {
 
 .donors .header-central {
   width: 98%;
-  padding: 200px 0;
+  padding: 200px 0 120px;
   text-align: center;
 }
 
@@ -2679,22 +2679,26 @@ textarea {
 .individual-giving .heading-left {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  text-align: center;
   gap: 20px;
-  margin: 140px auto 80px;
-  padding: 0 40px;
+  width: 98%;
+  padding: 200px 0 120px;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .individual-giving .heading-left h1 {
   color: var(--text-heading);
+  line-height: 80px;
+  margin-bottom: 30px;
   width: 60%;
 }
 
 .individual-giving .heading-left p {
   color: var(--text-body);
-  width: 60%;
-  line-height: 1.6;
+  width: calc(47% + (1714px - 100vw) * 0.01);
+  margin: 0 auto;
 }
 
 .individual-giving .bank-details {
@@ -3555,7 +3559,7 @@ textarea {
 
   .donors .header-central {
     width: auto;
-    padding: 200px 0 100px;
+    padding: 200px 0 80px;
   }
 
   .donors .header-central h1 {
@@ -3564,6 +3568,20 @@ textarea {
 
   .donors .header-central h1,
   .donors .header-central p {
+    width: 82%;
+  }
+
+  .individual-giving .heading-left {
+    width: auto;
+    padding: 200px 0 80px;
+  }
+
+  .individual-giving .heading-left h1 {
+    line-height: 70px;
+  }
+
+  .individual-giving .heading-left h1,
+  .individual-giving .heading-left p {
     width: 82%;
   }
 }
