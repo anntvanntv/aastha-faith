@@ -21,7 +21,7 @@ namespace ProcessWire;
         <li>
             <a class="<?= $page->name === 'our-work' || $page->parent->name === 'our-work' ? 'active' : '' ?>"
                href="<?= $pages->get('/our-work/')->url ?>">
-                Our work
+                Our Work
             </a>
         </li>
 
