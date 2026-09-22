@@ -36,7 +36,7 @@ namespace ProcessWire;
 
             <div class="icon-container">
                 <div class="icon-map">
-                    <img src="<?= $config->urls->templates ?>/icons/map.png" alt="icon-map">
+                    <img src="<?= $config->urls->templates ?>/icons/flag-nepal.svg" alt="Nepal flag">
                 </div>
                 <p class="body-bold">Nepal</p>
                 <p>Chudabikram Street <br>
@@ -47,7 +47,7 @@ namespace ProcessWire;
             </div>
             <div class="icon-container">
                 <div class="icon-map">
-                    <img src="<?= $config->urls->templates ?>/icons/map.png" alt="icon-map">
+                    <img src="<?= $config->urls->templates ?>/icons/flag-germany.svg" alt="Germany flag">
                 </div>
                 <p class="body-bold">Germany</p>
                 <p>Bornkampsweg 24 <br>
@@ -59,14 +59,14 @@ namespace ProcessWire;
 
             <div class="icon-container">
                 <div class="icon-call">
-                    <img src="<?= $config->urls->templates ?>/icons/call.png" alt="icon-call">
+                    <img src="<?= $config->urls->templates ?>/icons/call.svg" alt="icon-call">
                 </div>
                 <p class="body-bold">Call</p>
                 <a href="tel:+977 01 5412012">+977 01 5412012</a>
             </div>
             <div class="icon-container">
                 <div class="icon-mail">
-                    <img src="<?= $config->urls->templates ?>/icons/mail.png" alt="icon-mail">
+                    <img src="<?= $config->urls->templates ?>/icons/mail.svg" alt="icon-mail">
 
                 </div>
                 <p class="body-bold">Email</p>
