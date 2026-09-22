@@ -127,7 +127,7 @@ namespace ProcessWire;
             <form onsubmit="return validateForm()" method="post" action="./" novalidate>
                 <div class="row-form">
                     <div class="pill-group w100 m10">
-                        <p class="body-bold">I am reaching out as <span class="orange-text">*</span></p>
+                        <p class="body-bold">I am reaching out as <span class="req-star">*</span></p>
                         <div class="pill-grid">
                             <label class="pill">
                                 <input type="radio" name="group" value="NGOs &amp; CBOs">
@@ -245,16 +245,13 @@ namespace ProcessWire;
                 <div class="row-form">
                     <div class="name-form w50 m10">
                         <label for="name">
-                            <div class="icon-error">
-                                <img src="<?= $config->urls->templates ?>/icons/error.png" alt="icon">
-                            </div>
-                            <p class="body-bold">Name</p>
+                            <p class="body-bold">Name <span class="req-star">*</span></p>
                         </label>
                         <input id="name" type="text" title="your name" name="name" placeholder="Your name" required>
                     </div> <!-- name form -->
                     <div class="phone-form w50 m10">
                         <label for="phone">
-                            <p class="body-bold">Phone number <span class="orange-text">*</span></p>
+                            <p class="body-bold">Phone number <span class="req-star">*</span></p>
 
                         </label>
                         <input title="phone number" type="tel" id="phone" name="phone" placeholder="+000..." required>
@@ -263,29 +260,23 @@ namespace ProcessWire;
                 <div class="row-form">
                     <div class="mail-form w50 m10">
                         <label for="email">
-                            <div class="icon-error">
-                                <img src="<?= $config->urls->templates ?>/icons/error.png" alt="icon">
-                            </div>
-                            <p class="body-bold">Email</p>
+                            <p class="body-bold">Email <span class="req-star">*</span></p>
                         </label>
                         <input title="email address" type="email" id="email" name="email" placeholder="Email address"
                             required>
                     </div><!-- mail form --->
                     <div class="subject-form w50 m10">
                         <label for="subject">
-                            <p class="body-bold">Subject</p>
+                            <p class="body-bold">Subject <span class="req-star">*</span></p>
                         </label>
                         <input type="text" title="subject" id="subject" name="subject"
-                            placeholder="What would you like to talk about?">
+                            placeholder="What would you like to talk about?" required>
                     </div> <!-- subject form -->
                 </div>
                 <div class="row-form">
                     <div class="message-form w100 m10">
                         <label for="message">
-                            <div class="icon-error">
-                                <img src="<?= $config->urls->templates ?>icons/error.png" alt="icon">
-                            </div>
-                            <p class="body-bold">Message</p>
+                            <p class="body-bold">Message <span class="req-star">*</span></p>
                         </label>
                         <textarea class="w100" title="your message" id="message" name="message"
                             placeholder="Tell us more about your enquiry" required></textarea>
@@ -293,7 +284,7 @@ namespace ProcessWire;
                 </div>
                 <div class="row-form">
                     <div class="required">
-                        <p>* Required fields</p>
+                        <p class="req-note"><span class="req-star">*</span> Required fields</p>
                         <p id="warning-message" class="warning-message"><img src="<?= $config->urls->templates ?>icons/error.svg" alt=""> Please enter all required fields</p>
                         <button class="btn orange" type="submit">Send</button>
                     </div>

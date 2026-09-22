@@ -3234,6 +3234,15 @@ form {
   color: var(--text-body);
 }
 
+.req-star {
+  color: var(--red-800);
+}
+
+.required .req-note,
+.required .req-note .req-star {
+  color: var(--red-900);
+}
+
 .icon-error img {
   padding-bottom: 7px;
   padding-right: 1px;
