@@ -67,8 +67,8 @@ $footer = $pages->get('/footer/');
                         <?php if($footer->footer_publications): ?>
                         <a href="<?= $footer->footer_publications ?>">Publications</a>
                         <?php endif; ?>
-                        <a href="<?= $pages->get('/about-us/')->url ?>">About</a>
-                        <a href="<?= $pages->get('/contact/')->url ?>">Contact</a>
+                        <a href="<?= $pages->get('/about-us/')->url ?>">About Us</a>
+                        <a href="<?= $pages->get('/contact/')->url ?>">Contact Us</a>
                     </div>
                 </div><!--end fcard b-->
                 <div class="fcard c">
