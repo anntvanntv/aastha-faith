@@ -14,7 +14,7 @@ namespace ProcessWire;
 
                     <div class="eyebrow">
                         <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
-                        <h5 style="text-transform: uppercase;">Our work</h5>
+                        <h5 style="text-transform: uppercase;">Our Work</h5>
                     </div>
                     <div class="title-section">
                         <h1 edit="title"><?= $page->title ?></h1>

@@ -21,7 +21,7 @@ namespace ProcessWire;
         <li>
             <a class="<?= $page->name === 'our-work' || $page->parent->name === 'our-work' ? 'active' : '' ?>"
                href="<?= $pages->get('/our-work/')->url ?>">
-                Our work
+                Our Work
             </a>
         </li>
 
@@ -87,14 +87,14 @@ namespace ProcessWire;
         <li>
             <a class="<?= $page->name === 'about-us' ? 'active' : '' ?>"
                href="<?= $pages->get('/about-us/')->url ?>">
-                About us
+                About Us
             </a>
         </li>
 
         <li>
             <a class="<?= $page->name === 'contact' ? 'active' : '' ?>"
                href="<?= $pages->get('/contact/')->url ?>">
-                Contact
+                Contact Us
             </a>
         </li>
     </ul>
