@@ -99,12 +99,20 @@ namespace ProcessWire;
     </section>
     <section data-nav-color="dark">
         <div class="beyond-content">
-            <div class="header-left">
-                <div class="eyebrow">
-                    <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
-                    <h5 style="text-transform: uppercase;">change in action</h5>
+            <div class="beyond-header">
+                <div class="header-left">
+                    <div class="eyebrow">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">change in action</h5>
+                    </div>
+                    <h2 edit="areas_title"><?= $page->areas_title ?></h2>
                 </div>
-                <h2 edit="areas_title"><?= $page->areas_title ?></h2>
+                <div class="beyond-right">
+                    <a class="btn white" href="<?= $pages->get('/stories/')->url ?>">
+                        See More Stories
+                        <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
+                    </a>
+                </div>
             </div>
             <div class="cards-beyond">
                 <?php
@@ -138,12 +146,6 @@ namespace ProcessWire;
                     </div>
                 </div>
                 <?php $i++; endforeach; ?>
-            </div>
-            <div class="see-more-stories">
-                <a href="<?= $pages->get('/stories/')->url ?>" class="btn emptyblack">
-                    See More Stories
-                    <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
-                </a>
             </div>
 
         </div>
