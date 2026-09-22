@@ -281,7 +281,9 @@ $rm->migrate([
                 'about_card_name',
                 'about_card_job',
                 'about_card_function',
-                
+                'about_card_ghibli',
+                'about_card_back',
+
             ],
         ],
         'about_card_job' => [
@@ -304,6 +306,20 @@ $rm->migrate([
         'about_card_function' => [
             'type' => 'text',
             'label' => 'About Card Function',
+        ],
+        'about_card_ghibli' => [
+            'type' => 'FieldtypeImage',
+            'label' => 'Card Back Image (Ghibli-style portrait)',
+            'description' => 'Shown on the back of the card when it flips. If empty, the front photo is reused.',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg webp',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'about_card_back' => [
+            'type' => 'textarea',
+            'label' => 'Card Back Text',
+            'description' => 'Optional text shown under the back image when the card flips.',
+            'rows' => 3,
         ],
 
 

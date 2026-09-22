@@ -350,14 +350,29 @@ namespace ProcessWire;
         </div>
         <div class="team-members">
             <?php foreach ($page->about_card as $card): ?>
-                <div edit='about_card' class="member">
-                   <div edit='<?= $card ?>.image_about_card' class="avatar">
-                        <img src="<?= $card->image_about_card->url ?>" alt="">
-                    </div> 
-                    <div class="name">
-                        <h3 edit="<?= $card ?>.about_card_name "><?= $card->about_card_name ?></h3>
-                        <p edit="<?= $card ?>.about_card_job" class="small"><?= $card->about_card_job ?></p>
-                        <p edit="<?= $card ?>.about_card_function"><?= $card->about_card_function ?></p>
+                <div edit='about_card' class="member" role="button" tabindex="0" aria-pressed="false" aria-label="Flip card for <?= $card->about_card_name ?>">
+                    <div class="member-inner">
+                        <div class="member-front">
+                            <div edit='<?= $card ?>.image_about_card' class="avatar">
+                                <img src="<?= $card->image_about_card->url ?>" alt="">
+                            </div>
+                            <div class="name">
+                                <h3 edit="<?= $card ?>.about_card_name "><?= $card->about_card_name ?></h3>
+                                <p edit="<?= $card ?>.about_card_job" class="small"><?= $card->about_card_job ?></p>
+                            </div>
+                        </div>
+                        <div class="member-back">
+                            <div class="avatar">
+                                <img src="<?= $card->about_card_ghibli ? $card->about_card_ghibli->url : $card->image_about_card->url ?>" alt="">
+                            </div>
+                            <div class="name">
+                                <h3><?= $card->about_card_name ?></h3>
+                                <p class="small"><?= $card->about_card_function ?></p>
+                                <?php if($card->about_card_back): ?>
+                                    <p><?= $card->about_card_back ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
