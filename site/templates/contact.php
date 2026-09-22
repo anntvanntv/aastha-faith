@@ -97,8 +97,8 @@ namespace ProcessWire;
 
                         $mail = wireMail();
 
-                        $mail->to('productoimperio@gmail.com');
-                        $mail->from('productoimperio@gmail.com');
+                        $mail->to('faithinitiative@gmail.com');
+                        $mail->from('faithinitiative@gmail.com');
                         $mail->replyTo($email);
                         $mail->subject($subject);
 
