@@ -31,14 +31,14 @@ namespace ProcessWire;
 
         </section>
     </header>
-    <section class="content-contact">
+    <section class="content-contact" data-nav-color="dark">
         <div class="contact-icons">
 
             <div class="icon-container">
                 <div class="icon-map">
                     <img src="<?= $config->urls->templates ?>/icons/map.png" alt="icon-map">
                 </div>
-                <p class="body-bold-white">Nepal</p>
+                <p class="body-bold">Nepal</p>
                 <p>Chudabikram Street <br>
                     Kupondole -1 <br>
                     Lalitpur 44600, Nepal
@@ -49,7 +49,7 @@ namespace ProcessWire;
                 <div class="icon-map">
                     <img src="<?= $config->urls->templates ?>/icons/map.png" alt="icon-map">
                 </div>
-                <p class="body-bold-white">Germany</p>
+                <p class="body-bold">Germany</p>
                 <p>Bornkampsweg 24 <br>
                     Ahrensburg 22926, <br>
                     Germany
@@ -61,7 +61,7 @@ namespace ProcessWire;
                 <div class="icon-call">
                     <img src="<?= $config->urls->templates ?>/icons/call.png" alt="icon-call">
                 </div>
-                <p class="body-bold-white">Call</p>
+                <p class="body-bold">Call</p>
                 <a href="tel:+977 01 5412012">+(977) 01 5412012</a>
             </div>
             <div class="icon-container">
@@ -69,7 +69,7 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>/icons/mail.png" alt="icon-mail">
 
                 </div>
-                <p class="body-bold-white">Mail</p>
+                <p class="body-bold">Mail</p>
                 <a href="mailto:faithinitiative@gmail.com">faithinitiative<wbr>@gmail.com</a>
             </div>
 
@@ -128,13 +128,13 @@ namespace ProcessWire;
                             <div class="icon-error">
                                 <img src="<?= $config->urls->templates ?>/icons/error.png" alt="icon">
                             </div>
-                            <p class="body-bold-white">Name</p>
+                            <p class="body-bold">Name</p>
                         </label>
                         <input id="name" type="text" title="your name" name="name" placeholder="Your name" required>
                     </div> <!-- name form -->
                     <div class="phone-form w50 m10">
                         <label for="phone">
-                            <p class="body-bold-white">Phone number</p>
+                            <p class="body-bold">Phone number</p>
 
                         </label>
                         <input title="phone number" type="tel" id="phone" name="phone" placeholder="+000...">
@@ -146,14 +146,14 @@ namespace ProcessWire;
                             <div class="icon-error">
                                 <img src="<?= $config->urls->templates ?>/icons/error.png" alt="icon">
                             </div>
-                            <p class="body-bold-white">E-mail</p>
+                            <p class="body-bold">E-mail</p>
                         </label>
                         <input title="e-mail address" type="email" id="email" name="email" placeholder="E-mail address"
                             required>
                     </div><!-- mail form --->
                     <div class="subject-form w50 m10">
                         <label for="subject">
-                            <p class="body-bold-white">Subject</p>
+                            <p class="body-bold">Subject</p>
                         </label>
                         <input type="text" title="subject" id="subject" name="subject"
                             placeholder="What do you want to talk about">
@@ -165,7 +165,7 @@ namespace ProcessWire;
                             <div class="icon-error">
                                 <img src="<?= $config->urls->templates ?>icons/error.png" alt="icon">
                             </div>
-                            <p class="body-bold-white">Message</p>
+                            <p class="body-bold">Message</p>
                         </label>
                         <textarea class="w100" title="your message" id="message" name="message"
                             placeholder="Tell us more about your enquiry" required></textarea>
