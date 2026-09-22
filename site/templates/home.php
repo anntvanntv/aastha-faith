@@ -270,7 +270,7 @@ namespace ProcessWire;
 
          
 
-                <?php foreach ($page->album_card as $card): ?>
+                <?php foreach ($page->album_card->slice(0, 3) as $card): ?>
 
                     <div edit="album_card" class="news-card">
                         <div edit='<?= $card ?>.album_card_image' class="ncard-picture">

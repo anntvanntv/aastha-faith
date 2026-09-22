@@ -1127,7 +1127,7 @@ textarea:focus {
 }
 .field-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(285px, 420px));
   justify-content: center;
   gap: 30px;
 }
@@ -1142,6 +1142,53 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   align-items: end;
+}
+
+/*---- From the Field — card upgrade (scoped to .field only) ----*/
+.field .news-card {
+  background-color: var(--white-900);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.field .news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+}
+
+.field .ncard-picture {
+  overflow: hidden;
+}
+
+.field .ncard-picture img {
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-position: center 25%;
+  transition: transform .4s ease;
+}
+
+.field .news-card:hover .ncard-picture img {
+  transform: scale(1.05);
+}
+
+.field .ncard-content {
+  align-items: flex-start;
+  text-align: left;
+  padding: 4px 20px 24px;
+}
+
+.field .ncard-content h4 {
+  margin: 4px 0;
+}
+
+.field .ncard-content p {
+  margin-bottom: 0;
+}
+
+.field .expand-text-btn {
+  margin-top: 6px;
 }
 
 /*----------- logo carousel --------*/
