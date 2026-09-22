@@ -2629,30 +2629,62 @@ padding: 80px 0;
   padding: 80px 40px;
 }
 
-.cards-beyond {
+.beyond-header {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.cards-beyond {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
   margin-top: 40px;
   background-color: var(--white-800);
 }
 
 .cards-beyond .news-card {
-  flex: 0 1 437px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  background-color: var(--white-900);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.cards-beyond .news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
 }
 
 .cards-beyond .news-card .ncard-picture {
   height: 240px;
+  overflow: hidden;
 }
 
 .cards-beyond .news-card .ncard-picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+
+.cards-beyond .news-card:hover .ncard-picture img {
+  transform: scale(1.05);
+}
+
+.cards-beyond .news-card .programme-title {
+  padding: 0 20px;
+}
+
+.cards-beyond .news-card .ncard-content {
+  align-items: flex-start;
+  text-align: left;
+  padding: 0 20px 24px;
 }
 
 .see-more-stories {
@@ -4087,7 +4119,8 @@ form {
 
 @media (max-width: 834px) {
   /*------ footer ----*/
-  .field-header {
+  .field-header,
+  .beyond-header {
     flex-direction: column;
     align-items: start;
     gap: 44px;
