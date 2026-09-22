@@ -3118,7 +3118,112 @@ form {
 .contact-form textarea {
   min-height: 120px;
   padding: 12px 20px;
-  border-radius: 10px;
+  border-radius: 20px;
+}
+
+/*---- group pills ------*/
+.pill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 0 8px;
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 64px;
+  border: 1px solid var(--green-600);
+  background-color: var(--white-900);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.pill:hover {
+  border-color: var(--green-700);
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill.active {
+  background-color: var(--green-700);
+  border-color: var(--green-700);
+  color: var(--white-800);
+}
+
+.pill-card {
+  display: none;
+  background-color: var(--white-900);
+  border-radius: 20px;
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.07);
+  padding: 32px;
+  margin-top: 24px;
+  font-family: var(--font-sans);
+  color: var(--text-body);
+}
+
+.pill-card.active {
+  display: block;
+}
+
+.pill-card h4 {
+  color: var(--text-heading);
+  margin: 0 0 4px;
+}
+
+.pill-card .pill-tagline {
+  color: var(--green-700);
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.pill-card h5 {
+  color: var(--text-heading);
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
+}
+
+.pill-card ul {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+.pill-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.pill-cols > div:last-child {
+  border-left: 1px solid var(--neutral-200);
+  padding-left: 24px;
+}
+
+@media (max-width: 640px) {
+  .pill-grid,
+  .pill-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .pill-cols > div:last-child {
+    border-left: none;
+    padding-left: 0;
+  }
 }
 
 .row-form button {

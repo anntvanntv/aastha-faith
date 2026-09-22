@@ -33,3 +33,17 @@ function validateForm () {
 
 }
 
+/* group pills — single-select, show the matching info card on click */
+const groupPills = document.querySelectorAll('.pill input[name="group"]');
+const pillCards = document.querySelectorAll(".pill-card");
+
+groupPills.forEach((radio) => {
+    radio.addEventListener("change", () => {
+        document.querySelectorAll(".pill").forEach((p) => p.classList.remove("active"));
+        radio.closest(".pill").classList.add("active");
+        pillCards.forEach((card) => {
+            card.classList.toggle("active", card.dataset.group === radio.value);
+        });
+    });
+});
+
