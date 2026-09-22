@@ -423,7 +423,7 @@ namespace ProcessWire;
             <p>For safeguarding concerns, programme complaints, or feedback, contact our team. We take all concerns
                 seriously and respond within defined timeframes.</p>
             <a class="btn green concern-btn" href="/contact">
-                Contact
+                Contact Us
                 <img src="<?= $config->urls->templates ?>icons/arrow_forward_white.png" alt="icon-arrow">
             </a>
         </div>
