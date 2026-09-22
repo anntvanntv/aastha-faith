@@ -1505,9 +1505,73 @@ padding: 80px 0;
 .stories .container {
   margin: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
   justify-content: center;
+  max-width: 1350px;
+}
+
+@media (min-width: 1380px) {
+  .stories .container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .stories .container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .stories .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*---- Stories page — card upgrade (scoped to .stories) ----*/
+.stories .news-card {
+  background-color: var(--white-900);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.stories .news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+}
+
+.stories .ncard-picture {
+  overflow: hidden;
+}
+
+.stories .ncard-picture img {
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-position: center 25%;
+  transition: transform .4s ease;
+}
+
+.stories .news-card:hover .ncard-picture img {
+  transform: scale(1.05);
+}
+
+.stories .programme-title {
+  padding: 0 20px;
+}
+
+.stories .ncard-content {
+  align-items: flex-start;
+  text-align: left;
+  padding: 0 20px 24px;
+}
+
+.stories .expand-cards-btn {
+  color: var(--text-body);
+  margin: 48px auto 80px;
 }
 
 /*--------- one story -----------*/
