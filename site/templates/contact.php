@@ -22,10 +22,10 @@ namespace ProcessWire;
 
                 <p>Partner with us. Support our work. Join the movement for women's rights and health justice in Nepal.
                 </p>
-                <a class="btn transparent" href="/contact">
+                <!-- <a class="btn transparent" href="/contact">
                     Book a call
                     <img src="<?= $config->urls->templates ?>/icons/arrow_forward_orange.png" alt="">
-                </a>
+                </a> -->
             </div>
 
 
