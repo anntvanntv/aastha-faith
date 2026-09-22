@@ -284,7 +284,7 @@ namespace ProcessWire;
                 </div>
                 <div class="row-form">
                     <div class="required">
-                        <p class="req-note"><span class="req-star">*</span> Required fields</p>
+                        <p><span class="req-star">*</span> Required fields</p>
                         <p id="warning-message" class="warning-message"><img src="<?= $config->urls->templates ?>icons/error.svg" alt=""> Please enter all required fields</p>
                         <button class="btn orange" type="submit">Send</button>
                     </div>
