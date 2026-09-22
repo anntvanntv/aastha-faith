@@ -69,7 +69,7 @@ namespace ProcessWire;
             </div>
         </section>
 
-        <section id="stats" class="stats stats-dark" data-nav-color="dark">
+        <section id="stats" class="stats stats-dark" data-nav-color="light">
             <div class="stats-heading">
                 <div class="heading-left">
                     <div class="eyebrow">

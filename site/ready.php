@@ -42,41 +42,18 @@ $rm->createPage(
     title: 'Accountability',
 );
 
-$rm->createTemplate('partnership-volunteers');
+
+$rm->createTemplate('partnership');
 
 $rm->createPage(
-    template: 'partnership-volunteers',
+    template: 'partnership',
     parent: '/',
-    name: 'partnership-volunteers',
-    title: 'Partnership Volunteers'
+    name: 'partnership',
+    title: 'Partnership',
 );
 
-$rm->createTemplate('partnership-companies');
 
-$rm->createPage(
-    template: 'partnership-companies',
-    parent: '/',
-    name: 'partnership-companies',
-    title: 'Partnership Companies'
-);
 
-$rm->createTemplate('partnership-researchers');
-
-$rm->createPage(
-    template: 'partnership-researchers',
-    parent: '/',
-    name: 'partnership-researchers',
-    title: 'Partnership Researchers'
-);
-
-$rm->createTemplate('partnership-ngo'); 
-
-$rm->createPage(
-    template: 'partnership-ngo',
-    parent: '/',
-    name: 'partnership-ngo',
-    title: 'Partnership NGO'
-);   
 
 $rm->createTemplate('publications');
 
