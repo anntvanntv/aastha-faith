@@ -708,6 +708,12 @@ $rm->migrate([
             'type' => 'datetime',
             'label' => 'News Date',
         ],
+        'date' => [
+            'type' => 'datetime',
+            'label' => 'Date',
+            'defaultToday' => 1,
+            'notes' => 'Publication date. Leave empty to use the creation date automatically. Example: September 23, 2026',
+        ],
         'album_card_image' => [
             'type' => 'FieldtypeImage',
             'label' => 'Album Card Image',
@@ -1037,11 +1043,20 @@ $rm->createPage(
     template: 'news',
     parent: '/',
     name: 'news',
-    title: 'News'
+    title: 'Latest News'
 );
 foreach (['image', 'date', 'body'] as $f) {
     $rm->addFieldToTemplate($f, 'onenews');
 }
+
+// onenews: default empty date to created timestamp (editors can still override)
+$wire->addHookAfter('Pages::saved', function ($event) {
+    $p = $event->arguments(0);
+    if ($p->template->name !== 'onenews' || $p->date) return;
+    $p->of(false);
+    $p->date = $p->created ?: time();
+    $p->save('date');
+});
 
 $newsParent = $pages->get('/news/');
 if ($newsParent->id && !$newsParent->numChildren) {
