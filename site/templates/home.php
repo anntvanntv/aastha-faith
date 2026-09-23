@@ -107,8 +107,8 @@ namespace ProcessWire;
             <div class="stats-heading">
                 <div class="heading-left">
                     <div class="eyebrow">
-                        <img class="wave" src="<?= $config->urls->templates ?>icons/wave.png" alt="icon-wave">
-                        <img class="map-icon" src="<?= $config->urls->templates ?>icons/map.png" alt="icon">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">location</h5>
                     </div>
                     <h2 edit="title_change2"><?= $page->title_change2 ?: 'Find us.' ?></h2>
                 </div>
