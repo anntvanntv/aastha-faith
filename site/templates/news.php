@@ -5,19 +5,19 @@ $children = $page->children("sort=-date");
 
 $newsCard = function ($story) use ($config) {
     ?>
-    <div class="news-card">
+    <div class="news-card" data-date="<?= (int) $story->date ?>">
         <div class="ncard-picture bgw800">
             <?php if ($story->image): ?>
                 <img src="<?= $story->image->url ?>" alt="<?= $story->title ?>">
             <?php endif; ?>
         </div>
-        <div class="programme-title">
-            <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F j, Y", $story->date)) : '' ?></h5>
-        </div>
         <div class="ncard-content">
             <div class="title-content">
+                <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F j, Y", $story->date)) : '' ?></h5>
                 <h4><?= $story->title ?></h4>
-                <p><?= substr(strip_tags($story->body), 0, 180) ?>...</p>
+                <div class="clamp-wrap">
+                    <p class="clamp-text clamp-4"><?= strip_tags($story->body) ?></p>
+                </div>
             </div>
             <div class="btn-content">
                 <a href="<?= $story->url ?>" class="btn emptyblack">
@@ -47,7 +47,7 @@ if ($q !== '') {
         <section class="title-stories" data-nav-color="dark">
             <div class="eyebrow">
                 <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
-                <h5>explore</h5>
+                <h5>EXPLORE</h5>
             </div>
             <h1 edit="title"><?= $page->title ?></h1>
         </section>
@@ -58,7 +58,14 @@ if ($q !== '') {
             <input type="search" name="q" value="<?= $sanitizer->entities($q) ?>" placeholder="Search news…">
             <button class="btn" type="submit">Search</button>
         </form>
-        <a class="news-all<?= $results === null ? ' active' : '' ?>" href="<?= $page->url ?>">All</a>
+        <div class="news-filters">
+            <a class="news-all<?= $results === null ? ' active' : '' ?>" href="<?= $page->url ?>" data-range="all">All</a>
+            <button type="button" class="news-filter" data-range="today">Today</button>
+            <button type="button" class="news-filter" data-range="week">This Week</button>
+            <button type="button" class="news-filter" data-range="month">This Month</button>
+            <input type="date" class="news-date news-date-from" aria-label="From date">
+            <input type="date" class="news-date news-date-to" aria-label="To date">
+        </div>
         <?php if ($results !== null): ?>
             <p class="news-results-meta">
                 <?= count($results) ?> result<?= count($results) === 1 ? '' : 's' ?> for &ldquo;<?= $sanitizer->entities($q) ?>&rdquo;
