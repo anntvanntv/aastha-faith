@@ -3142,37 +3142,53 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   color: var(--text-body-light);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 80px 40px 156px 40px;
   gap: 40px;
 }
 
+.financial .header-central {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
 
+.financial .header-central p {
+  width: 60%;
+}
 
-.financial .header-left h2 {
+.financial .header-central h2 {
   line-height: 63px;
 }
 
 .financial-content {
   display: flex;
-  flex-direction: row;
-  gap: 30px;
+  flex-direction: column;
+  gap: 40px;
+  width: min(920px, 100%);
 }
 
 .financial-content .small {
   color: var(--neutral-400);
 }
 
-.financial .column-left,
-.financial .column-right {
+.financial .column {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
   gap: 24px;
+}
 
-  width: 437px;
-  height: 377px;
+.policies .column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(920px, 100%);
+}
+
+.financial .horizontal-card {
+  justify-content: space-between;
 }
 
 .horizontal-card .icon.pdf {
@@ -3196,6 +3212,7 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   flex-direction: column;
   align-items: center;
   padding: 80px 40px;
+  gap: 40px;
 }
 
 .policies .header-central {
@@ -4219,7 +4236,8 @@ border-top-style: solid;
     gap: 50px;
   }
 
-  .policies .horizontal-card {
+  .policies .horizontal-card,
+  .financial .horizontal-card {
     height: 93px;
   }
 
@@ -4244,21 +4262,12 @@ border-top-style: solid;
   }
 
   .financial-content {
-    gap: 10px;
-    width: 66%;
-  }
-
-  .financial-content .horizontal-card {
-    width: 279px;
-    padding: 12px 9px 0px 9px;
-  }
-
-  .financial .column-left,
-  .financial .column-right {
+    gap: 24px;
     width: 100%;
   }
 
-  .policies .header-central p {
+  .policies .header-central p,
+  .financial .header-central p {
     width: 80%;
   }
 
@@ -4324,7 +4333,8 @@ border-top-style: solid;
     gap: 10px;
   }
 
-.policies .horizontal-cards {
+.policies .horizontal-cards,
+  .financial .horizontal-cards {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
@@ -4969,7 +4979,8 @@ border-top-style: solid;
     padding: 80px 15px 156px 10px;
   }
 
-  .policies .header-central h2 {
+  .policies .header-central h2,
+  .financial .header-central h2 {
     line-height: 50px;
   }
 }
@@ -4982,7 +4993,6 @@ border-top-style: solid;
  }
 
  .content-policies,
- .financial-content,
  .container-right,
  .members .horizontal-cards,
  .executive .horizontal-cards {
@@ -5027,7 +5037,8 @@ border-top-style: solid;
    margin-left: 0;
  }
 
- .policies .header-central p {
+ .policies .header-central p,
+ .financial .header-central p {
    width: auto;
  }
 }
@@ -5175,11 +5186,13 @@ border-top-style: solid;
 /*accountability*/
 
 @media (max-width: 530px) {
-  .policies .horizontal-card {
+  .policies .horizontal-card,
+  .financial .horizontal-card {
     height: 114px;
   }
 
- .policies .horizontal-card .body-bold {
+ .policies .horizontal-card .body-bold,
+ .financial .horizontal-card .body-bold {
   width: 200px;
  }
 }
@@ -5486,8 +5499,8 @@ border-top-style: solid;
 
   /*------- accountability ----------*/
 
-  .financial .header-left h2 {
-    line-height: 38px;
+  .financial .header-central h2 {
+    line-height: 50px;
   }
 
   .legal h3 {
@@ -5518,7 +5531,8 @@ border-top-style: solid;
     margin-bottom: 0;
   }
 
-  .policies .header-central h2 {
+  .policies .header-central h2,
+  .financial .header-central h2 {
     line-height: 40px;
   }
 
@@ -5542,7 +5556,8 @@ border-top-style: solid;
     width: auto;
   }
 
-  .policies .horizontal-card {
+  .policies .horizontal-card,
+  .financial .horizontal-card {
     width: 100%;
   }
 }
@@ -5617,11 +5632,13 @@ border-top-style: solid;
     padding: 60px 10px;
   }
 
-  .policies .horizontal-card {
+  .policies .horizontal-card,
+  .financial .horizontal-card {
     height: 120px;
   }
 
-  .policies .horizontal-card .body-bold {
+  .policies .horizontal-card .body-bold,
+  .financial .horizontal-card .body-bold {
     width: 171px;
   }
 }
@@ -5640,11 +5657,13 @@ border-top-style: solid;
     padding: 6px 7px;
   }
 
-  .policies .horizontal-card {
+  .policies .horizontal-card,
+  .financial .horizontal-card {
     padding: 10px;
   }
 
-  .policies .card-left {
+  .policies .card-left,
+  .financial .card-left {
     gap: 6px;
   }
 }
