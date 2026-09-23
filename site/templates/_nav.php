@@ -78,6 +78,13 @@ namespace ProcessWire;
         </li>
 
         <li>
+            <a class="<?= $page->name === 'news' || $page->parent->name === 'news' ? 'active' : '' ?>"
+               href="<?= $pages->get('/news/')->url ?>">
+                News
+            </a>
+        </li>
+
+        <li>
             <a class="<?= $page->name === 'accountability' ? 'active' : '' ?>"
                href="<?= $pages->get('/accountability/')->url ?>">
                 Accountability

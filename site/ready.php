@@ -1029,5 +1029,37 @@ $rm->addFieldToTemplate('donor_cards', 'donors');
 $rm->addFieldToTemplate('cta_label', 'individual-giving');
 $rm->addFieldToTemplate('cta_url', 'individual-giving');
 
+/*--- latest news ---*/
+
+$rm->createTemplate('news');
+$rm->createTemplate('onenews');
+$rm->createPage(
+    template: 'news',
+    parent: '/',
+    name: 'news',
+    title: 'News'
+);
+foreach (['image', 'date', 'body'] as $f) {
+    $rm->addFieldToTemplate($f, 'onenews');
+}
+
+$newsParent = $pages->get('/news/');
+if ($newsParent->id && !$newsParent->numChildren) {
+    $homePg = $pages->get('/');
+    foreach ($homePg->album_card as $ac) {
+        $n = $pages->add('onenews', $newsParent, $sanitizer->pageName($ac->album_card_title ?: 'news-item'), [
+            'title' => $ac->album_card_title,
+            'date' => $ac->album_card_date,
+            'body' => $ac->album_card_text,
+        ]);
+        $img = $ac->album_card_image ? $ac->album_card_image->first() : null;
+        if ($img && $img->filename) {
+            $n->of(false);
+            $n->image->add($img->filename);
+            $n->save('image');
+        }
+    }
+}
+
 
 

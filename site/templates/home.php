@@ -260,8 +260,8 @@ namespace ProcessWire;
                     </div>
                 </div>
                 <div class="field-right">
-                    <a class="btn white">
-                        Read more stories
+                    <a class="btn white" href="<?= $pages->get('/news/')->url ?>">
+                        See all news
                         <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
                     </a>
                 </div>
@@ -270,13 +270,44 @@ namespace ProcessWire;
 
          
 
+                <?php $newsItems = $pages->get('/news/')->children("sort=-date,limit=3"); ?>
+                <?php if (count($newsItems)): ?>
+                <?php foreach ($newsItems as $card): ?>
+
+                    <div class="news-card">
+                        <div edit="<?= $card->id ?>.image" class="ncard-picture">
+                            <?php if ($card->image): ?>
+                                <img src="<?= $card->image->url ?>" alt="<?= $card->title ?>">
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="ncard-content">
+                            <div class="title-content">
+                                <?php if ($card->date): ?>
+                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->date)) ?></h5>
+                                <?php endif; ?>
+                                <h4 edit="<?= $card->id ?>.title"><?= $card->title ?></h4>
+                                <div class="clamp-wrap">
+                                    <p edit="<?= $card->id ?>.body" class="clamp-text clamp-4"><?= strip_tags($card->body) ?></p>
+                                </div>
+                            </div>
+                            <div class="btn-content">
+                                <a href="<?= $card->url ?>" class="btn emptyblack">
+                                    Read more
+                                    <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
+                                </a>
+                            </div>
+                        </div>
+                    </div> <!--end news-card-->
+                <?php endforeach; ?>
+                <?php else: ?>
                 <?php foreach ($page->album_card->sort('-album_card_date')->slice(0, 3) as $card): ?>
 
                     <div edit="album_card" class="news-card">
                         <div edit='<?= $card ?>.album_card_image' class="ncard-picture">
                             <img src="<?= $card->album_card_image->url ?>" alt="">
                         </div>
-                    
+
                         <div class="ncard-content">
                             <div class="title-content">
                                 <?php if ($card->album_card_date): ?>
@@ -288,10 +319,11 @@ namespace ProcessWire;
                                     <button class="expand-text-btn" aria-expanded="false">Read more</button>
                                 </div>
                             </div>
-                        
+
                         </div>
                     </div> <!--end news-card-->
                 <?php endforeach; ?>
+                <?php endif; ?>
               
             </div>
         </section>
