@@ -115,6 +115,7 @@
 .our-work svg.icon,
 .impact svg.icon,
 .stories svg.icon,
+.news svg.icon,
 .media svg.icon,
 .about-us svg.icon,
 .page404 svg.icon,
@@ -133,6 +134,7 @@
 .our-work svg.icon:hover,
 .impact svg.icon:hover,
 .stories svg.icon:hover,
+.news svg.icon:hover,
 .media svg.icon:hover,
 .about-us svg.icon:hover,
 .page404 svg.icon:hover
@@ -159,6 +161,7 @@
 .individual-giving nav ul li a,
 .donors nav ul li a,
 .stories nav ul li a,
+.news nav ul li a,
 .onestory nav ul li a,
 .about-us nav ul li a,
 .one-story nav ul li a,
@@ -175,6 +178,7 @@
 .individual-giving nav ul li a:hover,
 .donors nav ul li a:hover,
 .stories nav ul li a:hover,
+.news nav ul li a:hover,
 .onestory nav ul li a:hover,
 .about-us nav ul li a:hover,
 .one-story nav ul li a:hover,
@@ -1156,8 +1160,7 @@ textarea:focus {
 }
 .field-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(285px, 420px));
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
   gap: 30px;
 }
 
@@ -1205,7 +1208,25 @@ textarea:focus {
 .field .ncard-content {
   align-items: flex-start;
   text-align: left;
-  padding: 4px 20px 24px;
+  padding: 4px 20px 16px;
+  flex: 1;
+}
+
+.field .ncard-content .title-content {
+  flex: 1;
+}
+
+.field .news-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.field .clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .field .ncard-content h4 {
@@ -1619,7 +1640,8 @@ padding: 80px 0;
 
 /*------------------------------------------------ STORIES --------------------------------------------------*/
 
-.stories {
+.stories,
+.news  {
   background-color: var(--white-800);
 }
 
@@ -1631,7 +1653,8 @@ padding: 80px 0;
   background-color: var(--white-800);
 }
 
-.stories .container {
+.stories .container,
+.news .container  {
   margin: 30px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1641,26 +1664,30 @@ padding: 80px 0;
 }
 
 @media (min-width: 1380px) {
-  .stories .container {
+  .stories .container,
+  .news .container  {
     margin-left: auto;
     margin-right: auto;
   }
 }
 
 @media (max-width: 900px) {
-  .stories .container {
+  .stories .container,
+  .news .container  {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 620px) {
-  .stories .container {
+  .stories .container,
+  .news .container  {
     grid-template-columns: 1fr;
   }
 }
 
 /*---- Stories page — card upgrade (scoped to .stories) ----*/
-.stories .news-card {
+.stories .news-card,
+.news .news-card  {
   background-color: var(--white-900);
   border-radius: 16px;
   overflow: hidden;
@@ -1668,39 +1695,115 @@ padding: 80px 0;
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.stories .news-card:hover {
+.stories .news-card:hover,
+.news .news-card:hover  {
   transform: translateY(-4px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
 }
 
-.stories .ncard-picture {
+.stories .ncard-picture,
+.news .ncard-picture  {
   overflow: hidden;
 }
 
-.stories .ncard-picture img {
+.stories .ncard-picture img,
+.news .ncard-picture img  {
   display: block;
   aspect-ratio: 1 / 1;
   object-position: center 25%;
   transition: transform .4s ease;
 }
 
-.stories .news-card:hover .ncard-picture img {
+.stories .news-card:hover .ncard-picture img,
+.news .news-card:hover .ncard-picture img  {
   transform: scale(1.05);
 }
 
-.stories .programme-title {
+.stories .programme-title,
+.news .programme-title  {
   padding: 0 20px;
 }
 
-.stories .ncard-content {
+.stories .ncard-content,
+.news .ncard-content  {
   align-items: flex-start;
   text-align: left;
   padding: 0 20px 24px;
+  flex: 1;
 }
 
-.stories .expand-cards-btn {
+.stories .news-card,
+.news .news-card  {
+  display: flex;
+  flex-direction: column;
+}
+
+.stories .ncard-content .title-content,
+.news .ncard-content .title-content  {
+  flex: 1;
+}
+
+.stories .expand-cards-btn,
+.news .expand-cards-btn  {
   color: var(--text-body);
   margin: 48px auto 80px;
+}
+
+/*---- news archive — search bar (scoped to .news) ----*/
+.news .news-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0 30px 20px;
+}
+
+.news .news-search {
+  display: flex;
+  gap: 12px;
+  width: min(560px, 100%);
+}
+
+.news .news-search input {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1px solid var(--neutral-400);
+  border-radius: 64px;
+  background-color: var(--white-900);
+  color: var(--text-heading);
+  font-size: 16px;
+}
+
+.news .news-search input:focus {
+  outline: none;
+  border-color: var(--green-800);
+}
+
+.news .news-search .btn {
+  padding: 12px 24px;
+  border: none;
+  background-color: var(--green-900);
+  color: var(--text-body-light);
+  cursor: pointer;
+}
+
+.news .news-all {
+  padding: 8px 20px;
+  border: 1px solid var(--neutral-400);
+  border-radius: 64px;
+  color: var(--text-body);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.news .news-all.active,
+.news .news-all:hover {
+  border-color: var(--green-900);
+  color: var(--text-heading);
+}
+
+.news .news-results-meta {
+  color: var(--text-body);
 }
 
 /*--------- one story -----------*/
@@ -4472,6 +4575,7 @@ border-top-style: solid;
   .onework nav ul,
   .impact nav ul,
   .stories nav ul,
+  .news nav ul,
   .onestory nav ul,
   .about-us nav ul,
   .page404 nav ul {
