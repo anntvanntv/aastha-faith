@@ -3191,6 +3191,23 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   justify-content: space-between;
 }
 
+.financial .more-cards.open,
+.policies .more-cards.open {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  grid-column: 1 / -1;
+}
+
+.financial .expand-cards-btn,
+.policies .expand-cards-btn {
+  margin: 0 auto;
+}
+
+.policies .expand-cards-btn {
+  color: var(--text-body);
+}
+
 .horizontal-card .icon.pdf {
   width: 48px;
 }
@@ -4334,7 +4351,9 @@ border-top-style: solid;
   }
 
 .policies .horizontal-cards,
-  .financial .horizontal-cards {
+  .financial .horizontal-cards,
+  .policies .more-cards.open,
+  .financial .more-cards.open {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
