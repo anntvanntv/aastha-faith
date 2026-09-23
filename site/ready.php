@@ -714,6 +714,37 @@ $rm->migrate([
             'defaultToday' => 1,
             'notes' => 'Publication date. Leave empty to use the creation date automatically. Example: September 23, 2026',
         ],
+        'news_card_title' => [
+            'type' => 'text',
+            'label' => 'News Title',
+        ],
+        'news_card_image' => [
+            'type' => 'FieldtypeImage',
+            'label' => 'News Image',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png gif svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'news_card_date' => [
+            'type' => 'datetime',
+            'label' => 'News Date',
+            'defaultToday' => 1,
+            'notes' => 'Publication date. Leave empty to use today\'s date. Example: September 23, 2026',
+        ],
+        'news_card_body' => [
+            'type' => 'textarea',
+            'label' => 'News Body',
+        ],
+        'news_card' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'News Items',
+            'fields' => [
+                'news_card_title',
+                'news_card_image',
+                'news_card_date',
+                'news_card_body',
+            ],
+        ],
         'album_card_image' => [
             'type' => 'FieldtypeImage',
             'label' => 'Album Card Image',
@@ -1037,7 +1068,10 @@ $rm->addFieldToTemplate('cta_url', 'individual-giving');
 
 /*--- latest news ---*/
 
-$rm->createTemplate('news');
+$rm->createTemplate('news', [
+    'fields' => ['news_card'],
+    'urlSegments' => 1,
+]);
 $rm->createTemplate('onenews');
 $rm->createPage(
     template: 'news',
@@ -1047,6 +1081,9 @@ $rm->createPage(
 );
 foreach (['image', 'date', 'body'] as $f) {
     $rm->addFieldToTemplate($f, 'onenews');
+}
+foreach (['news_card_title', 'news_card_image', 'news_card_date', 'news_card_body'] as $f) {
+    $rm->addFieldToTemplate($f, 'repeater_news_card');
 }
 
 // onenews: default empty date to created timestamp (editors can still override)
@@ -1075,6 +1112,8 @@ if ($newsParent->id && !$newsParent->numChildren) {
         }
     }
 }
+
+// onenews child pages remain as fallback; primary source is news_card repeater on /news/
 
 
 

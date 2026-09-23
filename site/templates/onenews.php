@@ -23,10 +23,10 @@ namespace ProcessWire
                 </a>
             </div>
 
-            <h2 edit="title"><?= $page->title ?></h2>
+            <h2><?= $page->title ?></h2>
             <div class="fr-sb">
                 <div class="programme-title">
-                    <h5 edit="date" style="text-transform: uppercase;">
+                    <h5 style="text-transform: uppercase;">
                         <?= $page->date ? strtoupper(date("F j, Y", $page->date)) : "" ?>
                     </h5>
                 </div>
@@ -63,12 +63,12 @@ namespace ProcessWire
             </div>
         </div>
         <div class="description-one-story">
-            <div class="photo-onestory" edit="image">
+            <div class="photo-onestory">
                 <?php if ($page->image): ?>
                     <img class="one-story-foto" src="<?= $page->image->url ?>" alt="<?= $page->title ?>">
                 <?php endif; ?>
             </div>
-            <div class="text-one-story" edit="body">
+            <div class="text-one-story">
                 <?php foreach (preg_split('/\R\s*\R/', trim($page->getUnformatted('body'))) as $para): ?>
                     <?php if (trim($para) === '') continue; ?>
                     <p><?= nl2br($sanitizer->entities(trim($para))) ?></p>

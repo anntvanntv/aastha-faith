@@ -1,26 +1,38 @@
 <?php namespace ProcessWire;
 
 $q = trim((string) $input->get->text('q'));
-$children = $page->children("sort=-date");
+$items = $page->news_card;
+$segment = $input->urlSegment1;
 
-$newsCard = function ($story) use ($config) {
+// sort repeater items by date desc (newest first)
+$sorted = [];
+foreach ($items as $item) {
+    $sorted[] = $item;
+}
+usort($sorted, function ($a, $b) {
+    return $b->news_card_date - $a->news_card_date;
+});
+
+$newsUrl = wire('pages')->get('/news/')->url;
+$newsCard = function ($item) use ($config, $sanitizer, $newsUrl) {
+    $slug = $sanitizer->pageName($item->news_card_title);
     ?>
-    <div class="news-card" data-date="<?= (int) $story->date ?>">
+    <div class="news-card" data-date="<?= (int) $item->news_card_date ?>">
         <div class="ncard-picture bgw800">
-            <?php if ($story->image): ?>
-                <img src="<?= $story->image->url ?>" alt="<?= $story->title ?>">
+            <?php if ($item->news_card_image): ?>
+                <img src="<?= $item->news_card_image->url ?>" alt="<?= $item->news_card_title ?>">
             <?php endif; ?>
         </div>
         <div class="ncard-content">
             <div class="title-content">
-                <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F j, Y", $story->date)) : '' ?></h5>
-                <h4><?= $story->title ?></h4>
+                <h5 class="date" style="text-transform: uppercase;"><?= $item->news_card_date ? strtoupper(date("F j, Y", $item->news_card_date)) : '' ?></h5>
+                <h4><?= $item->news_card_title ?></h4>
                 <div class="clamp-wrap">
-                    <p class="clamp-text clamp-4"><?= strip_tags($story->body) ?></p>
+                    <p class="clamp-text clamp-4"><?= strip_tags($item->news_card_body) ?></p>
                 </div>
             </div>
             <div class="btn-content">
-                <a href="<?= $story->url ?>" class="btn emptyblack">
+                <a href="<?= $newsUrl . $slug ?>/" class="btn emptyblack">
                     Read more
                     <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
                 </a>
@@ -30,14 +42,41 @@ $newsCard = function ($story) use ($config) {
     <?php
 };
 
+if ($segment) {
+    // detail view: find matching repeater item by slug
+    $item = null;
+    foreach ($sorted as $i) {
+        if ($sanitizer->pageName($i->news_card_title) === $segment) {
+            $item = $i;
+            break;
+        }
+    }
+    if ($item) {
+        $page->of(false);
+        $page->title = $item->news_card_title;
+        $page->body = $item->news_card_body;
+        $page->date = $item->news_card_date;
+        $page->image = $item->news_card_image;
+        // render detail via onenews template
+        include('./onenews.php');
+        return;
+    }
+}
+
 if ($q !== '') {
-    $results = $page->children("sort=-date,title|body%=" . $sanitizer->selectorValue($q));
+    $results = [];
+    foreach ($sorted as $item) {
+        $hay = strtolower($item->news_card_title . ' ' . $item->news_card_body);
+        if (strpos($hay, strtolower($q)) !== false) {
+            $results[] = $item;
+        }
+    }
     $visibleNews = $results;
     $extraBatches = [];
 } else {
     $results = null;
-    $visibleNews = $children->slice(0, 6);
-    $extraBatches = array_chunk(iterator_to_array($children->slice(6)), 6);
+    $visibleNews = array_slice($sorted, 0, 6);
+    $extraBatches = array_chunk(array_slice($sorted, 6), 6);
 }
 ?>
 
@@ -72,7 +111,7 @@ if ($q !== '') {
             </p>
         <?php endif; ?>
         <?php if($user->isLoggedin()): ?>
-            <a href="<?= $config->urls->admin ?>page/add/?parent_id=<?= $page->id ?>" class="btn add-story-btn">
+            <a href="<?= $config->urls->admin ?>page/edit/?id=<?= $page->id ?>" class="btn add-story-btn">
                 Add News
             </a>
         <?php endif; ?>

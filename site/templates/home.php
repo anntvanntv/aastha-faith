@@ -270,29 +270,39 @@ namespace ProcessWire;
 
          
 
-                <?php $newsItems = $pages->get('/news/')->children("sort=-date,limit=3"); ?>
+                <?php
+                $newsPg = $pages->get('/news/');
+                $newsItems = [];
+                if ($newsPg->id) {
+                    foreach ($newsPg->news_card as $item) $newsItems[] = $item;
+                    usort($newsItems, function ($a, $b) { return $b->news_card_date - $a->news_card_date; });
+                    $newsItems = array_slice($newsItems, 0, 3);
+                }
+                ?>
                 <?php if (count($newsItems)): ?>
-                <?php foreach ($newsItems as $card): ?>
+                <?php foreach ($newsItems as $card):
+                    $slug = $sanitizer->pageName($card->news_card_title);
+                ?>
 
                     <div class="news-card">
-                        <div edit="<?= $card->id ?>.image" class="ncard-picture">
-                            <?php if ($card->image): ?>
-                                <img src="<?= $card->image->url ?>" alt="<?= $card->title ?>">
+                        <div class="ncard-picture">
+                            <?php if ($card->news_card_image): ?>
+                                <img src="<?= $card->news_card_image->url ?>" alt="<?= $card->news_card_title ?>">
                             <?php endif; ?>
                         </div>
 
                         <div class="ncard-content">
                             <div class="title-content">
-                                <?php if ($card->date): ?>
-                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->date)) ?></h5>
+                                <?php if ($card->news_card_date): ?>
+                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->news_card_date)) ?></h5>
                                 <?php endif; ?>
-                                <h4 edit="<?= $card->id ?>.title"><?= $card->title ?></h4>
+                                <h4><?= $card->news_card_title ?></h4>
                                 <div class="clamp-wrap">
-                                    <p edit="<?= $card->id ?>.body" class="clamp-text clamp-4"><?= strip_tags($card->body) ?></p>
+                                    <p class="clamp-text clamp-4"><?= strip_tags($card->news_card_body) ?></p>
                                 </div>
                             </div>
                             <div class="btn-content">
-                                <a href="<?= $card->url ?>" class="btn emptyblack">
+                                <a href="<?= $newsPg->url . $slug ?>/" class="btn emptyblack">
                                     Read more
                                     <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
                                 </a>
