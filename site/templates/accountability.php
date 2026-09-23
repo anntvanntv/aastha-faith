@@ -309,14 +309,16 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
         <?php $renderPdfGroup($sectionCards('cards_policy', 3)); ?>
     </div> <!-- column -->
     </section>
-    <section class="concern">
+    <section class="concern" data-nav-color="dark">
         <div class="header-central">
             <h2>Have a concern?</h2>
             <p>For safeguarding concerns, programme complaints, or feedback, contact our team. We take all concerns
                 seriously and respond within defined timeframes.</p>
             <a class="btn green concern-btn" href="/contact">
                 Contact Us
-                <img src="<?= $config->urls->templates ?>icons/arrow_forward_white.png" alt="icon-arrow">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.33333 0L4.39333 0.94L8.11333 4.66667H0V6H8.11333L4.39333 9.72667L5.33333 10.6667L10.6667 5.33333L5.33333 0Z" fill="currentColor"></path>
+                </svg>
             </a>
         </div>
     </section>
