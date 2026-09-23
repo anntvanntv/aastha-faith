@@ -1,6 +1,10 @@
 <?php
 namespace ProcessWire;
 
+$formatSize = function ($bytes) {
+    if (!$bytes) return '';
+    return $bytes >= 1048576 ? round($bytes / 1048576, 1) . ' MB' : round($bytes / 1024) . ' KB';
+};
 
 ?>
 
@@ -210,80 +214,66 @@ namespace ProcessWire;
         </div>
     </section>
     <section class="financial" data-nav-color="light">
-        <div class="header-left">
+        <div class="header-central">
             <h2>Financial transparency</h2>
             <p>Explore our annual reports, financial statements, and key documents to see how resources are managed and
                 impact is delivered.</p>
         </div>
         <div class="financial-content">
-            <div class="column-left">
+            <div class="column">
                 <h4>Annual Reports</h4>
-                <?php foreach ($page->pdf_cards as $card): ?>
-                    <?php if ((int) $card->info_type->id === 1): ?>
-                        <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                            
-                            <div class="card-left">
-                                <div class="icon pdf">
-                                    <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
+                <div class="horizontal-cards">
+                    <?php foreach ($page->pdf_cards as $card): ?>
+                        <?php if ((int) $card->info_type->id === 1): ?>
+                            <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
+
+                                <div class="card-left">
+                                    <div class="icon pdf">
+                                        <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
+                                    </div>
+                                    <div class="text-card">
+                                        <p edit='title' class="body-bold"><?= $card->title ?></p>
+                                        <p class="small"><?= $formatSize($card->pdf_file->filesize) ?> • PDF</p>
+                                    </div>
+
                                 </div>
-                                <div class="text-card">
-                                    <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
-                                </div>
-                               
+                                <div class="icon download" >
+                                      <a href="<?= $card->pdf_file->url ?>" download>
+                                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
+                                      </a>
+                                    </div>
                             </div>
-                            <div class="icon download" >
-                                  <a href="<?= $card->pdf_file->url ?>" download>
-                                    <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                                  </a>
-                                </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-                <!-- <div class="horizontal-card"> -->
-                    <!-- <div class="card-left"> -->
-                        <!-- <div class="icon pdf"> -->
-                            <!-- <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon"> -->
-                        <!-- </div> -->
-                        <!-- <div class="text-card"> -->
-                            <!-- <p class="body-bold">Report name</p> -->
-                            <!-- <p class="small">2.4 MB • PDF</p> -->
-                        <!-- </div>  -->
-                    <!-- </div> -->
-                    <!-- <div class="icon download"> -->
-                        <!-- <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon"> -->
-                    <!-- </div> -->
-                <!-- </div>   -->
-              
-              
-            </div> <!--- column left  --->
-            <div class="column-right">
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="column">
                 <h4>Financial Statements</h4>
-                <?php foreach ($page->pdf_cards as $card): ?>
-                    <?php if ((int) $card->info_type->id === 2): ?>
-                        <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                            
-                            <div class="card-left">
-                                <div class="icon pdf">
-                                    <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
+                <div class="horizontal-cards">
+                    <?php foreach ($page->pdf_cards as $card): ?>
+                        <?php if ((int) $card->info_type->id === 2): ?>
+                            <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
+
+                                <div class="card-left">
+                                    <div class="icon pdf">
+                                        <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
+                                    </div>
+                                    <div class="text-card">
+                                        <p edit='title' class="body-bold"><?= $card->title ?></p>
+                                        <p class="small"><?= $formatSize($card->pdf_file->filesize) ?> • PDF</p>
+                                    </div>
+
                                 </div>
-                                <div class="text-card">
-                                    <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
-                                </div>
-                               
+                                <div class="icon download" >
+                                      <a href="<?= $card->pdf_file->url ?>" download>
+                                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
+                                      </a>
+                                    </div>
                             </div>
-                            <div class="icon download" >
-                                  <a href="<?= $card->pdf_file->url ?>" download>
-                                    <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                                  </a>
-                                </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-             
-               
-            </div> <!-- column right -->
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         </div> <!--- financial content ---->
     </section>
     <section class="policies" data-nav-color="dark">
@@ -309,7 +299,7 @@ namespace ProcessWire;
                                 </div>
                                 <div class="text-card">
                                     <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
+                                    <p class="small"><?= $formatSize($card->pdf_file->filesize) ?> • PDF</p>
                                 </div>
                                
                             </div>
