@@ -9,18 +9,23 @@ namespace ProcessWire
     <header class="onestory">
         <?php include('./_nav.php'); ?>
     </header>
-    <section class="one-story-content">
+    <section class="one-story-content" data-nav-color="dark">
         <div class="title-one-story">
-            <a class="btn bgw800 one-storybtn" href="<?= $pages->get('/news/')->url ?>"><svg width="16" height="16"
-                    viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z" fill="currentColor" />
-                </svg>
-                Back to news</a>
+            <div class="one-story-nav">
+                <a class="btn white" href="/#field"><svg width="16" height="16"
+                        viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z" fill="currentColor" />
+                    </svg>
+                    Back to Latest News</a>
+                <a class="btn white" href="<?= $pages->get('/news/')->url ?>">
+                    See all News
+                    <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
+                </a>
+            </div>
 
             <h2 edit="title"><?= $page->title ?></h2>
             <div class="fr-sb">
-                <div edit="category" class="programme-title">
-                    <p class="small"><?= $page->category ?></p>
+                <div class="programme-title">
                     <h5 edit="date" style="text-transform: uppercase;">
                         <?= $page->date ? strtoupper(date("F j, Y", $page->date)) : "" ?>
                     </h5>
@@ -64,7 +69,10 @@ namespace ProcessWire
                 <?php endif; ?>
             </div>
             <div class="text-one-story" edit="body">
-                <?= $page->body ?>
+                <?php foreach (preg_split('/\R\s*\R/', trim($page->getUnformatted('body'))) as $para): ?>
+                    <?php if (trim($para) === '') continue; ?>
+                    <p><?= nl2br($sanitizer->entities(trim($para))) ?></p>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
