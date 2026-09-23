@@ -386,7 +386,8 @@ forEach($aboutusFields as $field) {
                 'title',
                 'pdf_file',
                 'info_type',
-            ]
+            ],
+            'collapsed' => Inputfield::collapsedYes,
         ],
         'pdf_file' => [
             'type' => 'file',
@@ -405,7 +406,32 @@ forEach($aboutusFields as $field) {
                 4 => 'registrations|Registrations & Certifications',
                 5 => 'affiliations|Legal Affiliations',
             ],
-        ]
+        ],
+        'cards_annual' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Annual Reports',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_financial' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Financial Statements',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_registrations' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Registrations & Certifications',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_affiliations' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Legal Affiliations',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_policy' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Policy Documents',
+            'fields' => ['title', 'pdf_file'],
+        ],
     ],        
  
     ]); 
@@ -432,11 +458,43 @@ forEach($aboutusFields as $field) {
             'account_cards',
             'pdf_cards',
             'card_number4',
+            'cards_annual',
+            'cards_financial',
+            'cards_registrations',
+            'cards_affiliations',
+            'cards_policy',
    
         ]; 
 
 forEach($accountabilityFields as $field){
     $rm->addFieldToTemplate($field, 'accountability');
+}
+
+/* one-time: move pdf_cards items into per-subsection card fields (skips fields already populated) */
+$accPage = $pages->get("template=accountability");
+if ($accPage->id && count($accPage->pdf_cards)) {
+    $accPage->of(false);
+    $cardFieldMap = [
+        1 => 'cards_annual',
+        2 => 'cards_financial',
+        3 => 'cards_policy',
+        4 => 'cards_registrations',
+        5 => 'cards_affiliations',
+    ];
+    foreach ($cardFieldMap as $typeId => $fieldName) {
+        $target = $accPage->get($fieldName);
+        if (!$target || count($target)) continue;
+        foreach ($accPage->pdf_cards as $c) {
+            if ((int) $c->info_type->id !== $typeId) continue;
+            $item = $accPage->$fieldName->getNew();
+            $item->title = $c->title;
+            $item->save();
+            if ($c->pdf_file) $item->pdf_file->add($c->pdf_file->filename);
+            $item->save();
+            $accPage->$fieldName->add($item);
+        }
+        if (count($accPage->$fieldName)) $accPage->save($fieldName);
+    }
 }
 
 
