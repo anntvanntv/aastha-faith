@@ -260,7 +260,7 @@ namespace ProcessWire;
                     </div>
                 </div>
                 <div class="field-right">
-                    <a class="btn white" href="<?= $pages->get('/stories/')->url ?>">
+                    <a class="btn white">
                         Read more stories
                         <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
                     </a>
@@ -270,7 +270,7 @@ namespace ProcessWire;
 
          
 
-                <?php foreach ($page->album_card->slice(0, 3) as $card): ?>
+                <?php foreach ($page->album_card->sort('-album_card_date')->slice(0, 3) as $card): ?>
 
                     <div edit="album_card" class="news-card">
                         <div edit='<?= $card ?>.album_card_image' class="ncard-picture">
@@ -279,6 +279,9 @@ namespace ProcessWire;
                     
                         <div class="ncard-content">
                             <div class="title-content">
+                                <?php if ($card->album_card_date): ?>
+                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->album_card_date)) ?></h5>
+                                <?php endif; ?>
                                 <h4 edit="<?= $card ?>.album_card_title "><?= $card->album_card_title ?></h4>
                                 <div class="clamp-wrap">
                                     <p edit="<?= $card ?>.album_card_text" class="clamp-text"><?= $card->album_card_text ?></p>

@@ -690,6 +690,10 @@ $rm->migrate([
             'extensions' => 'jpg jpeg png gif svg webp',
             'outputFormat' => FieldtypeFile::outputFormatArray,
         ],
+        'field_title' => [
+            'type' => 'text',
+            'label' => 'Latest News Title',
+        ],
         'album_card' => [
             'type' => 'FieldtypeRepeater',
             'label' => 'Album Card',
@@ -697,7 +701,12 @@ $rm->migrate([
                 'album_card_image',
                 'album_card_title',
                 'album_card_text',
+                'album_card_date',
             ],
+        ],
+        'album_card_date' => [
+            'type' => 'datetime',
+            'label' => 'News Date',
         ],
         'album_card_image' => [
             'type' => 'FieldtypeImage',
@@ -772,6 +781,7 @@ $rm->addFieldToTemplate('quote2_text', 'home');
 $rm->addFieldToTemplate('quote2_title', 'home');
 $rm->addFieldToTemplate('quote2_subtitle', 'home');
 $rm->addFieldToTemplate('album_card', 'home');
+$rm->addFieldToTemplate('album_card_date', 'repeater_album_card');
 $rm->addFieldToTemplate('born_title', 'home');
 $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');

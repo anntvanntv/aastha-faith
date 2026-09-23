@@ -130,7 +130,7 @@ namespace ProcessWire;
                     </div>
                     <div class="programme-title">
                         <p class="small"><?= $story->category ?></p>
-                        <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F Y", $story->date)) : '' ?></h5>
+                        <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F j, Y", $story->date)) : '' ?></h5>
                     </div>
                     <div class="ncard-content">
                         <div class="title-content">
