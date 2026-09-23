@@ -22,7 +22,7 @@ namespace ProcessWire
                 <div edit="category" class="programme-title">
                     <p class="small"><?= $page->category ?></p>
                     <h5 edit="date" style="text-transform: uppercase;">
-                        <?php echo strtoupper(date("F Y", $page->date)); ?>
+                        <?php echo strtoupper(date("F j, Y", $page->date)); ?>
                     </h5>
                 </div>
                 <button class="ones-button btn" id="share-story">

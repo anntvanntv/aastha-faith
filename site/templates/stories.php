@@ -16,8 +16,8 @@
         </section>
     </header>
     <?php
-    $visibleStories = $page->children()->slice(0, 6);
-    $extraBatches = array_chunk(iterator_to_array($page->children()->slice(6)), 6);
+    $visibleStories = $page->children("sort=-date")->slice(0, 6);
+    $extraBatches = array_chunk(iterator_to_array($page->children("sort=-date")->slice(6)), 6);
     ?>
     <section class="container">
 
@@ -35,7 +35,7 @@
             </div>
             <div class="programme-title">
             <p class="small"><?= $story->category ?></p>
-                <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F Y", $story->date)); ?></h5>
+                <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
             </div>
             <div class="ncard-content">
                 <div class="title-content">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="programme-title">
                 <p class="small"><?= $story->category ?></p>
-                    <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F Y", $story->date)); ?></h5>
+                    <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
                 </div>
                 <div class="ncard-content">
                     <div class="title-content">
