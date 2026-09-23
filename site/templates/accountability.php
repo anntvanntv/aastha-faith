@@ -14,6 +14,11 @@ $pdfGroup = function ($typeId) use ($page) {
     return $cards;
 };
 
+$sectionCards = function ($fieldName, $typeId) use ($page, $pdfGroup) {
+    $cards = $page->get($fieldName);
+    return ($cards && count($cards)) ? $cards : $pdfGroup($typeId);
+};
+
 $renderPdfGroup = function ($cards) use ($config, $formatSize) {
     $limit = 6;
     ?>
@@ -266,11 +271,11 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
         <div class="docs-content">
             <div class="column">
                 <h4>Annual Reports</h4>
-                <?php $renderPdfGroup($pdfGroup(1)); ?>
+                <?php $renderPdfGroup($sectionCards('cards_annual', 1)); ?>
             </div>
             <div class="column">
                 <h4>Financial Statements</h4>
-                <?php $renderPdfGroup($pdfGroup(2)); ?>
+                <?php $renderPdfGroup($sectionCards('cards_financial', 2)); ?>
             </div>
         </div> <!--- financial content ---->
     </section>
@@ -282,11 +287,11 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
         <div class="docs-content">
             <div class="column">
                 <h4>Registrations &amp; certifications</h4>
-                <?php $renderPdfGroup($pdfGroup(4)); ?>
+                <?php $renderPdfGroup($sectionCards('cards_registrations', 4)); ?>
             </div>
             <div class="column">
                 <h4>Legal affiliations</h4>
-                <?php $renderPdfGroup($pdfGroup(5)); ?>
+                <?php $renderPdfGroup($sectionCards('cards_affiliations', 5)); ?>
             </div>
         </div>
     </section>
@@ -301,7 +306,7 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
         </div>
     <div class="column">
         <h4>Policy documents</h4>
-        <?php $renderPdfGroup($pdfGroup(3)); ?>
+        <?php $renderPdfGroup($sectionCards('cards_policy', 3)); ?>
     </div> <!-- column -->
     </section>
     <section class="concern">
