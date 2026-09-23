@@ -263,7 +263,7 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
             <p>Explore our annual reports, financial statements, and key documents to see how resources are managed and
                 impact is delivered.</p>
         </div>
-        <div class="financial-content">
+        <div class="docs-content">
             <div class="column">
                 <h4>Annual Reports</h4>
                 <?php $renderPdfGroup($pdfGroup(1)); ?>
@@ -274,7 +274,23 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
             </div>
         </div> <!--- financial content ---->
     </section>
-    <section class="policies" data-nav-color="dark">
+    <section class="org-docs" data-nav-color="dark">
+        <div class="header-central">
+            <h2>Organizational Documents</h2>
+            <p>Delve into our official registrations, certifications, and legal affiliations that affirm our standing as a recognized and accountable organization.</p>
+        </div>
+        <div class="docs-content">
+            <div class="column">
+                <h4>Registrations &amp; certifications</h4>
+                <?php $renderPdfGroup($pdfGroup(4)); ?>
+            </div>
+            <div class="column">
+                <h4>Legal affiliations</h4>
+                <?php $renderPdfGroup($pdfGroup(5)); ?>
+            </div>
+        </div>
+    </section>
+    <section class="policies" data-nav-color="light">
         <div class="header-central">
             <h2>Policies & Safeguarding</h2>
             <p>FAITH works with some of the most vulnerable women in Nepal — women living with HIV, survivors of

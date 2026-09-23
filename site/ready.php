@@ -402,6 +402,8 @@ forEach($aboutusFields as $field) {
                 1 => 'annual|Annual Reports',
                 2 => 'financial|Financial Statements',
                 3 => 'policy|Policy Documents',
+                4 => 'registrations|Registrations & Certifications',
+                5 => 'affiliations|Legal Affiliations',
             ],
         ]
     ],        
