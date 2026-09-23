@@ -269,14 +269,20 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
                 impact is delivered.</p>
         </div>
         <div class="docs-content">
+            <?php $cards = $sectionCards('cards_annual', 1); ?>
+            <?php if (count($cards)): ?>
             <div class="column">
                 <h4>Annual Reports</h4>
-                <?php $renderPdfGroup($sectionCards('cards_annual', 1)); ?>
+                <?php $renderPdfGroup($cards); ?>
             </div>
+            <?php endif; ?>
+            <?php $cards = $sectionCards('cards_financial', 2); ?>
+            <?php if (count($cards)): ?>
             <div class="column">
                 <h4>Financial Statements</h4>
-                <?php $renderPdfGroup($sectionCards('cards_financial', 2)); ?>
+                <?php $renderPdfGroup($cards); ?>
             </div>
+            <?php endif; ?>
         </div> <!--- financial content ---->
     </section>
     <section class="org-docs" data-nav-color="dark">
@@ -285,14 +291,20 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
             <p>Delve into our official registrations, certifications, and legal affiliations that affirm our standing as a recognized and accountable organization.</p>
         </div>
         <div class="docs-content">
+            <?php $cards = $sectionCards('cards_registrations', 4); ?>
+            <?php if (count($cards)): ?>
             <div class="column">
                 <h4>Registrations &amp; certifications</h4>
-                <?php $renderPdfGroup($sectionCards('cards_registrations', 4)); ?>
+                <?php $renderPdfGroup($cards); ?>
             </div>
+            <?php endif; ?>
+            <?php $cards = $sectionCards('cards_affiliations', 5); ?>
+            <?php if (count($cards)): ?>
             <div class="column">
                 <h4>Legal affiliations</h4>
-                <?php $renderPdfGroup($sectionCards('cards_affiliations', 5)); ?>
+                <?php $renderPdfGroup($cards); ?>
             </div>
+            <?php endif; ?>
         </div>
     </section>
     <section class="policies" data-nav-color="light">
@@ -304,10 +316,13 @@ $renderPdfGroup = function ($cards) use ($config, $formatSize) {
                 replicate the harm it was founded to address.
             </p>
         </div>
+    <?php $cards = $sectionCards('cards_policy', 3); ?>
+    <?php if (count($cards)): ?>
     <div class="column">
         <h4>Policy documents</h4>
-        <?php $renderPdfGroup($sectionCards('cards_policy', 3)); ?>
+        <?php $renderPdfGroup($cards); ?>
     </div> <!-- column -->
+    <?php endif; ?>
     </section>
     <section class="concern" data-nav-color="dark">
         <div class="header-central">
