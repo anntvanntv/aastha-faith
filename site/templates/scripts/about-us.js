@@ -3,17 +3,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     document.querySelectorAll(".team .member").forEach((member) => {
-        const inner = member.querySelector(".member-inner");
-
-        const flip = () => {
-            member.classList.toggle("flipped");
-            member.setAttribute("aria-pressed", member.classList.contains("flipped"));
+        const setFlipped = (v) => {
+            member.classList.toggle("flipped", v);
+            member.setAttribute("aria-pressed", v);
         };
-        member.addEventListener("click", flip);
+
+        if (canHover) {
+            // desktop: hover flips, leaving flips back
+            member.addEventListener("mouseenter", () => setFlipped(true));
+            member.addEventListener("mouseleave", () => setFlipped(false));
+        } else {
+            // touch: tap toggles
+            member.addEventListener("click", () => setFlipped(!member.classList.contains("flipped")));
+        }
         member.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                flip();
+                setFlipped(!member.classList.contains("flipped"));
             }
         });
 
