@@ -7,10 +7,10 @@
 <div id="content">
 <header>
 <?php include('./_nav.php'); ?>
-        <section class="title-stories">
+        <section class="title-stories" data-nav-color="dark">
             <div class="eyebrow">
                 <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
-                <h5>explore</h5>
+                <h5>EXPLORE</h5>
             </div>
             <h1 edit="title"><?= $page->title ?></h1>
         </section>
@@ -33,12 +33,12 @@
             <div class="ncard-picture bgw800">
             <img src="<?= $story->image->url ?>" alt="<?= $story->title ?>">
             </div>
-            <div class="programme-title">
-            <p class="small"><?= $story->category ?></p>
-                <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
-            </div>
             <div class="ncard-content">
                 <div class="title-content">
+                    <div class="programme-title">
+                        <p class="small"><?= $story->category ?></p>
+                        <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
+                    </div>
                     <h4><?= $story->title ?></h4>
                     <p><?= substr(strip_tags($story->body), 0, 180) ?>...</p>
                 </div>
@@ -63,12 +63,12 @@
                 <div class="ncard-picture bgw800">
                 <img src="<?= $story->image->url ?>" alt="<?= $story->title ?>">
                 </div>
-                <div class="programme-title">
-                <p class="small"><?= $story->category ?></p>
-                    <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
-                </div>
                 <div class="ncard-content">
                     <div class="title-content">
+                        <div class="programme-title">
+                            <p class="small"><?= $story->category ?></p>
+                            <h5 class="date" style="text-transform: uppercase;"><?php echo strtoupper(date("F j, Y", $story->date)); ?></h5>
+                        </div>
                         <h4><?= $story->title ?></h4>
                         <p><?= substr(strip_tags($story->body), 0, 180) ?>...</p>
                     </div>

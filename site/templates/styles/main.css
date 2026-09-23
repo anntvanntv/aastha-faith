@@ -1658,43 +1658,25 @@ padding: 80px 0;
 }
 
 .title-stories {
-  padding: 200px 27px;
-}
-
-.news .title-stories {
-  padding-left: 40px;
-  padding-right: 40px;
+  padding: 200px 40px;
 }
 
 .bgw800 {
   background-color: var(--white-800);
 }
 
-.stories .container,
-.news .container  {
+.stories .container {
   margin: 30px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 30px;
 }
 
-@media (min-width: 1380px) {
-  .stories .container {
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-@media (max-width: 900px) {
-  .stories .container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 620px) {
-  .stories .container {
-    grid-template-columns: 1fr;
-  }
+.news .container  {
+  margin: 30px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 30px;
 }
 
 /*---- Stories page — card upgrade (scoped to .stories) ----*/
@@ -1733,7 +1715,8 @@ padding: 80px 0;
 
 .stories .programme-title,
 .news .programme-title  {
-  padding: 0 20px;
+  padding: 0;
+  margin-bottom: 6px;
 }
 
 .news .programme-title {
@@ -1744,7 +1727,7 @@ padding: 80px 0;
 .news .ncard-content  {
   align-items: flex-start;
   text-align: left;
-  padding: 0 20px 24px;
+  padding: 0 20px 16px;
   flex: 1;
 }
 
@@ -5656,15 +5639,10 @@ border-top-style: solid;
   /*----- stories ------*/
 
   .title-stories {
-    padding: 100px 10px 48px;
-  }
-
-  /*----- news archive mobile — match .field 20px edges ------*/
-
-  .news .title-stories {
     padding: 100px 20px 48px;
   }
 
+  .stories .container,
   .news .container {
     margin-left: 20px;
     margin-right: 20px;
