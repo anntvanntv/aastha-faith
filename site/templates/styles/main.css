@@ -3108,6 +3108,44 @@ div.line-legal:nth-child(3) > div:nth-child(2) > p:nth-child(2) {
   line-height: 4px;
 }
 
+.legal .container-right {
+  flex: 1;
+  min-width: 0;
+}
+
+.members .horizontal-cards,
+.executive .horizontal-cards {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.members .horizontal-card,
+.executive .horizontal-card {
+  width: 100%;
+  height: auto;
+  min-height: 80px;
+  padding: 12px 18px;
+}
+
+.members .horizontal-card .icon,
+.executive .horizontal-card .icon {
+  flex-shrink: 0;
+}
+
+.members .horizontal-card .text,
+.executive .horizontal-card .text {
+  min-width: 0;
+}
+
+.members .horizontal-card p,
+.executive .horizontal-card p {
+  line-height: 20px;
+}
+
+.members .horizontal-card .small,
+.executive .horizontal-card .small {
+  line-height: 14px;
+}
+
 .horizontal-card {
   display: flex;
   background-color: var(--white-900);
