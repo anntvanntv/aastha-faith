@@ -113,68 +113,60 @@ document.addEventListener("DOMContentLoaded", () => {
 const shareButton = document.getElementById("share-story");
 const shareDialog = document.getElementById("share-dialog");
 
-const shareUrl = document.getElementById("share-url");
+if (shareButton && shareDialog) {
+    const shareUrl = document.getElementById("share-url");
+    const copyButton = document.getElementById("copy-link");
+    const closeDialog = document.getElementById("close-dialog");
+    const wppButton = document.getElementById("share-whatsapp");
+    const fbButton = document.getElementById("share-facebook");
+    const linkedinButton = document.getElementById("share-linkedin");
 
-const copyButton = document.getElementById("copy-link");
+    const openShare = () => {
+        if (shareUrl) shareUrl.value = window.location.href;
+        shareDialog.classList.remove("hidden-story");
+    };
+    const closeShare = () => shareDialog.classList.add("hidden-story");
 
-const closeDialog = document.getElementById("close-dialog");
+    shareButton.addEventListener("click", openShare);
+    if (closeDialog) closeDialog.addEventListener("click", closeShare);
 
+    // close on Escape or click outside the dialog
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeShare();
+    });
+    document.addEventListener("click", (e) => {
+        if (shareDialog.classList.contains("hidden-story")) return;
+        if (!shareDialog.contains(e.target) && !shareButton.contains(e.target)) closeShare();
+    });
 
-const wppButton = document.getElementById("share-whatsapp");
-const fbButton = document.getElementById("share-facebook");
-const linkedinButton = document.getElementById("share-linkedin");
-
-copyButton.addEventListener("click", async () => {
-    try {
-        shareUrl.select();
-        shareUrl.setSelectionRange(0, 99999);
-
-
-        await navigator.clipboard.writeText(shareUrl.value);
-
-    } catch (err) {
-        console.error(err);
+    if (copyButton && shareUrl) {
+        copyButton.addEventListener("click", async () => {
+            try {
+                shareUrl.select();
+                shareUrl.setSelectionRange(0, 99999);
+                await navigator.clipboard.writeText(shareUrl.value);
+                const label = copyButton.textContent;
+                copyButton.textContent = "Copied!";
+                setTimeout(() => { copyButton.textContent = label; }, 1500);
+            } catch (err) {
+                console.error(err);
+            }
+        });
     }
 
-});
+    if (wppButton) wppButton.addEventListener("click", () => {
+        const text = encodeURIComponent(document.title + " " + window.location.href);
+        window.open(`https://wa.me/?text=${text}`, "_blank");
+    });
 
+    if (fbButton) fbButton.addEventListener("click", () => {
+        const url = encodeURIComponent(shareUrl.value);
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+    });
 
-shareButton.addEventListener("click", () => {
-    shareUrl.value = window.location.href;
-    shareDialog.classList.toggle("hidden-story");
-} )
-
-
-closeDialog.addEventListener("click", () => {
-    shareDialog.classList.toggle("hidden-story");
-} )
-
-wppButton.addEventListener("click", () => {
-    const url = encodeURIComponent(window.location.href);
-
-    window.open(
-        `https://wa.me/?text=${url}`,
-        "_blank"
-    );
-});
-
-
-fbButton.addEventListener("click", () => {
-    const url = encodeURIComponent(shareUrl.value);
-
-    window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-        "_blank"
-    );
-});
-
-
-linkedinButton.addEventListener("click", () => {
-    const url = encodeURIComponent(shareUrl.value);
-
-    window.open(
-        `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-        "_blank"
-    );
-});
+    if (linkedinButton) linkedinButton.addEventListener("click", () => {
+        const url = encodeURIComponent(shareUrl.value);
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, "_blank");
+    });
+}
 

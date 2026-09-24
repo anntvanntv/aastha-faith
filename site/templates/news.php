@@ -13,8 +13,6 @@ if ($segment) {
     }
     if ($onenewsItem) {
         include('./onenews.php');
-        // segment-rendered pages load news.js via _main — include onenews.js too
-        echo '<script src="' . $config->urls->templates . 'scripts/onenews.js"></script>';
         return;
     }
     throw new Wire404Exception();

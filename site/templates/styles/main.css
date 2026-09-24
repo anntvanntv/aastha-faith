@@ -1854,6 +1854,7 @@ padding: 80px 0;
   flex-direction: row;
   gap: 40px;
   align-items: stretch;
+  position: relative;
 }
 
 .onenews .one-story-main {
@@ -1884,9 +1885,14 @@ padding: 80px 0;
   width: 100%;
 }
 
-/* news sidebar on detail page */
+/* news sidebar on detail page — absolutely positioned so the left column
+   (text + photo) alone determines the row height; the list scrolls inside */
 .onenews .news-side {
-  flex: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: calc(40% - 40px);
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -1961,9 +1967,14 @@ padding: 80px 0;
 }
 
 .onenews .news-side .news-all.active,
-.onenews .news-side .news-filter.active,
-.onenews .news-side .news-all:hover,
-.onenews .news-side .news-filter:hover {
+.onenews .news-side .news-filter.active {
+  border-color: var(--green-900);
+  background-color: var(--green-900);
+  color: var(--text-body-light);
+}
+
+.onenews .news-side .news-all:not(.active):hover,
+.onenews .news-side .news-filter:not(.active):hover {
   border-color: var(--green-900);
   color: var(--text-heading);
 }
@@ -1978,8 +1989,9 @@ padding: 80px 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0;
-  border: none;
+  padding: 6px 14px;
+  border: 1px solid var(--neutral-400);
+  border-radius: 64px;
   background: none;
   color: var(--text-body);
   font-size: 13px;
@@ -1987,7 +1999,9 @@ padding: 80px 0;
   cursor: pointer;
 }
 
-.onenews .news-side .news-sort:hover {
+.onenews .news-side .news-sort:hover,
+.onenews .news-side .news-sort.open {
+  border-color: var(--green-900);
   color: var(--text-heading);
 }
 
@@ -2044,6 +2058,10 @@ padding: 80px 0;
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-top: 1px solid var(--neutral-200);
+  border-left: 1px solid var(--neutral-200);
   overflow-y: auto;
 }
 
@@ -2111,6 +2129,25 @@ padding: 80px 0;
 
 .ones-button:hover {
   cursor: pointer;
+}
+
+/* news detail: share button matches the green action style */
+.onenews .ones-button {
+  width: auto;
+  height: 44px;
+  padding: 0 24px;
+  align-items: center;
+  background-color: var(--green-900);
+  color: var(--text-body-light);
+}
+
+.onenews .ones-button:hover {
+  background-color: var(--green-800);
+}
+
+.onenews .ones-button .share {
+  width: 16px;
+  color: inherit;
 }
 
 .fr-sb {
@@ -4978,7 +5015,7 @@ border-top-style: solid;
   }
 
   .onenews .news-side {
-    flex: none;
+    position: static;
     width: 100%;
   }
 
