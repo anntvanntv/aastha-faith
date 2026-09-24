@@ -260,8 +260,8 @@ namespace ProcessWire;
                     </div>
                 </div>
                 <div class="field-right">
-                    <a class="btn white" href="<?= $pages->get('/news/')->url ?>">
-                        See all news
+                    <a class="btn white" href="<?= $pages->get('/stories/')->url ?>">
+                        See all Stories
                         <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
                     </a>
                 </div>

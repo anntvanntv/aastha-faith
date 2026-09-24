@@ -73,7 +73,7 @@ $currentHref = $input->urlSegment1
                     <div class="box-url">
                         <input id="share-url" type="text" readonly></input>
                         <button class="btn" id="copy-link">
-                            copy link
+                            Copy Link
                         </button>
                     </div>
                     <div class="share-options">
