@@ -973,10 +973,12 @@ $rm->migrate([
         'footer_phone' => ['type' => 'text', 'label' => 'Phone Number'],
         'footer_address' => ['type' => 'text', 'label' => 'Address'],
         'footer_publications' => ['type' => 'text', 'label' => 'Publications Link'],
+        'footer_tagline' => ['type' => 'text', 'label' => 'Tagline'],
     ],
 ]);
 
 $footerFields = [
+    'footer_tagline',
     'footer_address',
     'footer_phone_code',
     'footer_phone',
@@ -991,6 +993,31 @@ $footerFields = [
 
 foreach($footerFields as $field){
     $rm->addFieldToTemplate($field, 'footer');
+}
+
+// order: tagline right under title in admin
+$footerFg = $templates->get('footer')->fieldgroup;
+if ($footerFg->has('footer_tagline') && $footerFg->has('title')) {
+    $names = [];
+    foreach ($footerFg as $f) $names[] = $f->name;
+    if (array_search('footer_tagline', $names) !== array_search('title', $names) + 1) {
+        $footerFg->insertAfter($fields->get('footer_tagline'), $fields->get('title'));
+        $footerFg->save();
+    }
+}
+
+// seed footer tagline once (only when empty — respects admin edits)
+$footerPg = $pages->get('/footer/');
+if ($footerPg->id && !$footerPg->footer_tagline) {
+    $prevOf = $footerPg->of();
+    try {
+        $footerPg->of(false);
+        $footerPg->footer_tagline = 'Feminist Approaches in Transforming Health. Women-led. Community-rooted. Internationally trusted.';
+        $footerPg->save('footer_tagline');
+    } catch (\Throwable $e) {
+        wire()->log->error('footer_tagline seed failed: ' . $e->getMessage());
+    }
+    $footerPg->of($prevOf);
 }
 
 /*  -----  donor path cards  ---- */
