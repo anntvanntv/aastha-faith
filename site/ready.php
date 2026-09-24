@@ -1134,14 +1134,18 @@ $rm->createPage(
     status: [Page::statusUnpublished],
 );
 
-// family: submission children only under the submissions parent
+// family: submission children only under the submissions parent (guarded — saves once)
 $subParent = $templates->get('contact_submissions');
 $subChild = $templates->get('contact_submission');
 if ($subParent->id && $subChild->id) {
-    $subParent->childTemplates = [$subChild->id];
-    $subParent->save();
-    $subChild->parentTemplates = [$subParent->id];
-    $subChild->save();
+    if ($subParent->childTemplates != [$subChild->id]) {
+        $subParent->childTemplates = [$subChild->id];
+        $subParent->save();
+    }
+    if ($subChild->parentTemplates != [$subParent->id]) {
+        $subChild->parentTemplates = [$subParent->id];
+        $subChild->save();
+    }
 }
 
 /*  -----  donor path cards  ---- */
