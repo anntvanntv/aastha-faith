@@ -786,8 +786,14 @@ $rm->addFieldToTemplate('quote2_image', 'home');
 $rm->addFieldToTemplate('quote2_text', 'home');
 $rm->addFieldToTemplate('quote2_title', 'home');
 $rm->addFieldToTemplate('quote2_subtitle', 'home');
-$rm->addFieldToTemplate('album_card', 'home');
+// album_card moved to /news/ page — detach from home (news is managed on the news page itself)
+// $rm->addFieldToTemplate('album_card', 'home');
 $rm->addFieldToTemplate('album_card_date', 'repeater_album_card');
+$homeT = $templates->get('home');
+if ($homeT && $homeT->fields->has('album_card')) {
+    $homeT->fields->remove('album_card');
+    $homeT->fields->save();
+}
 $rm->addFieldToTemplate('born_title', 'home');
 $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
@@ -1058,21 +1064,41 @@ $wire->addHookAfter('Pages::saved', function ($event) {
     $p->save('date');
 });
 
+// news page manages cards via the same album_card repeater as home
+$rm->addFieldToTemplate('album_card', 'news');
+
+// /news/{slug}/ renders detail from album_card row
+$newsT = $templates->get('news');
+if ($newsT && $newsT->id && !$newsT->urlSegments) {
+    $newsT->urlSegments = 1;
+    $newsT->save();
+}
+
+// migrate onenews children into /news/ album_card rows (idempotent, prod-safe)
 $newsParent = $pages->get('/news/');
-if ($newsParent->id && !$newsParent->numChildren) {
-    $homePg = $pages->get('/');
-    foreach ($homePg->album_card as $ac) {
-        $n = $pages->add('onenews', $newsParent, $sanitizer->pageName($ac->album_card_title ?: 'news-item'), [
-            'title' => $ac->album_card_title,
-            'date' => $ac->album_card_date,
-            'body' => $ac->album_card_text,
-        ]);
-        $img = $ac->album_card_image ? $ac->album_card_image->first() : null;
-        if ($img && $img->filename) {
-            $n->of(false);
-            $n->image->add($img->filename);
-            $n->save('image');
+if ($newsParent->id && $newsParent->numChildren && !count($newsParent->album_card)) {
+    $prevOf = $newsParent->of();
+    try {
+        $newsParent->of(false);
+        foreach ($newsParent->children('sort=date') as $c) {
+            $row = $newsParent->album_card->getNewItem();
+            $row->album_card_title = $c->title;
+            $row->album_card_date = $c->date;
+            $row->album_card_text = $c->body;
+            $img = $c->image;
+            if ($img instanceof Pageimages) $img = count($img) ? $img->first() : null;
+            $row->of(false);
+            $row->save();
+            if ($img && $img->filename) {
+                $row->album_card_image = $img->filename;
+                $row->save('album_card_image');
+            }
         }
+        $newsParent->save('album_card');
+        $newsParent->of($prevOf);
+    } catch (\Throwable $e) {
+        $newsParent->of($prevOf);
+        wire('log')->save('errors', 'album_card migration failed: ' . $e->getMessage());
     }
 }
 

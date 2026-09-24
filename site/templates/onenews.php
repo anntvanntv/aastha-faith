@@ -1,10 +1,26 @@
 <?php
-namespace ProcessWire
+namespace ProcessWire;
+
+// $onenewsItem = album_card row when included from news.php; null for onenews pages
+if (isset($onenewsItem) && $onenewsItem) {
+    $title = $onenewsItem->album_card_title;
+    $date = $onenewsItem->album_card_date;
+    $body = $onenewsItem->album_card_text;
+    $image = $onenewsItem->album_card_image;
+} else {
+    $title = $page->title;
+    $date = $page->date;
+    $body = $page->getUnformatted('body');
+    $image = $page->image;
+}
+if ($image instanceof Pageimages) {
+    $image = count($image) ? $image->first() : null;
+}
 
 ?>
 
 
-<div id="content">
+<div id="content" class="onenews">
 
     <header class="onestory">
         <?php include('./_nav.php'); ?>
@@ -23,11 +39,11 @@ namespace ProcessWire
                 </a>
             </div>
 
-            <h2 edit="title"><?= $page->title ?></h2>
+            <h2><?= $title ?></h2>
             <div class="fr-sb">
                 <div class="programme-title">
-                    <h5 edit="date" style="text-transform: uppercase;">
-                        <?= $page->date ? strtoupper(date("F j, Y", $page->date)) : "" ?>
+                    <h5 style="text-transform: uppercase;">
+                        <?= $date ? strtoupper(date("F j, Y", $date)) : "" ?>
                     </h5>
                 </div>
                 <button class="ones-button btn" id="share-story">
@@ -63,13 +79,13 @@ namespace ProcessWire
             </div>
         </div>
         <div class="description-one-story">
-            <div class="photo-onestory" edit="image">
-                <?php if ($page->image): ?>
-                    <img class="one-story-foto" src="<?= $page->image->url ?>" alt="<?= $page->title ?>">
+            <div class="photo-onestory">
+                <?php if ($image): ?>
+                    <img class="one-story-foto" src="<?= $image->url ?>" alt="<?= $title ?>">
                 <?php endif; ?>
             </div>
-            <div class="text-one-story" edit="body">
-                <?php foreach (preg_split('/\R\s*\R/', trim($page->getUnformatted('body'))) as $para): ?>
+            <div class="text-one-story">
+                <?php foreach (preg_split('/\R\s*\R/', trim($body)) as $para): ?>
                     <?php if (trim($para) === '') continue; ?>
                     <p><?= nl2br($sanitizer->entities(trim($para))) ?></p>
                 <?php endforeach; ?>

@@ -270,56 +270,66 @@ namespace ProcessWire;
 
          
 
-                <?php $newsItems = $pages->get('/news/')->children("sort=-date,limit=3"); ?>
+                <?php
+                $newsPg = $pages->get('/news/');
+                $newsItems = [];
+                if ($newsPg->id) {
+                    foreach ($newsPg->album_card as $row) {
+                        $newsItems[] = [
+                            'title' => $row->album_card_title,
+                            'date' => $row->album_card_date,
+                            'text' => $row->album_card_text,
+                            'img' => $row->album_card_image,
+                            'link' => $newsPg->url . preg_replace('/-+/', '-', $sanitizer->pageName($row->album_card_title)) . '/',
+                        ];
+                    }
+                    if (!count($newsItems)) {
+                        // fallback: onenews children (pre-migration / prod backup)
+                        foreach ($newsPg->children('sort=-date,limit=3') as $c) {
+                            $newsItems[] = [
+                                'title' => $c->title,
+                                'date' => $c->date,
+                                'text' => $c->body,
+                                'img' => $c->image,
+                                'link' => $c->url,
+                            ];
+                        }
+                    }
+                    usort($newsItems, function ($a, $b) { return $b['date'] - $a['date']; });
+                    $newsItems = array_slice($newsItems, 0, 3);
+                }
+                ?>
                 <?php if (count($newsItems)): ?>
-                <?php foreach ($newsItems as $card): ?>
+                <?php foreach ($newsItems as $card):
+                    $cardImg = $card['img'];
+                    if ($cardImg instanceof Pageimages) {
+                        $cardImg = count($cardImg) ? $cardImg->first() : null;
+                    }
+                ?>
 
                     <div class="news-card">
-                        <div edit="<?= $card->id ?>.image" class="ncard-picture">
-                            <?php if ($card->image): ?>
-                                <img src="<?= $card->image->url ?>" alt="<?= $card->title ?>">
+                        <div class="ncard-picture">
+                            <?php if ($cardImg): ?>
+                                <img src="<?= $cardImg->url ?>" alt="<?= $card['title'] ?>">
                             <?php endif; ?>
                         </div>
 
                         <div class="ncard-content">
                             <div class="title-content">
-                                <?php if ($card->date): ?>
-                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->date)) ?></h5>
+                                <?php if ($card['date']): ?>
+                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card['date'])) ?></h5>
                                 <?php endif; ?>
-                                <h4 edit="<?= $card->id ?>.title"><?= $card->title ?></h4>
+                                <h4><?= $card['title'] ?></h4>
                                 <div class="clamp-wrap">
-                                    <p edit="<?= $card->id ?>.body" class="clamp-text clamp-4"><?= strip_tags($card->body) ?></p>
+                                    <p class="clamp-text clamp-4"><?= strip_tags($card['text']) ?></p>
                                 </div>
                             </div>
                             <div class="btn-content">
-                                <a href="<?= $card->url ?>" class="btn emptyblack">
+                                <a href="<?= $card['link'] ?>" class="btn emptyblack">
                                     Read more
                                     <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
                                 </a>
                             </div>
-                        </div>
-                    </div> <!--end news-card-->
-                <?php endforeach; ?>
-                <?php else: ?>
-                <?php foreach ($page->album_card->sort('-album_card_date')->slice(0, 3) as $card): ?>
-
-                    <div edit="album_card" class="news-card">
-                        <div edit='<?= $card ?>.album_card_image' class="ncard-picture">
-                            <img src="<?= $card->album_card_image->url ?>" alt="">
-                        </div>
-
-                        <div class="ncard-content">
-                            <div class="title-content">
-                                <?php if ($card->album_card_date): ?>
-                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card->album_card_date)) ?></h5>
-                                <?php endif; ?>
-                                <h4 edit="<?= $card ?>.album_card_title "><?= $card->album_card_title ?></h4>
-                                <div class="clamp-wrap">
-                                    <p edit="<?= $card ?>.album_card_text" class="clamp-text"><?= $card->album_card_text ?></p>
-                                    <button class="expand-text-btn" aria-expanded="false">Read more</button>
-                                </div>
-                            </div>
-
                         </div>
                     </div> <!--end news-card-->
                 <?php endforeach; ?>
