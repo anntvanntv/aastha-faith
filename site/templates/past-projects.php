@@ -30,7 +30,9 @@ $extraBatches = array_chunk($extraCards, 6);
         <h4 edit="<?= $card ?>.title_past_project"><?= $card->title_past_project ?></h4>
         <h5 edit="<?= $card ?>.budget_past_project"><?= $card->budget_past_project ?></h5>
         <p class="body-bold">Duration:  <span edit="<?= $card ?>.duration_past_project"><?= $card->duration_past_project ?></span></p>
+        <?php if (trim($card->target_past_project)): ?>
         <p class="body-bold">Target Districts: <span edit="<?= $card ?>.target_past_project"><?= $card->target_past_project ?></span></p>
+        <?php endif; ?>
         <p class="body-bold">Donor: <span edit="<?= $card ?>.donor_past_project"><?= $card->donor_past_project ?></span></p>
         <p class="body-bold">Reflection: <span edit="<?= $card ?>.beneficiaries_past_project"><?= $card->beneficiaries_past_project ?> </span></p>
     </div>
@@ -47,7 +49,9 @@ $extraBatches = array_chunk($extraCards, 6);
             <h4 edit="<?= $card ?>.title_past_project"><?= $card->title_past_project ?></h4>
             <h5 edit="<?= $card ?>.budget_past_project"><?= $card->budget_past_project ?></h5>
             <p class="body-bold">Duration:  <span edit="<?= $card ?>.duration_past_project"><?= $card->duration_past_project ?></span></p>
+            <?php if (trim($card->target_past_project)): ?>
             <p class="body-bold">Target Districts: <span edit="<?= $card ?>.target_past_project"><?= $card->target_past_project ?></span></p>
+            <?php endif; ?>
             <p class="body-bold">Donor: <span edit="<?= $card ?>.donor_past_project"><?= $card->donor_past_project ?></span></p>
             <p class="body-bold">Reflection: <span edit="<?= $card ?>.beneficiaries_past_project"><?= $card->beneficiaries_past_project ?> </span></p>
         </div>
