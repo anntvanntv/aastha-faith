@@ -1,0 +1,5 @@
+/* Contact page — Form Submissions table is view-only */
+.Inputfield_contact_submissions_list .InputfieldPageTableAdd,
+.Inputfield_contact_submissions_list a.InputfieldPageTableDelete {
+  display: none !important;
+}

@@ -1148,6 +1148,75 @@ if ($subParent->id && $subChild->id) {
     }
 }
 
+// submissions table on the Contact page edit form
+if (!$modules->isInstalled('FieldtypePageTable')) {
+    $modules->install('FieldtypePageTable');
+}
+$subListField = $fields->get('contact_submissions_list');
+if (!$subListField) {
+    $subListField = new Field();
+    $subListField->type = 'FieldtypePageTable';
+    $subListField->name = 'contact_submissions_list';
+    $subListField->label = 'Form Submissions';
+    $subListField->save();
+}
+$subParentPage = $pages->get('/contact-submissions/');
+if ($subParentPage->id && $subChild->id) {
+    $subListChanged = false;
+    if ($subListField->parent_id != $subParentPage->id) {
+        $subListField->parent_id = $subParentPage->id;
+        $subListChanged = true;
+    }
+    if ($subListField->template_id != $subChild->id) {
+        $subListField->template_id = $subChild->id;
+        $subListChanged = true;
+    }
+    $wantCols = "title\ncontact_email\ncontact_phone\ncontact_subject\ncontact_group\ncreated";
+    if ($subListField->columns !== $wantCols) {
+        $subListField->columns = $wantCols;
+        $subListChanged = true;
+    }
+    if ($subListField->sortfields !== '-created') {
+        $subListField->sortfields = '-created';
+        $subListChanged = true;
+    }
+    $subNotes = 'All submitted contact forms. Emails go to the Admin Email above. Local dev: view captured mail in Mailpit at :8025 (ddev mailpit).';
+    if ($subListField->notes !== $subNotes) {
+        $subListField->notes = $subNotes;
+        $subListChanged = true;
+    }
+    if ($subListChanged) $subListField->save();
+}
+$rm->addFieldToTemplate('contact_submissions_list', 'contact');
+
+// keep the submissions table in sync with the submission children (guarded — writes only on diff)
+$contactPgForList = $pages->get('/contact/');
+if ($subParentPage->id && $contactPgForList->id && $contactPgForList->template->hasField('contact_submissions_list')) {
+    $kidIds = $pages->findIds("parent=$subParentPage->id, template=contact_submission");
+    $haveIds = $contactPgForList->contact_submissions_list->explode('id');
+    $missingIds = array_diff($kidIds, $haveIds);
+    if ($missingIds) {
+        $prevOf = $contactPgForList->of();
+        try {
+            $contactPgForList->of(false);
+            foreach ($missingIds as $mid) {
+                $contactPgForList->contact_submissions_list->add($pages->get((int) $mid));
+            }
+            $contactPgForList->save('contact_submissions_list');
+        } catch (\Throwable $e) {
+            wire()->log->error('contact_submissions_list sync failed: ' . $e->getMessage());
+        }
+        $contactPgForList->of($prevOf);
+    }
+}
+
+// admin: submissions table is view-only — hide Add New and row delete
+$isAdminReq = ($page && $page->template && $page->template->name === 'admin')
+    || strpos($_SERVER['REQUEST_URI'] ?? '', $config->urls->admin) === 0;
+if ($isAdminReq) {
+    $config->styles->add($config->urls->templates . 'styles/admin.css');
+}
+
 /*  -----  donor path cards  ---- */
 
 $rm->migrate([
