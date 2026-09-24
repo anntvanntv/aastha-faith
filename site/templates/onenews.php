@@ -17,6 +17,28 @@ if ($image instanceof Pageimages) {
     $image = count($image) ? $image->first() : null;
 }
 
+// sidebar: all news items (title + date only), newest first
+$newsPg = $pages->get('/news/');
+$sideItems = [];
+if ($newsPg->id) {
+    foreach ($newsPg->album_card as $row) {
+        $sideItems[] = [
+            'title' => $row->album_card_title,
+            'date' => $row->album_card_date,
+            'link' => $newsPg->url . preg_replace('/-+/', '-', $sanitizer->pageName($row->album_card_title)) . '/',
+        ];
+    }
+    if (!count($sideItems)) {
+        foreach ($newsPg->children('sort=-date') as $c) {
+            $sideItems[] = ['title' => $c->title, 'date' => $c->date, 'link' => $c->url];
+        }
+    }
+    usort($sideItems, function ($a, $b) { return $b['date'] - $a['date']; });
+}
+$currentHref = $input->urlSegment1
+    ? $newsPg->url . preg_replace('/-+/', '-', $sanitizer->pageName($input->urlSegment1)) . '/'
+    : $page->url;
+
 ?>
 
 
@@ -79,17 +101,56 @@ if ($image instanceof Pageimages) {
             </div>
         </div>
         <div class="description-one-story">
-            <div class="photo-onestory">
-                <?php if ($image): ?>
-                    <img class="one-story-foto" src="<?= $image->url ?>" alt="<?= $title ?>">
-                <?php endif; ?>
+            <div class="one-story-main">
+                <div class="text-one-story">
+                    <?php foreach (preg_split('/\R\s*\R/', trim($body)) as $para): ?>
+                        <?php if (trim($para) === '') continue; ?>
+                        <p><?= nl2br($sanitizer->entities(trim($para))) ?></p>
+                    <?php endforeach; ?>
+                </div>
+                <div class="photo-onestory">
+                    <?php if ($image): ?>
+                        <img class="one-story-foto" src="<?= $image->url ?>" alt="<?= $title ?>">
+                    <?php endif; ?>
+                </div>
             </div>
-            <div class="text-one-story">
-                <?php foreach (preg_split('/\R\s*\R/', trim($body)) as $para): ?>
-                    <?php if (trim($para) === '') continue; ?>
-                    <p><?= nl2br($sanitizer->entities(trim($para))) ?></p>
-                <?php endforeach; ?>
-            </div>
+            <aside class="news-side">
+                <h5 class="news-side-heading">More News</h5>
+                <div class="news-tools">
+                    <form class="news-search" method="get" action="">
+                        <input type="search" name="q" placeholder="Search news…" aria-label="Search news">
+                        <button class="btn" type="submit">Search</button>
+                    </form>
+                    <div class="news-filters">
+                        <a class="news-all active" href="#">All</a>
+                        <button type="button" class="news-filter" data-range="today">Today</button>
+                        <button type="button" class="news-filter" data-range="week">This Week</button>
+                        <button type="button" class="news-filter" data-range="month">This Month</button>
+                    </div>
+                </div>
+                <div class="news-side-listhead">
+                    <button type="button" class="news-sort" aria-expanded="false" aria-label="Sort news">
+                        <span class="news-sort-label">Newest first</span>
+                        <svg class="news-sort-caret" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="news-sort-menu">
+                        <button type="button" class="news-sort-option active" data-sort="date-desc">Newest first</button>
+                        <button type="button" class="news-sort-option" data-sort="date-asc">Oldest first</button>
+                        <button type="button" class="news-sort-option" data-sort="title-asc">Title A–Z</button>
+                        <button type="button" class="news-sort-option" data-sort="title-desc">Title Z–A</button>
+                    </div>
+                </div>
+                <div class="news-side-list">
+                    <?php foreach ($sideItems as $it): ?>
+                        <a class="news-side-item<?= $it['link'] === $currentHref ? ' current' : '' ?>" data-date="<?= (int) $it['date'] ?>" href="<?= $it['link'] ?>">
+                            <h5 class="date" style="text-transform: uppercase;"><?= $it['date'] ? strtoupper(date("F j, Y", $it['date'])) : '' ?></h5>
+                            <h4><?= $it['title'] ?></h4>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </aside>
         </div>
     </section>
 
