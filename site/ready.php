@@ -974,6 +974,7 @@ $rm->migrate([
         'footer_address' => ['type' => 'text', 'label' => 'Address'],
         'footer_publications' => ['type' => 'text', 'label' => 'Publications Link'],
         'footer_tagline' => ['type' => 'text', 'label' => 'Tagline'],
+        'contact_admin_email' => ['type' => 'text', 'label' => 'Admin Email (receives form submissions)'],
     ],
 ]);
 
@@ -984,6 +985,7 @@ $footerFields = [
     'footer_phone',
     'footer_email',
     'footer_email2',
+    // 'contact_admin_email', // moved to contact page — kept on footer too for now
     'footer_facebook',
     'footer_instagram',
     'footer_vimeo',
@@ -995,7 +997,7 @@ foreach($footerFields as $field){
     $rm->addFieldToTemplate($field, 'footer');
 }
 
-// order: tagline right under title in admin
+// order: tagline right under title; admin email grouped with the email fields
 $footerFg = $templates->get('footer')->fieldgroup;
 if ($footerFg->has('footer_tagline') && $footerFg->has('title')) {
     $names = [];
@@ -1005,6 +1007,19 @@ if ($footerFg->has('footer_tagline') && $footerFg->has('title')) {
         $footerFg->save();
     }
 }
+// contact_admin_email ordering on footer — field moved to contact page; detach disabled
+// if ($footerFg->has('contact_admin_email') && $footerFg->has('footer_email2')) {
+//     $names = [];
+//     foreach ($footerFg as $f) $names[] = $f->name;
+//     if (array_search('contact_admin_email', $names) !== array_search('footer_email2', $names) + 1) {
+//         $footerFg->insertAfter($fields->get('contact_admin_email'), $fields->get('footer_email2'));
+//         $footerFg->save();
+//     }
+// }
+// if ($footerFg->has('contact_admin_email')) {
+//     $footerFg->remove($fields->get('contact_admin_email'));
+//     $footerFg->save();
+// }
 
 // seed footer tagline once (only when empty — respects admin edits)
 $footerPg = $pages->get('/footer/');
@@ -1018,6 +1033,115 @@ if ($footerPg->id && !$footerPg->footer_tagline) {
         wire()->log->error('footer_tagline seed failed: ' . $e->getMessage());
     }
     $footerPg->of($prevOf);
+}
+
+// seed contact admin email on footer page once (legacy location — field moved to contact page)
+// if ($footerPg->id && $footerPg->template->hasField('contact_admin_email') && !$footerPg->contact_admin_email) {
+//     $prevOf = $footerPg->of();
+//     try {
+//         $footerPg->of(false);
+//         $footerPg->contact_admin_email = 'faithinitiative@gmail.com';
+//         $footerPg->save('contact_admin_email');
+//     } catch (\Throwable $e) {
+//         wire()->log->error('contact_admin_email seed failed: ' . $e->getMessage());
+//     }
+//     $footerPg->of($prevOf);
+// }
+
+
+/*  -----  contact form submissions  ---- */
+
+$rm->migrate([
+    'fields' => [
+        'contact_name' => ['type' => 'text', 'label' => 'Name'],
+        'contact_email' => ['type' => 'text', 'label' => 'Email'],
+        'contact_phone' => ['type' => 'text', 'label' => 'Phone'],
+        'contact_subject' => ['type' => 'text', 'label' => 'Subject'],
+        'contact_group' => ['type' => 'text', 'label' => 'Group'],
+        'contact_message' => ['type' => 'textarea', 'label' => 'Message'],
+        'contact_nepal_address' => ['type' => 'textarea', 'label' => 'Nepal Office Address'],
+        'contact_germany_address' => ['type' => 'textarea', 'label' => 'Germany Office Address'],
+        'contact_office_phone' => ['type' => 'text', 'label' => 'Phone Number'],
+        'contact_office_email' => ['type' => 'text', 'label' => 'Email Address'],
+    ],
+]);
+
+// contact page fields — under title, in page order (nepal, germany, phone, email, admin email)
+$contactFields = ['contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
+foreach ($contactFields as $cf) {
+    $rm->addFieldToTemplate($cf, 'contact');
+}
+$contactFg = $templates->get('contact')->fieldgroup;
+if ($contactFg->id) {
+    $names = [];
+    foreach ($contactFg as $f) $names[] = $f->name;
+    $after = 'title';
+    $needsOrder = false;
+    foreach ($contactFields as $n) {
+        if (array_search($n, $names) !== array_search($after, $names) + 1) { $needsOrder = true; break; }
+        $after = $n;
+    }
+    if ($needsOrder) {
+        $after = 'title';
+        foreach ($contactFields as $n) {
+            if ($contactFg->has($n) && $contactFg->has($after)) {
+                $contactFg->insertAfter($fields->get($n), $fields->get($after));
+            }
+            $after = $n;
+        }
+        $contactFg->save();
+    }
+}
+
+// seed contact page field values once (per-field, only when empty — respects admin edits)
+$contactPg = $pages->get('/contact/');
+if ($contactPg->id) {
+    $defaults = [
+        'contact_nepal_address' => "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal",
+        'contact_germany_address' => "Bornkampsweg 24\nAhrensburg 22926,\nGermany",
+        'contact_office_phone' => '+977 01 5412012',
+        'contact_office_email' => 'faithinitiative@gmail.com',
+        'contact_admin_email' => 'faithinitiative@gmail.com',
+    ];
+    $prevOf = $contactPg->of();
+    try {
+        $contactPg->of(false);
+        $dirty = false;
+        foreach ($defaults as $k => $v) {
+            if ($contactPg->template->hasField($k) && !$contactPg->get($k)) {
+                $contactPg->set($k, $v);
+                $dirty = true;
+            }
+        }
+        if ($dirty) $contactPg->save();
+    } catch (\Throwable $e) {
+        wire()->log->error('contact page fields seed failed: ' . $e->getMessage());
+    }
+    $contactPg->of($prevOf);
+}
+
+$rm->createTemplate('contact_submission');
+foreach (['contact_name', 'contact_email', 'contact_phone', 'contact_subject', 'contact_group', 'contact_message'] as $cf) {
+    $rm->addFieldToTemplate($cf, 'contact_submission');
+}
+
+$rm->createTemplate('contact_submissions');
+$rm->createPage(
+    template: 'contact_submissions',
+    parent: '/',
+    name: 'contact-submissions',
+    title: 'Contact Submissions',
+    status: [Page::statusUnpublished],
+);
+
+// family: submission children only under the submissions parent
+$subParent = $templates->get('contact_submissions');
+$subChild = $templates->get('contact_submission');
+if ($subParent->id && $subChild->id) {
+    $subParent->childTemplates = [$subChild->id];
+    $subParent->save();
+    $subChild->parentTemplates = [$subParent->id];
+    $subChild->save();
 }
 
 /*  -----  donor path cards  ---- */

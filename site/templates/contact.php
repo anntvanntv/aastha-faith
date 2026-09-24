@@ -32,6 +32,12 @@ namespace ProcessWire;
         </section>
     </header>
     <section class="content-contact" data-nav-color="dark">
+        <?php
+        $nepalAddr = $page->contact_nepal_address ?: "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal";
+        $germanyAddr = $page->contact_germany_address ?: "Bornkampsweg 24\nAhrensburg 22926,\nGermany";
+        $officePhone = $page->contact_office_phone ?: '+977 01 5412012';
+        $officeEmail = $page->contact_office_email ?: 'faithinitiative@gmail.com';
+        ?>
         <div class="contact-icons">
 
             <div class="icon-container">
@@ -39,10 +45,7 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>/icons/flag-nepal.svg" alt="Nepal flag">
                 </div>
                 <p class="body-bold">Nepal</p>
-                <p>Chudabikram Street <br>
-                    Kupondole -1 <br>
-                    Lalitpur 44600, Nepal
-                </p>
+                <p><?= nl2br($sanitizer->entities($nepalAddr)) ?></p>
 
             </div>
             <div class="icon-container">
@@ -50,10 +53,7 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>/icons/flag-germany.svg" alt="Germany flag">
                 </div>
                 <p class="body-bold">Germany</p>
-                <p>Bornkampsweg 24 <br>
-                    Ahrensburg 22926, <br>
-                    Germany
-                </p>
+                <p><?= nl2br($sanitizer->entities($germanyAddr)) ?></p>
             </div>
 
 
@@ -62,7 +62,7 @@ namespace ProcessWire;
                     <img src="<?= $config->urls->templates ?>/icons/call.svg" alt="icon-call">
                 </div>
                 <p class="body-bold">Call</p>
-                <a href="tel:+977 01 5412012">+977 01 5412012</a>
+                <a href="tel:<?= preg_replace('/[^+0-9]/', '', $officePhone) ?>"><?= $officePhone ?></a>
             </div>
             <div class="icon-container">
                 <div class="icon-mail">
@@ -70,7 +70,7 @@ namespace ProcessWire;
 
                 </div>
                 <p class="body-bold">Email</p>
-                <a href="mailto:faithinitiative@gmail.com">faithinitiative<wbr>@gmail.com</a>
+                <a href="mailto:<?= $officeEmail ?>"><?= $officeEmail ?></a>
             </div>
 
         </div>
@@ -95,34 +95,94 @@ namespace ProcessWire;
                         $message = $input->post->textarea('message');
                         $group = $input->post->text('group');
 
-                        $mail = wireMail();
+                        $adminEmail = $page->contact_admin_email ?: ($pages->get('/footer/')->contact_admin_email ?: 'faithinitiative@gmail.com');
 
-                        $mail->to('faithinitiative@gmail.com');
-                        $mail->from('faithinitiative@gmail.com');
-                        $mail->replyTo($email);
-                        $mail->subject($subject);
+                        // save submission (browsable under Contact Submissions in admin)
+                        try {
+                            $parent = $pages->get('/contact-submissions/');
+                            if ($parent->id) {
+                                $sub = new Page();
+                                $sub->template = 'contact_submission';
+                                $sub->parent = $parent;
+                                $sub->name = 'submission-' . time() . '-' . mt_rand(100, 999);
+                                $sub->title = ($name ?: 'Submission') . ($subject ? ' — ' . $subject : '');
+                                $sub->contact_name = $name;
+                                $sub->contact_email = $email;
+                                $sub->contact_phone = $phone;
+                                $sub->contact_subject = $subject;
+                                $sub->contact_group = $group;
+                                $sub->contact_message = $message;
+                                $sub->save();
+                            }
+                        } catch (\Throwable $e) {
+                            wire()->log->error('contact submission save failed: ' . $e->getMessage());
+                        }
 
-                        $mail->body(
-                            "Name: $name
-                            
-                            Group: $group
-                            
-                            Phone: $phone
-                            
-                            Email: $email
-                            
-                            Message:
-                            
-                            $message"
+                        // notify admin (best-effort — submission already saved)
+                        try {
+                            $mail = wireMail();
+                            $mail->to($adminEmail);
+                            $mail->from($adminEmail);
+                            $mail->replyTo($email);
+                            $mail->subject($subject);
+                            $mail->body(
+                                "Name: $name
+
+                                Group: $group
+
+                                Phone: $phone
+
+                                Email: $email
+
+                                Message:
+
+                                $message"
                             );
+                            $mail->send();
+                        } catch (\Throwable $e) {
+                            wire()->log->error('contact admin mail failed: ' . $e->getMessage());
+                        }
 
-                            if($mail->send()) {
-                                $session->redirect('./?sent=1');
-                               
-                            } 
+                        // confirm to submitter
+                        if ($email) {
+                            try {
+                                $confirm = wireMail();
+                                $confirm->to($email);
+                                $confirm->from($adminEmail);
+                                $confirm->subject('We received your message — FAITH');
+                                $confirm->body(
+                                    "Hi $name,
+
+                                    Thank you for reaching out to FAITH. We have received your message and will get back to you shortly.
+
+                                    — FAITH"
+                                );
+                                $confirm->send();
+                            } catch (\Throwable $e) {
+                                wire()->log->error('contact confirm mail failed: ' . $e->getMessage());
+                            }
+                        }
+
+                        $session->redirect('./?sent=1');
 
                     }
             ?>
+
+            <?php if ($input->get->sent): ?>
+                <div class="share-dialog success-dialog hidden-story" id="success-dialog">
+                    <div class="icon" id="close-success"><img src="<?= $config->urls->templates ?>icons/close-dark.svg"
+                            alt=""></div>
+                    <div class="success-check">
+                        <svg width="56" height="56" viewBox="0 0 56 56" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="28" cy="28" r="26" />
+                            <path d="M17 29l7.5 7.5L39 22" />
+                        </svg>
+                    </div>
+                    <h4>Thank you</h4>
+                    <p>Your message has been received.<br>We will get back to you shortly.</p>
+                </div>
+            <?php endif; ?>
 
             <form onsubmit="return validateForm()" method="post" action="./" novalidate>
                 <div class="row-form">

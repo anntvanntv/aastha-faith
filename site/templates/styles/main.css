@@ -4076,6 +4076,51 @@ form {
   gap: 6px;
 }
 
+.success-dialog {
+  width: 460px;
+  border-radius: 16px;
+  text-align: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.success-dialog #close-success {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.success-dialog.hidden-story {
+  transform: translate(-50%, -44%) scale(0.96);
+}
+
+.success-dialog h4 {
+  margin: 6px 0 0;
+}
+
+.success-dialog p {
+  margin: 10px 0 4px;
+  color: var(--text-body);
+}
+
+.success-check {
+  color: var(--green-900);
+  margin-bottom: 4px;
+}
+
+.success-check svg circle {
+  fill: var(--white-800);
+  stroke: var(--green-900);
+  stroke-width: 2;
+}
+
+.success-check svg path {
+  stroke: var(--green-900);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* --------------   donors   -------------   */
 
 .donors {

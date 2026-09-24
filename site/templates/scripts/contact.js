@@ -47,3 +47,22 @@ groupPills.forEach((radio) => {
     });
 });
 
+
+/* success popup — shown once after form submission (?sent=1) */
+const successDialog = document.getElementById("success-dialog");
+if (successDialog) {
+    successDialog.classList.remove("hidden-story");
+    // strip ?sent=1 so a refresh doesn't re-show the popup
+    history.replaceState(null, "", window.location.pathname);
+    const closeSuccess = () => successDialog.classList.add("hidden-story");
+    const closeSuccessBtn = document.getElementById("close-success");
+    if (closeSuccessBtn) closeSuccessBtn.addEventListener("click", closeSuccess);
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeSuccess();
+    });
+    document.addEventListener("click", (e) => {
+        if (successDialog.classList.contains("hidden-story")) return;
+        if (!successDialog.contains(e.target)) closeSuccess();
+    });
+}
+
