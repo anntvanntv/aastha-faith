@@ -1,6 +1,59 @@
 <?php
 namespace ProcessWire;
 
+$formatSize = function ($bytes) {
+    if (!$bytes) return '';
+    return $bytes >= 1048576 ? round($bytes / 1048576, 1) . ' MB' : round($bytes / 1024) . ' KB';
+};
+
+$pdfGroup = function ($typeId) use ($page) {
+    $cards = [];
+    foreach ($page->pdf_cards as $c) {
+        if ((int) $c->info_type->id === $typeId) $cards[] = $c;
+    }
+    return $cards;
+};
+
+$sectionCards = function ($fieldName, $typeId) use ($page, $pdfGroup) {
+    $cards = $page->get($fieldName);
+    return ($cards && count($cards)) ? $cards : $pdfGroup($typeId);
+};
+
+$renderPdfGroup = function ($cards) use ($config, $formatSize) {
+    $limit = 6;
+    ?>
+    <div class="horizontal-cards">
+        <?php foreach ($cards as $i => $card): ?>
+            <?php if ($i === $limit): ?><div class="more-cards"><?php endif; ?>
+            <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
+                <div class="card-left">
+                    <div class="icon pdf">
+                        <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
+                    </div>
+                    <div class="text-card">
+                        <p edit='title' class="body-bold"><?= $card->title ?></p>
+                        <p class="small"><?= $formatSize($card->pdf_file->filesize) ?> • PDF</p>
+                    </div>
+                </div>
+                <div class="icon download">
+                    <a href="<?= $card->pdf_file->url ?>" download>
+                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <?php if (count($cards) > $limit): ?></div><?php endif; ?>
+    </div>
+    <?php if (count($cards) > $limit): ?>
+        <button class="expand-cards-btn" type="button" data-more="See <?= count($cards) - $limit ?> more">
+            <span class="expand-cards-label">See <?= count($cards) - $limit ?> more</span>
+            <svg class="expand-cards-arrow" width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    <?php endif; ?>
+    <?php
+};
 
 ?>
 
@@ -210,83 +263,51 @@ namespace ProcessWire;
         </div>
     </section>
     <section class="financial" data-nav-color="light">
-        <div class="header-left">
+        <div class="header-central">
             <h2>Financial transparency</h2>
             <p>Explore our annual reports, financial statements, and key documents to see how resources are managed and
                 impact is delivered.</p>
         </div>
-        <div class="financial-content">
-            <div class="column-left">
+        <div class="docs-content">
+            <?php $cards = $sectionCards('cards_annual', 1); ?>
+            <?php if (count($cards)): ?>
+            <div class="column">
                 <h4>Annual Reports</h4>
-                <?php foreach ($page->pdf_cards as $card): ?>
-                    <?php if ((int) $card->info_type->id === 1): ?>
-                        <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                            
-                            <div class="card-left">
-                                <div class="icon pdf">
-                                    <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                                </div>
-                                <div class="text-card">
-                                    <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
-                                </div>
-                               
-                            </div>
-                            <div class="icon download" >
-                                  <a href="<?= $card->pdf_file->url ?>" download>
-                                    <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                                  </a>
-                                </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-                <!-- <div class="horizontal-card"> -->
-                    <!-- <div class="card-left"> -->
-                        <!-- <div class="icon pdf"> -->
-                            <!-- <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon"> -->
-                        <!-- </div> -->
-                        <!-- <div class="text-card"> -->
-                            <!-- <p class="body-bold">Report name</p> -->
-                            <!-- <p class="small">2.4 MB • PDF</p> -->
-                        <!-- </div>  -->
-                    <!-- </div> -->
-                    <!-- <div class="icon download"> -->
-                        <!-- <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon"> -->
-                    <!-- </div> -->
-                <!-- </div>   -->
-              
-              
-            </div> <!--- column left  --->
-            <div class="column-right">
+                <?php $renderPdfGroup($cards); ?>
+            </div>
+            <?php endif; ?>
+            <?php $cards = $sectionCards('cards_financial', 2); ?>
+            <?php if (count($cards)): ?>
+            <div class="column">
                 <h4>Financial Statements</h4>
-                <?php foreach ($page->pdf_cards as $card): ?>
-                    <?php if ((int) $card->info_type->id === 2): ?>
-                        <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                            
-                            <div class="card-left">
-                                <div class="icon pdf">
-                                    <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                                </div>
-                                <div class="text-card">
-                                    <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
-                                </div>
-                               
-                            </div>
-                            <div class="icon download" >
-                                  <a href="<?= $card->pdf_file->url ?>" download>
-                                    <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                                  </a>
-                                </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-             
-               
-            </div> <!-- column right -->
+                <?php $renderPdfGroup($cards); ?>
+            </div>
+            <?php endif; ?>
         </div> <!--- financial content ---->
     </section>
-    <section class="policies" data-nav-color="dark">
+    <section class="org-docs" data-nav-color="dark">
+        <div class="header-central">
+            <h2>Organizational Documents</h2>
+            <p>Delve into our official registrations, certifications, and legal affiliations that affirm our standing as a recognized and accountable organization.</p>
+        </div>
+        <div class="docs-content">
+            <?php $cards = $sectionCards('cards_registrations', 4); ?>
+            <?php if (count($cards)): ?>
+            <div class="column">
+                <h4>Registrations &amp; certifications</h4>
+                <?php $renderPdfGroup($cards); ?>
+            </div>
+            <?php endif; ?>
+            <?php $cards = $sectionCards('cards_affiliations', 5); ?>
+            <?php if (count($cards)): ?>
+            <div class="column">
+                <h4>Legal affiliations</h4>
+                <?php $renderPdfGroup($cards); ?>
+            </div>
+            <?php endif; ?>
+        </div>
+    </section>
+    <section class="policies" data-nav-color="light">
         <div class="header-central">
             <h2>Policies & Safeguarding</h2>
             <p>FAITH works with some of the most vulnerable women in Nepal — women living with HIV, survivors of
@@ -295,136 +316,24 @@ namespace ProcessWire;
                 replicate the harm it was founded to address.
             </p>
         </div>
-    <div class="column">        
+    <?php $cards = $sectionCards('cards_policy', 3); ?>
+    <?php if (count($cards)): ?>
+    <div class="column">
         <h4>Policy documents</h4>
-        <div class="horizontal-cards">
-
-        <?php foreach ($page->pdf_cards as $card): ?>
-                    <?php if ((int) $card->info_type->id === 3): ?>
-                        <div class="horizontal-card" edit="pdf_cards" data-pdf='<?= $card->pdf_file->url ?>'>
-                            
-                            <div class="card-left">
-                                <div class="icon pdf">
-                                    <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                                </div>
-                                <div class="text-card">
-                                    <p edit='title' class="body-bold"><?= $card->title ?></p>
-                                    <p class="small">2.4 MB • PDF</p>
-                                </div>
-                               
-                            </div>
-                            <div class="icon download" >
-                                  <a href="<?= $card->pdf_file->url ?>" download>
-                                    <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                                  </a>
-                                </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-              
-               <!--  <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Safeguarding</p>
-                            <p class="small">2.4 MB • PDF</p> -->
-                        <!-- </div> --> <!-- text card --->
-                    <!-- </div> --><!-- card left --->
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-                </div> --><!--  horizontal card --->
-                <!-- <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Child Protection</p>
-                            <p class="small">2.4 MB • PDF</p>
-                        </div> --> <!-- text card --->
-                    <!-- </div> --><!--- card left --->
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-                </div> --><!--  horizontal card --->
-                <!-- <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Anti-Discrimination</p>
-                            <p class="small">2.4 MB • PDF</p>
-                        </div> --> <!-- text card --->
-                    <!-- </div> --><!---card left  -->
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-                </div> --><!--  horizontal card --->
-         
-                <!-- <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Data Protection</p>
-                            <p class="small">2.4 MB • PDF</p>
-                        </div> --> <!-- text card --->
-                    <!-- </div> --><!-- card left --->
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-                </div> --><!--  horizontal card --->
-                <!-- <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Complaints Procedure</p>
-                            <p class="small">2.4 MB • PDF</p>
-                        </div> --> <!-- text card --->
-                    <!-- </div> --><!-- card left --->
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-                </div> --><!--  horizontal card --->
-                <!-- <div class="horizontal-card">
-                    <div class="card-left">
-                        <div class="icon pdf">
-                            <img src="<?= $config->urls->templates ?>/icons/pdf.png" alt="icon">
-                        </div>
-                        <div class="text-card">
-                            <p class="body-bold">Conflict of Interest</p>
-                            <p class="small">2.4 MB • PDF</p>
-                        </div> --> <!-- text card --->
-                    <!-- </div> --><!--card left -->
-
-
-                    <!-- <div class="icon download">
-                        <img src="<?= $config->urls->templates ?>/icons/file_download.png" alt="icon">
-                    </div>
-
-                </div> --><!--  horizontal card --->
-
-        
-
-
-        </div> <!--- horizontal cards ----->
-        </div> <!-- column -->
+        <?php $renderPdfGroup($cards); ?>
+    </div> <!-- column -->
+    <?php endif; ?>
     </section>
-    <section class="concern">
+    <section class="concern" data-nav-color="dark">
         <div class="header-central">
             <h2>Have a concern?</h2>
             <p>For safeguarding concerns, programme complaints, or feedback, contact our team. We take all concerns
                 seriously and respond within defined timeframes.</p>
             <a class="btn green concern-btn" href="/contact">
                 Contact Us
-                <img src="<?= $config->urls->templates ?>icons/arrow_forward_white.png" alt="icon-arrow">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.33333 0L4.39333 0.94L8.11333 4.66667H0V6H8.11333L4.39333 9.72667L5.33333 10.6667L10.6667 5.33333L5.33333 0Z" fill="currentColor"></path>
+                </svg>
             </a>
         </div>
     </section>

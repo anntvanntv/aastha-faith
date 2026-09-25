@@ -32,8 +32,8 @@ namespace ProcessWire;
             <div class="in-numbers-heading">
                 <div class="heading-left">
                     <div class="eyebrow">
-                        <img class="wave" src="<?= $config->urls->templates ?>icons/wave.png" alt="icon-wave">
-                        <h5>closer look</h5>
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">closer look</h5>
                     </div>
                     <h2 edit="hero_title2"><?= $page->hero_title2 ?></h2>
                 </div>
@@ -130,7 +130,7 @@ namespace ProcessWire;
                     </div>
                     <div class="programme-title">
                         <p class="small"><?= $story->category ?></p>
-                        <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F Y", $story->date)) : '' ?></h5>
+                        <h5 class="date" style="text-transform: uppercase;"><?= $story->date ? strtoupper(date("F j, Y", $story->date)) : '' ?></h5>
                     </div>
                     <div class="ncard-content">
                         <div class="title-content">

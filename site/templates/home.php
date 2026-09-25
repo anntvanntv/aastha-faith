@@ -107,8 +107,8 @@ namespace ProcessWire;
             <div class="stats-heading">
                 <div class="heading-left">
                     <div class="eyebrow">
-                        <img class="wave" src="<?= $config->urls->templates ?>icons/wave.png" alt="icon-wave">
-                        <img class="map-icon" src="<?= $config->urls->templates ?>icons/map.png" alt="icon">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">location</h5>
                     </div>
                     <h2 edit="title_change2"><?= $page->title_change2 ?: 'Find us.' ?></h2>
                 </div>
@@ -261,7 +261,7 @@ namespace ProcessWire;
                 </div>
                 <div class="field-right">
                     <a class="btn white" href="<?= $pages->get('/stories/')->url ?>">
-                        Read more stories
+                        See all Stories
                         <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon">
                     </a>
                 </div>
@@ -270,25 +270,70 @@ namespace ProcessWire;
 
          
 
-                <?php foreach ($page->album_card->slice(0, 3) as $card): ?>
+                <?php
+                $newsPg = $pages->get('/news/');
+                $newsItems = [];
+                if ($newsPg->id) {
+                    foreach ($newsPg->album_card as $row) {
+                        $newsItems[] = [
+                            'title' => $row->album_card_title,
+                            'date' => $row->album_card_date,
+                            'text' => $row->album_card_text,
+                            'img' => $row->album_card_image,
+                            'link' => $newsPg->url . preg_replace('/-+/', '-', $sanitizer->pageName($row->album_card_title)) . '/',
+                        ];
+                    }
+                    if (!count($newsItems)) {
+                        // fallback: onenews children (pre-migration / prod backup)
+                        foreach ($newsPg->children('sort=-date,limit=3') as $c) {
+                            $newsItems[] = [
+                                'title' => $c->title,
+                                'date' => $c->date,
+                                'text' => $c->body,
+                                'img' => $c->image,
+                                'link' => $c->url,
+                            ];
+                        }
+                    }
+                    usort($newsItems, function ($a, $b) { return $b['date'] - $a['date']; });
+                    $newsItems = array_slice($newsItems, 0, 3);
+                }
+                ?>
+                <?php if (count($newsItems)): ?>
+                <?php foreach ($newsItems as $card):
+                    $cardImg = $card['img'];
+                    if ($cardImg instanceof Pageimages) {
+                        $cardImg = count($cardImg) ? $cardImg->first() : null;
+                    }
+                ?>
 
-                    <div edit="album_card" class="news-card">
-                        <div edit='<?= $card ?>.album_card_image' class="ncard-picture">
-                            <img src="<?= $card->album_card_image->url ?>" alt="">
+                    <div class="news-card">
+                        <div class="ncard-picture">
+                            <?php if ($cardImg): ?>
+                                <img src="<?= $cardImg->url ?>" alt="<?= $card['title'] ?>">
+                            <?php endif; ?>
                         </div>
-                    
+
                         <div class="ncard-content">
                             <div class="title-content">
-                                <h4 edit="<?= $card ?>.album_card_title "><?= $card->album_card_title ?></h4>
+                                <?php if ($card['date']): ?>
+                                    <h5 class="date" style="text-transform: uppercase;"><?= strtoupper(date("F j, Y", $card['date'])) ?></h5>
+                                <?php endif; ?>
+                                <h4><?= $card['title'] ?></h4>
                                 <div class="clamp-wrap">
-                                    <p edit="<?= $card ?>.album_card_text" class="clamp-text"><?= $card->album_card_text ?></p>
-                                    <button class="expand-text-btn" aria-expanded="false">Read more</button>
+                                    <p class="clamp-text clamp-4"><?= strip_tags($card['text']) ?></p>
                                 </div>
                             </div>
-                        
+                            <div class="btn-content">
+                                <a href="<?= $card['link'] ?>" class="btn emptyblack">
+                                    Read more
+                                    <img src="<?= $config->urls->templates ?>icons/arrow_forward.png" alt="icon_arrow">
+                                </a>
+                            </div>
                         </div>
                     </div> <!--end news-card-->
                 <?php endforeach; ?>
+                <?php endif; ?>
               
             </div>
         </section>

@@ -11,7 +11,7 @@ $footer = $pages->get('/footer/');
                 <div class="logo">
                     <img src="<?= $config->urls->templates ?>assets/logo.png" alt="logo">
                 </div>
-                <p>Feminist Approaches in Transforming Health. Women-led. Community-rooted. Internationally trusted.</p>
+                <p><?= $footer->footer_tagline ?: 'Feminist Approaches in Transforming Health. Women-led. Community-rooted. Internationally trusted.' ?></p>
                 <div class="social-media">
                     <?php if($footer->footer_facebook): ?>
                     <a href="<?= $footer->footer_facebook ?>" target="_blank" rel="noopener">

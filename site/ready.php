@@ -386,7 +386,8 @@ forEach($aboutusFields as $field) {
                 'title',
                 'pdf_file',
                 'info_type',
-            ]
+            ],
+            'collapsed' => Inputfield::collapsedYes,
         ],
         'pdf_file' => [
             'type' => 'file',
@@ -402,8 +403,35 @@ forEach($aboutusFields as $field) {
                 1 => 'annual|Annual Reports',
                 2 => 'financial|Financial Statements',
                 3 => 'policy|Policy Documents',
+                4 => 'registrations|Registrations & Certifications',
+                5 => 'affiliations|Legal Affiliations',
             ],
-        ]
+        ],
+        'cards_annual' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Annual Reports',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_financial' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Financial Statements',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_registrations' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Registrations & Certifications',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_affiliations' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Legal Affiliations',
+            'fields' => ['title', 'pdf_file'],
+        ],
+        'cards_policy' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Policy Documents',
+            'fields' => ['title', 'pdf_file'],
+        ],
     ],        
  
     ]); 
@@ -430,11 +458,43 @@ forEach($aboutusFields as $field) {
             'account_cards',
             'pdf_cards',
             'card_number4',
+            'cards_annual',
+            'cards_financial',
+            'cards_registrations',
+            'cards_affiliations',
+            'cards_policy',
    
         ]; 
 
 forEach($accountabilityFields as $field){
     $rm->addFieldToTemplate($field, 'accountability');
+}
+
+/* one-time: move pdf_cards items into per-subsection card fields (skips fields already populated) */
+$accPage = $pages->get("template=accountability");
+if ($accPage->id && count($accPage->pdf_cards)) {
+    $accPage->of(false);
+    $cardFieldMap = [
+        1 => 'cards_annual',
+        2 => 'cards_financial',
+        3 => 'cards_policy',
+        4 => 'cards_registrations',
+        5 => 'cards_affiliations',
+    ];
+    foreach ($cardFieldMap as $typeId => $fieldName) {
+        $target = $accPage->get($fieldName);
+        if (!$target || count($target)) continue;
+        foreach ($accPage->pdf_cards as $c) {
+            if ((int) $c->info_type->id !== $typeId) continue;
+            $item = $accPage->$fieldName->getNew();
+            $item->title = $c->title;
+            $item->save();
+            if ($c->pdf_file) $item->pdf_file->add($c->pdf_file->filename);
+            $item->save();
+            $accPage->$fieldName->add($item);
+        }
+        if (count($accPage->$fieldName)) $accPage->save($fieldName);
+    }
 }
 
 
@@ -630,6 +690,10 @@ $rm->migrate([
             'extensions' => 'jpg jpeg png gif svg webp',
             'outputFormat' => FieldtypeFile::outputFormatArray,
         ],
+        'field_title' => [
+            'type' => 'text',
+            'label' => 'Latest News Title',
+        ],
         'album_card' => [
             'type' => 'FieldtypeRepeater',
             'label' => 'Album Card',
@@ -637,7 +701,18 @@ $rm->migrate([
                 'album_card_image',
                 'album_card_title',
                 'album_card_text',
+                'album_card_date',
             ],
+        ],
+        'album_card_date' => [
+            'type' => 'datetime',
+            'label' => 'News Date',
+        ],
+        'date' => [
+            'type' => 'datetime',
+            'label' => 'Date',
+            'defaultToday' => 1,
+            'notes' => 'Publication date. Leave empty to use the creation date automatically. Example: September 23, 2026',
         ],
         'album_card_image' => [
             'type' => 'FieldtypeImage',
@@ -711,7 +786,14 @@ $rm->addFieldToTemplate('quote2_image', 'home');
 $rm->addFieldToTemplate('quote2_text', 'home');
 $rm->addFieldToTemplate('quote2_title', 'home');
 $rm->addFieldToTemplate('quote2_subtitle', 'home');
-$rm->addFieldToTemplate('album_card', 'home');
+// album_card moved to /news/ page — detach from home (news is managed on the news page itself)
+// $rm->addFieldToTemplate('album_card', 'home');
+$rm->addFieldToTemplate('album_card_date', 'repeater_album_card');
+$homeT = $templates->get('home');
+if ($homeT && $homeT->fields->has('album_card')) {
+    $homeT->fields->remove('album_card');
+    $homeT->fields->save();
+}
 $rm->addFieldToTemplate('born_title', 'home');
 $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
@@ -891,15 +973,19 @@ $rm->migrate([
         'footer_phone' => ['type' => 'text', 'label' => 'Phone Number'],
         'footer_address' => ['type' => 'text', 'label' => 'Address'],
         'footer_publications' => ['type' => 'text', 'label' => 'Publications Link'],
+        'footer_tagline' => ['type' => 'text', 'label' => 'Tagline'],
+        'contact_admin_email' => ['type' => 'text', 'label' => 'Admin Email (receives form submissions)'],
     ],
 ]);
 
 $footerFields = [
+    'footer_tagline',
     'footer_address',
     'footer_phone_code',
     'footer_phone',
     'footer_email',
     'footer_email2',
+    // 'contact_admin_email', // moved to contact page — kept on footer too for now
     'footer_facebook',
     'footer_instagram',
     'footer_vimeo',
@@ -909,6 +995,226 @@ $footerFields = [
 
 foreach($footerFields as $field){
     $rm->addFieldToTemplate($field, 'footer');
+}
+
+// order: tagline right under title; admin email grouped with the email fields
+$footerFg = $templates->get('footer')->fieldgroup;
+if ($footerFg->has('footer_tagline') && $footerFg->has('title')) {
+    $names = [];
+    foreach ($footerFg as $f) $names[] = $f->name;
+    if (array_search('footer_tagline', $names) !== array_search('title', $names) + 1) {
+        $footerFg->insertAfter($fields->get('footer_tagline'), $fields->get('title'));
+        $footerFg->save();
+    }
+}
+// contact_admin_email ordering on footer — field moved to contact page; detach disabled
+// if ($footerFg->has('contact_admin_email') && $footerFg->has('footer_email2')) {
+//     $names = [];
+//     foreach ($footerFg as $f) $names[] = $f->name;
+//     if (array_search('contact_admin_email', $names) !== array_search('footer_email2', $names) + 1) {
+//         $footerFg->insertAfter($fields->get('contact_admin_email'), $fields->get('footer_email2'));
+//         $footerFg->save();
+//     }
+// }
+// if ($footerFg->has('contact_admin_email')) {
+//     $footerFg->remove($fields->get('contact_admin_email'));
+//     $footerFg->save();
+// }
+
+// seed footer tagline once (only when empty — respects admin edits)
+$footerPg = $pages->get('/footer/');
+if ($footerPg->id && !$footerPg->footer_tagline) {
+    $prevOf = $footerPg->of();
+    try {
+        $footerPg->of(false);
+        $footerPg->footer_tagline = 'Feminist Approaches in Transforming Health. Women-led. Community-rooted. Internationally trusted.';
+        $footerPg->save('footer_tagline');
+    } catch (\Throwable $e) {
+        wire()->log->error('footer_tagline seed failed: ' . $e->getMessage());
+    }
+    $footerPg->of($prevOf);
+}
+
+// seed contact admin email on footer page once (legacy location — field moved to contact page)
+// if ($footerPg->id && $footerPg->template->hasField('contact_admin_email') && !$footerPg->contact_admin_email) {
+//     $prevOf = $footerPg->of();
+//     try {
+//         $footerPg->of(false);
+//         $footerPg->contact_admin_email = 'faithinitiative@gmail.com';
+//         $footerPg->save('contact_admin_email');
+//     } catch (\Throwable $e) {
+//         wire()->log->error('contact_admin_email seed failed: ' . $e->getMessage());
+//     }
+//     $footerPg->of($prevOf);
+// }
+
+
+/*  -----  contact form submissions  ---- */
+
+$rm->migrate([
+    'fields' => [
+        'contact_name' => ['type' => 'text', 'label' => 'Name'],
+        'contact_email' => ['type' => 'text', 'label' => 'Email'],
+        'contact_phone' => ['type' => 'text', 'label' => 'Phone'],
+        'contact_subject' => ['type' => 'text', 'label' => 'Subject'],
+        'contact_group' => ['type' => 'text', 'label' => 'Group'],
+        'contact_message' => ['type' => 'textarea', 'label' => 'Message'],
+        'contact_nepal_address' => ['type' => 'textarea', 'label' => 'Nepal Office Address'],
+        'contact_germany_address' => ['type' => 'textarea', 'label' => 'Germany Office Address'],
+        'contact_office_phone' => ['type' => 'text', 'label' => 'Phone Number'],
+        'contact_office_email' => ['type' => 'text', 'label' => 'Email Address'],
+    ],
+]);
+
+// contact page fields — under title, in page order (nepal, germany, phone, email, admin email)
+$contactFields = ['contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
+foreach ($contactFields as $cf) {
+    $rm->addFieldToTemplate($cf, 'contact');
+}
+$contactFg = $templates->get('contact')->fieldgroup;
+if ($contactFg->id) {
+    $names = [];
+    foreach ($contactFg as $f) $names[] = $f->name;
+    $after = 'title';
+    $needsOrder = false;
+    foreach ($contactFields as $n) {
+        if (array_search($n, $names) !== array_search($after, $names) + 1) { $needsOrder = true; break; }
+        $after = $n;
+    }
+    if ($needsOrder) {
+        $after = 'title';
+        foreach ($contactFields as $n) {
+            if ($contactFg->has($n) && $contactFg->has($after)) {
+                $contactFg->insertAfter($fields->get($n), $fields->get($after));
+            }
+            $after = $n;
+        }
+        $contactFg->save();
+    }
+}
+
+// seed contact page field values once (per-field, only when empty — respects admin edits)
+$contactPg = $pages->get('/contact/');
+if ($contactPg->id) {
+    $defaults = [
+        'contact_nepal_address' => "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal",
+        'contact_germany_address' => "Bornkampsweg 24\nAhrensburg 22926,\nGermany",
+        'contact_office_phone' => '+977 01 5412012',
+        'contact_office_email' => 'faithinitiative@gmail.com',
+        'contact_admin_email' => 'faithinitiative@gmail.com',
+    ];
+    $prevOf = $contactPg->of();
+    try {
+        $contactPg->of(false);
+        $dirty = false;
+        foreach ($defaults as $k => $v) {
+            if ($contactPg->template->hasField($k) && !$contactPg->get($k)) {
+                $contactPg->set($k, $v);
+                $dirty = true;
+            }
+        }
+        if ($dirty) $contactPg->save();
+    } catch (\Throwable $e) {
+        wire()->log->error('contact page fields seed failed: ' . $e->getMessage());
+    }
+    $contactPg->of($prevOf);
+}
+
+$rm->createTemplate('contact_submission');
+foreach (['contact_name', 'contact_email', 'contact_phone', 'contact_subject', 'contact_group', 'contact_message'] as $cf) {
+    $rm->addFieldToTemplate($cf, 'contact_submission');
+}
+
+$rm->createTemplate('contact_submissions');
+$rm->createPage(
+    template: 'contact_submissions',
+    parent: '/',
+    name: 'contact-submissions',
+    title: 'Contact Submissions',
+    status: [Page::statusUnpublished],
+);
+
+// family: submission children only under the submissions parent (guarded — saves once)
+$subParent = $templates->get('contact_submissions');
+$subChild = $templates->get('contact_submission');
+if ($subParent->id && $subChild->id) {
+    if ($subParent->childTemplates != [$subChild->id]) {
+        $subParent->childTemplates = [$subChild->id];
+        $subParent->save();
+    }
+    if ($subChild->parentTemplates != [$subParent->id]) {
+        $subChild->parentTemplates = [$subParent->id];
+        $subChild->save();
+    }
+}
+
+// submissions table on the Contact page edit form
+if (!$modules->isInstalled('FieldtypePageTable')) {
+    $modules->install('FieldtypePageTable');
+}
+$subListField = $fields->get('contact_submissions_list');
+if (!$subListField) {
+    $subListField = new Field();
+    $subListField->type = 'FieldtypePageTable';
+    $subListField->name = 'contact_submissions_list';
+    $subListField->label = 'Form Submissions';
+    $subListField->save();
+}
+$subParentPage = $pages->get('/contact-submissions/');
+if ($subParentPage->id && $subChild->id) {
+    $subListChanged = false;
+    if ($subListField->parent_id != $subParentPage->id) {
+        $subListField->parent_id = $subParentPage->id;
+        $subListChanged = true;
+    }
+    if ($subListField->template_id != $subChild->id) {
+        $subListField->template_id = $subChild->id;
+        $subListChanged = true;
+    }
+    $wantCols = "title\ncontact_email\ncontact_phone\ncontact_subject\ncontact_group\ncreated";
+    if ($subListField->columns !== $wantCols) {
+        $subListField->columns = $wantCols;
+        $subListChanged = true;
+    }
+    if ($subListField->sortfields !== '-created') {
+        $subListField->sortfields = '-created';
+        $subListChanged = true;
+    }
+    $subNotes = 'All submitted contact forms. Emails go to the Admin Email above. Local dev: view captured mail in Mailpit at :8025 (ddev mailpit).';
+    if ($subListField->notes !== $subNotes) {
+        $subListField->notes = $subNotes;
+        $subListChanged = true;
+    }
+    if ($subListChanged) $subListField->save();
+}
+$rm->addFieldToTemplate('contact_submissions_list', 'contact');
+
+// keep the submissions table in sync with the submission children (guarded — writes only on diff)
+$contactPgForList = $pages->get('/contact/');
+if ($subParentPage->id && $contactPgForList->id && $contactPgForList->template->hasField('contact_submissions_list')) {
+    $kidIds = $pages->findIds("parent=$subParentPage->id, template=contact_submission");
+    $haveIds = $contactPgForList->contact_submissions_list->explode('id');
+    $missingIds = array_diff($kidIds, $haveIds);
+    if ($missingIds) {
+        $prevOf = $contactPgForList->of();
+        try {
+            $contactPgForList->of(false);
+            foreach ($missingIds as $mid) {
+                $contactPgForList->contact_submissions_list->add($pages->get((int) $mid));
+            }
+            $contactPgForList->save('contact_submissions_list');
+        } catch (\Throwable $e) {
+            wire()->log->error('contact_submissions_list sync failed: ' . $e->getMessage());
+        }
+        $contactPgForList->of($prevOf);
+    }
+}
+
+// admin: submissions table is view-only — hide Add New and row delete
+$isAdminReq = ($page && $page->template && $page->template->name === 'admin')
+    || strpos($_SERVER['REQUEST_URI'] ?? '', $config->urls->admin) === 0;
+if ($isAdminReq) {
+    $config->styles->add($config->urls->templates . 'styles/admin.css');
 }
 
 /*  -----  donor path cards  ---- */
@@ -958,6 +1264,67 @@ $rm->migrate([
 $rm->addFieldToTemplate('donor_cards', 'donors');
 $rm->addFieldToTemplate('cta_label', 'individual-giving');
 $rm->addFieldToTemplate('cta_url', 'individual-giving');
+
+/*--- latest news ---*/
+
+$rm->createTemplate('news');
+$rm->createTemplate('onenews');
+$rm->createPage(
+    template: 'news',
+    parent: '/',
+    name: 'news',
+    title: 'Latest News'
+);
+foreach (['image', 'date', 'body'] as $f) {
+    $rm->addFieldToTemplate($f, 'onenews');
+}
+
+// onenews: default empty date to created timestamp (editors can still override)
+$wire->addHookAfter('Pages::saved', function ($event) {
+    $p = $event->arguments(0);
+    if ($p->template->name !== 'onenews' || $p->date) return;
+    $p->of(false);
+    $p->date = $p->created ?: time();
+    $p->save('date');
+});
+
+// news page manages cards via the same album_card repeater as home
+$rm->addFieldToTemplate('album_card', 'news');
+
+// /news/{slug}/ renders detail from album_card row
+$newsT = $templates->get('news');
+if ($newsT && $newsT->id && !$newsT->urlSegments) {
+    $newsT->urlSegments = 1;
+    $newsT->save();
+}
+
+// migrate onenews children into /news/ album_card rows (idempotent, prod-safe)
+$newsParent = $pages->get('/news/');
+if ($newsParent->id && $newsParent->numChildren && !count($newsParent->album_card)) {
+    $prevOf = $newsParent->of();
+    try {
+        $newsParent->of(false);
+        foreach ($newsParent->children('sort=date') as $c) {
+            $row = $newsParent->album_card->getNewItem();
+            $row->album_card_title = $c->title;
+            $row->album_card_date = $c->date;
+            $row->album_card_text = $c->body;
+            $img = $c->image;
+            if ($img instanceof Pageimages) $img = count($img) ? $img->first() : null;
+            $row->of(false);
+            $row->save();
+            if ($img && $img->filename) {
+                $row->album_card_image = $img->filename;
+                $row->save('album_card_image');
+            }
+        }
+        $newsParent->save('album_card');
+        $newsParent->of($prevOf);
+    } catch (\Throwable $e) {
+        $newsParent->of($prevOf);
+        wire('log')->save('errors', 'album_card migration failed: ' . $e->getMessage());
+    }
+}
 
 
 
