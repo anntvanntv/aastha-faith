@@ -979,7 +979,7 @@ $rm->migrate([
         'map_district_completed' => [
             'type' => 'checkbox',
             'label' => 'Completed',
-            'notes' => 'Reserved for future use (e.g. completed vs ongoing projects).',
+            'notes' => 'Checked = completed project (teal). Unchecked = ongoing (amber).',
         ],
     ],
 ]);
@@ -1040,9 +1040,9 @@ if ($page->template->name !== 'admin' && $repT && $repT->fieldgroup->has('map_di
 // Seed coverage districts once — only when the repeater is empty (front-end only)
 $dummyMetrics = "Ongoing projects";
 if ($page->template->name !== 'admin' && $homePage->id && $homePage->hasField('map_district') && !count($homePage->map_district)) {
-    // district name => completed flag (reserved)
+    // district name => completed flag (1 = teal/completed, 0 = amber/ongoing)
     $seedDistricts = [
-        'Lalitpur' => 1, 'Kathmandu' => 1, 'Sunsari' => 0, 'Morang' => 0,
+        'Lalitpur' => 1, 'Kathmandu' => 0, 'Sunsari' => 0, 'Morang' => 0,
         'Makwanpur' => 0, 'Bara' => 0, 'Banke' => 0, 'Bhaktapur' => 1,
         'Chitwan' => 0, 'Kaski' => 1, 'Tanahu' => 0, 'Kailali' => 0,
         'Nawalparasi' => 0, 'Parsa' => 0, 'Kanchanpur' => 0, 'Saptari' => 0,

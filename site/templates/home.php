@@ -139,10 +139,17 @@ namespace ProcessWire;
             foreach (($page->map_district ?? []) as $row) {
                 $opt = $row->map_district_sel;
                 $dn = strtoupper(trim($opt ? (string)$opt->title : ''));
-                if ($dn) $coverageData[$dn] = trim($row->map_district_metric ?? '');
+                if ($dn) $coverageData[$dn] = [
+                    'm' => trim($row->map_district_metric ?? ''),
+                    'c' => $row->map_district_completed ? 1 : 0,
+                ];
             }
             ?>
             <div class="coverage-map-wrap">
+                <div class="coverage-legend">
+                    <span><i class="dot dot-completed"></i> Completed</span>
+                    <span><i class="dot dot-ongoing"></i> Ongoing</span>
+                </div>
                 <div id="coverage-map" data-geojson="<?= $config->urls->templates ?>assets/nepal-districts.geojson" data-provinces="<?= $config->urls->templates ?>assets/nepal-provinces.geojson"></div>
             </div>
         </section>

@@ -162,19 +162,22 @@ if (statNumbers.length && "IntersectionObserver" in window) {
         .then(function (geo) {
             var layer = L.geoJSON(geo, {
                 style: function (f) {
-                    var active = !!lookup[norm(f.properties.DISTRICT)];
+                    var entry = lookup[norm(f.properties.DISTRICT)];
+                    var active = !!entry;
+                    var completed = active && entry.c;
                     return {
-                        color: active ? '#f2f1ee' : '#b3b3b3',
+                        color: active ? (completed ? '#227e72' : '#c0ae4b') : '#b3b3b3',
                         weight: active ? 1 : 0.7,
-                        fillColor: active ? '#113f39' : '#f2f1ee',
-                        fillOpacity: active ? 1 : 0.55
+                        fillColor: active ? (completed ? '#113f39' : '#f2bc6b') : '#f2f1ee',
+                        fillOpacity: active ? (completed ? 1 : 0.9) : 0.55
                     };
                 },
                 onEachFeature: function (feature, lyr) {
                     var name = feature.properties.DISTRICT || '';
                     var key = norm(name);
-                    var metric = lookup[key];
-                    var active = metric !== undefined;
+                    var entry = lookup[key];
+                    var active = !!entry;
+                    var metric = active ? entry.m : '';
                     var lines = metric ? String(metric).split(/\r?\n/).filter(function (l) { return l.trim(); }) : [];
                     var html = '<div class="map-tip"><strong>' + esc(label(name)) + '</strong>' +
                         lines.map(function (l) { return '<span>' + esc(l) + '</span>'; }).join('') + '</div>';
@@ -184,7 +187,7 @@ if (statNumbers.length && "IntersectionObserver" in window) {
                         className: 'coverage-tooltip'
                     });
                     lyr.on('mouseover', function () {
-                        if (active) lyr.setStyle({ fillColor: '#195e56', weight: 1.4, fillOpacity: 1 });
+                        if (active) lyr.setStyle({ fillColor: entry.c ? '#195e56' : '#eea639', weight: 1.4, fillOpacity: 1 });
                     });
                     lyr.on('mouseout', function () { layer.resetStyle(lyr); });
                 }
