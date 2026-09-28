@@ -22,10 +22,12 @@ namespace ProcessWire
         </div>
         <div class="description-one-work">
             <div class="text-one-work">
+                <?php if (trim($page->objective ?? '')): ?>
                 <div edit="objective">
                     <h5 style="text-transform:uppercase">OBJECTIVE</h5>
                     <p><?= $page->objective ?></p>
                 </div>
+                <?php endif; ?>
                 <?php if($page->outputs): ?>
                 <div edit="outputs">
                     <h5 style="text-transform:uppercase">Outputs</h5>

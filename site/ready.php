@@ -729,6 +729,30 @@ $rm->migrate([
             'type' => 'textarea',
             'label' => 'Album Card Text',
         ],
+        'objective' => [
+            'type' => 'textarea',
+            'label' => 'Objective',
+        ],
+        'outputs' => [
+            'type' => 'textarea',
+            'label' => 'Outputs',
+        ],
+        'duration' => [
+            'type' => 'text',
+            'label' => 'Duration',
+        ],
+        'donor' => [
+            'type' => 'text',
+            'label' => 'Donor',
+        ],
+        'project_areas' => [
+            'type' => 'text',
+            'label' => 'Project Areas',
+        ],
+        'budget' => [
+            'type' => 'text',
+            'label' => 'Budget',
+        ],
         'quote_text' => [
             'type' => 'textarea',
             'label' => 'Quote Text',
@@ -1287,6 +1311,12 @@ $wire->addHookAfter('Pages::saved', function ($event) {
     $p->date = $p->created ?: time();
     $p->save('date');
 });
+
+// onework: re-attach project fields detached when the fieldgroup was reset
+// (data survives in the field tables — attaching makes it editable again)
+foreach (['objective', 'outputs', 'duration', 'donor', 'project_areas', 'budget'] as $f) {
+    $rm->addFieldToTemplate($f, 'onework');
+}
 
 // news page manages cards via the same album_card repeater as home
 $rm->addFieldToTemplate('album_card', 'news');
