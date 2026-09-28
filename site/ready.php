@@ -622,10 +622,12 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Born Orange Title',
         ],
-        'title_change2' => [
-            'type' => 'text',
-            'label' => 'Title Change 2',
-        ],
+        // 'title_change2' — Find-us heading moved to contact page as contact_findus_title;
+        // detached from home below; field + data stay preserved
+        // 'title_change2' => [
+        //     'type' => 'text',
+        //     'label' => 'Title Change 2',
+        // ],
         'born_image' => [
             'type' => 'image',
             'label' => 'Born Image',
@@ -823,7 +825,13 @@ $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
 $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
-$rm->addFieldToTemplate('title_change2', 'home');
+// $rm->addFieldToTemplate('title_change2', 'home'); // Find-us heading moved to contact (contact_findus_title)
+// detach from home — section is commented out; field + data stay preserved on the field itself
+$_homeFgT2 = $templates->get('home')->fieldgroup;
+if ($_homeFgT2->has('title_change2')) {
+    $_homeFgT2->remove($fields->get('title_change2'));
+    $_homeFgT2->save();
+}
 $rm->addFieldToTemplate('stats_cards', 'home');
 $rm->addFieldToTemplate('hero_slides', 'home');
 
@@ -837,8 +845,12 @@ $dirty = false;
 $ti = array_search('title_change', $names, true);
 $si = array_search('stats_cards', $names, true);
 $t2i = array_search('title_change2', $names, true);
-if ($ti !== false && $si !== false && $t2i !== false && !($si === $ti + 1 && $t2i === $ti + 2)) {
+if ($ti !== false && $si !== false && $si !== $ti + 1) {
     $homeFg->insertAfter($fields->get('stats_cards'), $fields->get('title_change'));
+    $dirty = true;
+}
+// title_change2 detached from home (moved to contact) — order it after stats_cards only while still attached
+if ($t2i !== false && $si !== false && $t2i !== $si + 1) {
     $homeFg->insertAfter($fields->get('title_change2'), $fields->get('stats_cards'));
     $dirty = true;
 }
@@ -1069,11 +1081,12 @@ if ($page->template->name !== 'admin' && $homePage->id && $homePage->hasField('m
 // keep the map fields in page order in admin — after the Find-us section fields
 $names = [];
 foreach ($homeFg as $f) $names[] = $f->name;
-$t2i = array_search('title_change2', $names, true);
+$anchor = array_search('title_change2', $names, true) !== false ? 'title_change2' : 'stats_cards';
+$ai = array_search($anchor, $names, true);
 $mti = array_search('map_title', $names, true);
 $mdi = array_search('map_district', $names, true);
-if ($t2i !== false && $mti !== false && $mdi !== false && !($mti === $t2i + 1 && $mdi === $t2i + 2)) {
-    $homeFg->insertAfter($fields->get('map_title'), $fields->get('title_change2'));
+if ($ai !== false && $mti !== false && $mdi !== false && !($mti === $ai + 1 && $mdi === $ai + 2)) {
+    $homeFg->insertAfter($fields->get('map_title'), $fields->get($anchor));
     $homeFg->insertAfter($fields->get('map_district'), $fields->get('map_title'));
     $homeFg->save();
 }
@@ -1301,11 +1314,12 @@ $rm->migrate([
         'contact_germany_address' => ['type' => 'textarea', 'label' => 'Germany Office Address'],
         'contact_office_phone' => ['type' => 'text', 'label' => 'Phone Number'],
         'contact_office_email' => ['type' => 'text', 'label' => 'Email Address'],
+        'contact_findus_title' => ['type' => 'text', 'label' => 'Find Us Section Title'],
     ],
 ]);
 
-// contact page fields — under title, in page order (nepal, germany, phone, email, admin email)
-$contactFields = ['contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
+// contact page fields — under title, in page order (find-us heading, nepal, germany, phone, email, admin email)
+$contactFields = ['contact_findus_title', 'contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
 foreach ($contactFields as $cf) {
     $rm->addFieldToTemplate($cf, 'contact');
 }
@@ -1332,9 +1346,11 @@ if ($contactFg->id) {
 }
 
 // seed contact page field values once (per-field, only when empty — respects admin edits)
+// front-end only — writing during an admin save collides with PagesEditor
 $contactPg = $pages->get('/contact/');
-if ($contactPg->id) {
+if ($page->template->name !== 'admin' && $contactPg->id) {
     $defaults = [
+        'contact_findus_title' => 'Find us on Map',
         'contact_nepal_address' => "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal",
         'contact_germany_address' => "Bornkampsweg 24\nAhrensburg 22926,\nGermany",
         'contact_office_phone' => '+977 01 5412012',

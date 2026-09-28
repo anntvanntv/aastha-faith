@@ -31,54 +31,69 @@ namespace ProcessWire;
 
         </section>
     </header>
-    <section class="content-contact" data-nav-color="dark">
+    <section class="contact-findus stats" data-nav-color="dark">
         <?php
         $nepalAddr = $page->contact_nepal_address ?: "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal";
         $germanyAddr = $page->contact_germany_address ?: "Bornkampsweg 24\nAhrensburg 22926,\nGermany";
         $officePhone = $page->contact_office_phone ?: '+977 01 5412012';
         $officeEmail = $page->contact_office_email ?: 'faithinitiative@gmail.com';
         ?>
-        <div class="contact-icons">
-
-            <div class="icon-container">
-                <div class="icon-map">
-                    <img src="<?= $config->urls->templates ?>/icons/flag-nepal.svg" alt="Nepal flag">
+            <div class="stats-heading">
+                <div class="heading-left">
+                    <div class="eyebrow">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">location</h5>
+                    </div>
+                    <h2><?= $page->contact_findus_title ?: 'Find us on Map' ?></h2>
                 </div>
-                <p class="body-bold">Nepal</p>
-                <p><?= nl2br($sanitizer->entities($nepalAddr)) ?></p>
-
             </div>
-            <div class="icon-container">
-                <div class="icon-map">
-                    <img src="<?= $config->urls->templates ?>/icons/flag-germany.svg" alt="Germany flag">
+            <div class="findus-inner">
+                <div class="map-area">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7065.95801099961!2d85.30852979709088!3d27.687043755168673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b4ad7096dd%3A0x29fa3d73b99dcc97!2sKupondole%2C%20Patan%2C%20Zona%20de%20Bagmati%2044600%2C%20Nepal!5e0!3m2!1ses!2sde!4v1789045329645!5m2!1sen!2sde"
+                        style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin"></iframe>
                 </div>
-                <p class="body-bold">Germany</p>
-                <p><?= nl2br($sanitizer->entities($germanyAddr)) ?></p>
-            </div>
+                <div class="contact-icons">
+
+                    <div class="icon-container">
+                        <div class="icon-map">
+                            <img src="<?= $config->urls->templates ?>/icons/flag-nepal.svg" alt="Nepal flag">
+                        </div>
+                        <p class="body-bold">Nepal</p>
+                        <p><?= nl2br($sanitizer->entities($nepalAddr)) ?></p>
+
+                    </div>
+                    <div class="icon-container">
+                        <div class="icon-map">
+                            <img src="<?= $config->urls->templates ?>/icons/flag-germany.svg" alt="Germany flag">
+                        </div>
+                        <p class="body-bold">Germany</p>
+                        <p><?= nl2br($sanitizer->entities($germanyAddr)) ?></p>
+                    </div>
 
 
-            <div class="icon-container">
-                <div class="icon-call">
-                    <img src="<?= $config->urls->templates ?>/icons/call.svg" alt="icon-call">
+                    <div class="icon-container">
+                        <div class="icon-call">
+                            <img src="<?= $config->urls->templates ?>/icons/call.svg" alt="icon-call">
+                        </div>
+                        <p class="body-bold">Call</p>
+                        <a href="tel:<?= preg_replace('/[^+0-9]/', '', $officePhone) ?>"><?= $officePhone ?></a>
+                    </div>
+                    <div class="icon-container">
+                        <div class="icon-mail">
+                            <img src="<?= $config->urls->templates ?>/icons/mail.svg" alt="icon-mail">
+
+                        </div>
+                        <p class="body-bold">Email</p>
+                        <a href="mailto:<?= $officeEmail ?>"><?= $officeEmail ?></a>
+                    </div>
+
                 </div>
-                <p class="body-bold">Call</p>
-                <a href="tel:<?= preg_replace('/[^+0-9]/', '', $officePhone) ?>"><?= $officePhone ?></a>
             </div>
-            <div class="icon-container">
-                <div class="icon-mail">
-                    <img src="<?= $config->urls->templates ?>/icons/mail.svg" alt="icon-mail">
+    </section>
 
-                </div>
-                <p class="body-bold">Email</p>
-                <a href="mailto:<?= $officeEmail ?>"><?= $officeEmail ?></a>
-            </div>
-
-        </div>
-        <div class="divider">
-            <img src="<?= $config->urls->templates ?>icons/Divider.png" alt="icon">
-        </div>
-
-        
+    <section class="content-contact" data-nav-color="dark">
         <div class="contact-form">
 
         
