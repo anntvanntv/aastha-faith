@@ -122,6 +122,31 @@ namespace ProcessWire;
             </div>
 
         </section>
+        <section id="coverage" class="coverage" data-nav-color="dark">
+            <div class="stats-heading">
+                <div class="heading-left">
+                    <div class="eyebrow">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">where we work</h5>
+                    </div>
+                    <h2 edit="map_title"><?= $page->map_title ?: 'Our Reach' ?></h2>
+                </div>
+            </div>
+            <?php
+            $coverageData = [];
+            foreach (($page->map_district ?? []) as $row) {
+                $opt = $row->map_district_sel;
+                $dn = strtoupper(trim($opt ? (string)$opt->title : ''));
+                if ($dn) $coverageData[$dn] = trim($row->map_district_metric ?? '');
+            }
+            ?>
+            <div class="coverage-map-wrap">
+                <div id="coverage-map" data-geojson="<?= $config->urls->templates ?>assets/nepal-districts.geojson" data-provinces="<?= $config->urls->templates ?>assets/nepal-provinces.geojson"></div>
+            </div>
+        </section>
+        <link rel="stylesheet" href="<?= $config->urls->templates ?>vendor/leaflet.css">
+        <script src="<?= $config->urls->templates ?>vendor/leaflet.js"></script>
+        <script>window.coverageDistricts = <?= json_encode($coverageData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;</script>
         <section id="born" class="born" data-nav-color="light">
             <div class="born-container">
                 <div class="b-heading">

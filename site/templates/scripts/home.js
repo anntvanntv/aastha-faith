@@ -116,3 +116,94 @@ if (statNumbers.length && "IntersectionObserver" in window) {
     }, { threshold: 0.5 });
     statNumbers.forEach((el) => statObserver.observe(el));
 }
+
+// Coverage map — Nepal districts, hover tooltips with admin-managed metrics
+(function () {
+    var el = document.getElementById('coverage-map');
+    if (!el || typeof L === 'undefined') return;
+
+    var map = L.map(el, {
+        zoomControl: false,
+        attributionControl: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        dragging: false,
+        touchZoom: false
+    });
+
+    var data = window.coverageDistricts || {};
+    var esc = function (s) {
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    };
+    var label = function (name) {
+        // Title-case only when the source name is ALL CAPS
+        return name === name.toUpperCase() ? name.charAt(0) + name.slice(1).toLowerCase() : name;
+    };
+    var norm = function (s) { return String(s).toUpperCase().replace(/[^A-Z]/g, ''); };
+    // dataset spellings / 2017 splits an admin-entered name should also match
+    var ALIASES = {
+        CHITWAN: ['CHITAWAN'],
+        MAKWANPUR: ['MAKAWANPUR'],
+        NAWALPARASI: ['NAWALPUR', 'PARASI'],
+        NAWALPARASIEASTWEST: ['NAWALPUR', 'PARASI']
+    };
+    // normalized lookup: map-dataset district name -> metric
+    var lookup = {};
+    Object.keys(data).forEach(function (k) {
+        (ALIASES[norm(k)] || [norm(k)]).forEach(function (t) { lookup[t] = data[k]; });
+    });
+
+    fetch(el.dataset.geojson)
+        .then(function (r) { return r.json(); })
+        .then(function (geo) {
+            var layer = L.geoJSON(geo, {
+                style: function (f) {
+                    var active = !!lookup[norm(f.properties.DISTRICT)];
+                    return {
+                        color: active ? '#f2f1ee' : '#b3b3b3',
+                        weight: active ? 1 : 0.7,
+                        fillColor: active ? '#113f39' : '#f2f1ee',
+                        fillOpacity: active ? 1 : 0.55
+                    };
+                },
+                onEachFeature: function (feature, lyr) {
+                    var name = feature.properties.DISTRICT || '';
+                    var key = norm(name);
+                    var metric = lookup[key];
+                    var active = metric !== undefined;
+                    var lines = metric ? String(metric).split(/\r?\n/).filter(function (l) { return l.trim(); }) : [];
+                    var html = '<div class="map-tip"><strong>' + esc(label(name)) + '</strong>' +
+                        lines.map(function (l) { return '<span>' + esc(l) + '</span>'; }).join('') + '</div>';
+                    lyr.bindTooltip(html, {
+                        sticky: true,
+                        direction: 'top',
+                        className: 'coverage-tooltip'
+                    });
+                    lyr.on('mouseover', function () {
+                        if (active) lyr.setStyle({ fillColor: '#195e56', weight: 1.4, fillOpacity: 1 });
+                    });
+                    lyr.on('mouseout', function () { layer.resetStyle(lyr); });
+                }
+            }).addTo(map);
+            map.fitBounds(layer.getBounds(), { padding: [14, 14] });
+
+            // province borders — thick outline overlay, must not block district hover
+            fetch(el.dataset.provinces)
+                .then(function (r) { return r.json(); })
+                .then(function (pgeo) {
+                    // light halo under dark line — readable on both dark fills and light bg
+                    L.geoJSON(pgeo, {
+                        interactive: false,
+                        style: { color: '#f2f1ee', weight: 4.5, fill: false, opacity: 1 }
+                    }).addTo(map);
+                    L.geoJSON(pgeo, {
+                        interactive: false,
+                        style: { color: '#343434', weight: 2, fill: false, opacity: 0.9 }
+                    }).addTo(map);
+                });
+        });
+})();
