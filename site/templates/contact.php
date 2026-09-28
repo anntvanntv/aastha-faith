@@ -204,116 +204,44 @@ namespace ProcessWire;
                     <div class="pill-group w100 m10">
                         <p class="body-bold">I am reaching out as <span class="req-star">*</span></p>
                         <div class="pill-grid">
+                            <?php foreach (($page->contact_pills ?? []) as $grp):
+                                $gl = $sanitizer->entities($grp->pill_label); ?>
                             <label class="pill">
-                                <input type="radio" name="group" value="NGOs &amp; CBOs">
-                                <span>NGOs &amp; CBOs</span>
+                                <input type="radio" name="group" value="<?= $gl ?>">
+                                <span><?= $gl ?></span>
                             </label>
-                            <label class="pill">
-                                <input type="radio" name="group" value="Volunteers &amp; Interns">
-                                <span>Volunteers &amp; Interns</span>
-                            </label>
-                            <label class="pill">
-                                <input type="radio" name="group" value="Private Sector">
-                                <span>Private Sector</span>
-                            </label>
-                            <label class="pill">
-                                <input type="radio" name="group" value="Researchers">
-                                <span>Researchers</span>
-                            </label>
+                            <?php endforeach; ?>
                         </div>
                         <div class="pill-cards" aria-live="polite">
-                            <div class="pill-card" data-group="NGOs &amp; CBOs">
-                                <h4>NGOs &amp; CBOs</h4>
-                                <p class="pill-tagline">Partners, not sub-grantees</p>
-                                <p>We work with community organisations in Nepal and NGOs across the region on joint proposals, shared advocacy, and bringing our peer model to new districts. You know your community; we bring the funding, safeguarding, and reporting experience most calls demand.</p>
+                            <?php foreach (($page->contact_pills ?? []) as $grp):
+                                $gl = $sanitizer->entities($grp->pill_label);
+                                $you = array_filter(array_map('trim', explode("\n", (string)$grp->pill_you_bring)));
+                                $we = array_filter(array_map('trim', explode("\n", (string)$grp->pill_we_bring)));
+                            ?>
+                            <div class="pill-card" data-group="<?= $gl ?>">
+                                <h4><?= $gl ?></h4>
+                                <p class="pill-tagline"><?= $sanitizer->entities($grp->pill_tagline) ?></p>
+                                <p><?= nl2br($sanitizer->entities($grp->pill_desc)) ?></p>
                                 <div class="pill-cols">
                                     <div>
                                         <h5>What you bring</h5>
                                         <ul>
-                                            <li>A community you are accountable to</li>
-                                            <li>Registration and accounts, or the will to build them</li>
-                                            <li>A concrete idea: a call, a district, a policy goal</li>
+                                            <?php foreach ($you as $li): ?>
+                                            <li><?= $sanitizer->entities($li) ?></li>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </div>
                                     <div>
                                         <h5>What we bring</h5>
                                         <ul>
-                                            <li>21 years of beneficiary-led programming</li>
-                                            <li>A documented, proven peer-to-peer model</li>
-                                            <li>Links into global mental health networks</li>
+                                            <?php foreach ($we as $li): ?>
+                                            <li><?= $sanitizer->entities($li) ?></li>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="pill-card" data-group="Volunteers &amp; Interns">
-                                <h4>Volunteers &amp; Interns</h4>
-                                <p class="pill-tagline">Eight weeks minimum</p>
-                                <p>Most roles are remote: grant research, translation, data, film and photo editing, web and social media. Some placements are in Lalitpur. We don't offer short visits to our communities — volunteers support the organisation; peers support the community.</p>
-                                <div class="pill-cols">
-                                    <div>
-                                        <h5>What you bring</h5>
-                                        <ul>
-                                            <li>Eight weeks or more, at agreed weekly hours</li>
-                                            <li>A specific skill, and working English</li>
-                                            <li>A police check and a signed safeguarding policy</li>
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <h5>What we bring</h5>
-                                        <ul>
-                                            <li>A named supervisor and a written role</li>
-                                            <li>Induction on safeguarding and confidentiality</li>
-                                            <li>A reference and certificate for your work</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pill-card" data-group="Private Sector">
-                                <h4>Private Sector</h4>
-                                <p class="pill-tagline">Flexible funding goes furthest</p>
-                                <p>Unrestricted, multi-year support pays for what grants don't: peer educators' transport, a counsellor between grant cycles, an audit. Skills help too when they fill a gap — legal, accounting, IT, logistics.</p>
-                                <div class="pill-cols">
-                                    <div>
-                                        <h5>What you bring</h5>
-                                        <ul>
-                                            <li>Unrestricted, matched, or multi-year giving</li>
-                                            <li>Pro bono skills with real hours behind them</li>
-                                            <li>Respect for our communities' privacy in any publicity</li>
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <h5>What we bring</h5>
-                                        <ul>
-                                            <li>Audited accounts and clear reporting</li>
-                                            <li>Consent-cleared stories and images</li>
-                                            <li>Staff talks on gender, HIV, and mental health</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pill-card" data-group="Researchers">
-                                <h4>Researchers</h4>
-                                <p class="pill-tagline">Designed with us, not about us</p>
-                                <p>We co-design research on women's and maternal mental health, HIV, harm reduction, stigma, and climate stress. Come early enough for us to shape the questions. Participants are paid for their time, community researchers are named as authors, and findings return to the community in Nepali.</p>
-                                <div class="pill-cols">
-                                    <div>
-                                        <h5>What you bring</h5>
-                                        <ul>
-                                            <li>Ethics approval, including NHRC clearance</li>
-                                            <li>Budget for participants and community researchers</li>
-                                            <li>Agreement on authorship and data ownership</li>
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <h5>What we bring</h5>
-                                        <ul>
-                                            <li>Two decades of trust with hard-to-reach groups</li>
-                                            <li>Trained peer researchers and safe settings</li>
-                                            <li>Honest review of your tools before fieldwork</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>

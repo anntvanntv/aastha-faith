@@ -1315,6 +1315,16 @@ $rm->migrate([
         'contact_office_phone' => ['type' => 'text', 'label' => 'Phone Number'],
         'contact_office_email' => ['type' => 'text', 'label' => 'Email Address'],
         'contact_findus_title' => ['type' => 'text', 'label' => 'Find Us Section Title'],
+        'contact_pills' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Reaching-Out Groups (pills + info cards)',
+            'fields' => ['pill_label', 'pill_tagline', 'pill_desc', 'pill_you_bring', 'pill_we_bring'],
+        ],
+        'pill_label' => ['type' => 'text', 'label' => 'Group Label', 'notes' => 'Used as the pill text, the radio value, and the card title.'],
+        'pill_tagline' => ['type' => 'text', 'label' => 'Tagline'],
+        'pill_desc' => ['type' => 'textarea', 'label' => 'Description'],
+        'pill_you_bring' => ['type' => 'textarea', 'label' => 'What You Bring', 'notes' => 'One item per line.'],
+        'pill_we_bring' => ['type' => 'textarea', 'label' => 'What We Bring', 'notes' => 'One item per line.'],
     ],
 ]);
 
@@ -1322,6 +1332,63 @@ $rm->migrate([
 $contactFields = ['contact_findus_title', 'contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
 foreach ($contactFields as $cf) {
     $rm->addFieldToTemplate($cf, 'contact');
+}
+$rm->addFieldToTemplate('contact_pills', 'contact');
+// keep contact_pills right before the submissions table in admin
+$cpFg = $templates->get('contact')->fieldgroup;
+$_cn = []; foreach ($cpFg as $_f) $_cn[] = $_f->name;
+$_pi = array_search('contact_pills', $_cn, true);
+$_si = array_search('contact_submissions_list', $_cn, true);
+if ($_pi !== false && $_si !== false && $_pi !== $_si - 1) {
+    $cpFg->insertBefore($fields->get('contact_pills'), $fields->get('contact_submissions_list'));
+    $cpFg->save();
+}
+$rm->addFieldToTemplate('pill_label', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_tagline', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_desc', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_you_bring', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_we_bring', 'repeater_contact_pills');
+
+// seed the four reaching-out groups once — only when the repeater is empty (front-end only)
+$contactPillsPg = $pages->get('/contact/');
+if ($page->template->name !== 'admin' && $contactPillsPg->id && $contactPillsPg->hasField('contact_pills') && !count($contactPillsPg->contact_pills)) {
+    $pillSeed = [
+        ['NGOs & CBOs', 'Partners, not sub-grantees',
+            "We work with community organisations in Nepal and NGOs across the region on joint proposals, shared advocacy, and bringing our peer model to new districts. You know your community; we bring the funding, safeguarding, and reporting experience most calls demand.",
+            "A community you are accountable to\nRegistration and accounts, or the will to build them\nA concrete idea: a call, a district, a policy goal",
+            "21 years of beneficiary-led programming\nA documented, proven peer-to-peer model\nLinks into global mental health networks"],
+        ['Volunteers & Interns', 'Eight weeks minimum',
+            "Most roles are remote: grant research, translation, data, film and photo editing, web and social media. Some placements are in Lalitpur. We don't offer short visits to our communities — volunteers support the organisation; peers support the community.",
+            "Eight weeks or more, at agreed weekly hours\nA specific skill, and working English\nA police check and a signed safeguarding policy",
+            "A named supervisor and a written role\nInduction on safeguarding and confidentiality\nA reference and certificate for your work"],
+        ['Private Sector', 'Flexible funding goes furthest',
+            "Unrestricted, multi-year support pays for what grants don't: peer educators' transport, a counsellor between grant cycles, an audit. Skills help too when they fill a gap — legal, accounting, IT, logistics.",
+            "Unrestricted, matched, or multi-year giving\nPro bono skills with real hours behind them\nRespect for our communities' privacy in any publicity",
+            "Audited accounts and clear reporting\nConsent-cleared stories and images\nStaff talks on gender, HIV, and mental health"],
+        ['Researchers', 'Designed with us, not about us',
+            "We co-design research on women's and maternal mental health, HIV, harm reduction, stigma, and climate stress. Come early enough for us to shape the questions. Participants are paid for their time, community researchers are named as authors, and findings return to the community in Nepali.",
+            "Ethics approval, including NHRC clearance\nBudget for participants and community researchers\nAgreement on authorship and data ownership",
+            "Two decades of trust with hard-to-reach groups\nTrained peer researchers and safe settings\nHonest review of your tools before fieldwork"],
+    ];
+    $prevOf = $contactPillsPg->of();
+    try {
+        $contactPillsPg->of(false);
+        foreach ($pillSeed as $g) {
+            $row = $contactPillsPg->contact_pills->getNewItem();
+            $row->pill_label = $g[0];
+            $row->pill_tagline = $g[1];
+            $row->pill_desc = $g[2];
+            $row->pill_you_bring = $g[3];
+            $row->pill_we_bring = $g[4];
+            $row->of(false);
+            $row->save();
+        }
+        $contactPillsPg->save('contact_pills');
+        $contactPillsPg->of($prevOf);
+    } catch (\Throwable $e) {
+        $contactPillsPg->of($prevOf);
+        wire('log')->save('errors', 'contact_pills seed failed: ' . $e->getMessage());
+    }
 }
 $contactFg = $templates->get('contact')->fieldgroup;
 if ($contactFg->id) {
