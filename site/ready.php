@@ -622,10 +622,12 @@ $rm->migrate([
             'type' => 'text',
             'label' => 'Born Orange Title',
         ],
-        'title_change2' => [
-            'type' => 'text',
-            'label' => 'Title Change 2',
-        ],
+        // 'title_change2' — Find-us heading moved to contact page as contact_findus_title;
+        // detached from home below; field + data stay preserved
+        // 'title_change2' => [
+        //     'type' => 'text',
+        //     'label' => 'Title Change 2',
+        // ],
         'born_image' => [
             'type' => 'image',
             'label' => 'Born Image',
@@ -729,6 +731,30 @@ $rm->migrate([
             'type' => 'textarea',
             'label' => 'Album Card Text',
         ],
+        'objective' => [
+            'type' => 'textarea',
+            'label' => 'Objective',
+        ],
+        'outputs' => [
+            'type' => 'textarea',
+            'label' => 'Outputs',
+        ],
+        'duration' => [
+            'type' => 'text',
+            'label' => 'Duration',
+        ],
+        'donor' => [
+            'type' => 'text',
+            'label' => 'Donor',
+        ],
+        'project_areas' => [
+            'type' => 'text',
+            'label' => 'Project Areas',
+        ],
+        'budget' => [
+            'type' => 'text',
+            'label' => 'Budget',
+        ],
         'quote_text' => [
             'type' => 'textarea',
             'label' => 'Quote Text',
@@ -799,7 +825,13 @@ $rm->addFieldToTemplate('born_orange_title', 'home');
 $rm->addFieldToTemplate('born_text', 'home');
 $rm->addFieldToTemplate('born_image', 'home');
 $rm->addFieldToTemplate('areas_cards', 'home');
-$rm->addFieldToTemplate('title_change2', 'home');
+// $rm->addFieldToTemplate('title_change2', 'home'); // Find-us heading moved to contact (contact_findus_title)
+// detach from home — section is commented out; field + data stay preserved on the field itself
+$_homeFgT2 = $templates->get('home')->fieldgroup;
+if ($_homeFgT2->has('title_change2')) {
+    $_homeFgT2->remove($fields->get('title_change2'));
+    $_homeFgT2->save();
+}
 $rm->addFieldToTemplate('stats_cards', 'home');
 $rm->addFieldToTemplate('hero_slides', 'home');
 
@@ -813,8 +845,12 @@ $dirty = false;
 $ti = array_search('title_change', $names, true);
 $si = array_search('stats_cards', $names, true);
 $t2i = array_search('title_change2', $names, true);
-if ($ti !== false && $si !== false && $t2i !== false && !($si === $ti + 1 && $t2i === $ti + 2)) {
+if ($ti !== false && $si !== false && $si !== $ti + 1) {
     $homeFg->insertAfter($fields->get('stats_cards'), $fields->get('title_change'));
+    $dirty = true;
+}
+// title_change2 detached from home (moved to contact) — order it after stats_cards only while still attached
+if ($t2i !== false && $si !== false && $t2i !== $si + 1) {
     $homeFg->insertAfter($fields->get('title_change2'), $fields->get('stats_cards'));
     $dirty = true;
 }
@@ -839,6 +875,221 @@ if ($present && array_slice($names, -count($present)) !== $present) {
 
 if ($dirty) $homeFg->save();
 
+/* Coverage map on home — districts highlighted with hover metrics */
+$rm->migrate([
+    'fields' => [
+        'map_title' => [
+            'type' => 'text',
+            'label' => 'Coverage Section Title',
+        ],
+        'map_district' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Coverage Map Districts',
+            'fields' => ['map_district_sel', 'map_district_metric', 'map_district_completed'],
+        ],
+        'map_district_sel' => [
+            'type' => 'options',
+            'label' => 'District',
+            'options' => [
+                1 => 'achham|Achham',
+                2 => 'arghakhanchi|Arghakhanchi',
+                3 => 'baglung|Baglung',
+                4 => 'baitadi|Baitadi',
+                5 => 'bajhang|Bajhang',
+                6 => 'bajura|Bajura',
+                7 => 'banke|Banke',
+                8 => 'bara|Bara',
+                9 => 'bardiya|Bardiya',
+                10 => 'bhaktapur|Bhaktapur',
+                11 => 'bhojpur|Bhojpur',
+                12 => 'chitawan|Chitawan',
+                13 => 'dadeldhura|Dadeldhura',
+                14 => 'dailekh|Dailekh',
+                15 => 'dang|Dang',
+                16 => 'darchula|Darchula',
+                17 => 'dhading|Dhading',
+                18 => 'dhankuta|Dhankuta',
+                19 => 'dhanusha|Dhanusha',
+                20 => 'dolakha|Dolakha',
+                21 => 'dolpa|Dolpa',
+                22 => 'doti|Doti',
+                23 => 'gorkha|Gorkha',
+                24 => 'gulmi|Gulmi',
+                25 => 'humla|Humla',
+                26 => 'ilam|Ilam',
+                27 => 'jajarkot|Jajarkot',
+                28 => 'jhapa|Jhapa',
+                29 => 'jumla|Jumla',
+                30 => 'kabhrepalanchok|Kabhrepalanchok',
+                31 => 'kailali|Kailali',
+                32 => 'kalikot|Kalikot',
+                33 => 'kanchanpur|Kanchanpur',
+                34 => 'kapilbastu|Kapilbastu',
+                35 => 'kaski|Kaski',
+                36 => 'kathmandu|Kathmandu',
+                37 => 'khotang|Khotang',
+                38 => 'lalitpur|Lalitpur',
+                39 => 'lamjung|Lamjung',
+                40 => 'mahottari|Mahottari',
+                41 => 'makawanpur|Makawanpur',
+                42 => 'manang|Manang',
+                43 => 'morang|Morang',
+                44 => 'mugu|Mugu',
+                45 => 'mustang|Mustang',
+                46 => 'myagdi|Myagdi',
+                47 => 'nawalpur|Nawalpur',
+                48 => 'nuwakot|Nuwakot',
+                49 => 'okhaldhunga|Okhaldhunga',
+                50 => 'palpa|Palpa',
+                51 => 'panchthar|Panchthar',
+                52 => 'parasi|Parasi',
+                53 => 'parbat|Parbat',
+                54 => 'parsa|Parsa',
+                55 => 'pyuthan|Pyuthan',
+                56 => 'ramechhap|Ramechhap',
+                57 => 'rasuwa|Rasuwa',
+                58 => 'rautahat|Rautahat',
+                59 => 'rolpa|Rolpa',
+                60 => 'rukum_east|Rukum East',
+                61 => 'rukum_west|Rukum West',
+                62 => 'rupandehi|Rupandehi',
+                63 => 'salyan|Salyan',
+                64 => 'sankhuwasabha|Sankhuwasabha',
+                65 => 'saptari|Saptari',
+                66 => 'sarlahi|Sarlahi',
+                67 => 'sindhuli|Sindhuli',
+                68 => 'sindhupalchok|Sindhupalchok',
+                69 => 'siraha|Siraha',
+                70 => 'solukhumbu|Solukhumbu',
+                71 => 'sunsari|Sunsari',
+                72 => 'surkhet|Surkhet',
+                73 => 'syangja|Syangja',
+                74 => 'tanahu|Tanahu',
+                75 => 'taplejung|Taplejung',
+                76 => 'terhathum|Terhathum',
+                77 => 'udayapur|Udayapur',
+                78 => 'nawalparasi|Nawalparasi (East + West)',
+            ],
+        ],
+        'map_district_metric' => [
+            'type' => 'textarea',
+            'label' => 'District Metrics',
+            'notes' => 'One metric per line — each line shows as a separate row in the hover tooltip.',
+        ],
+        'map_district_completed' => [
+            'type' => 'checkbox',
+            'label' => 'Completed',
+            'notes' => 'Checked = completed project (teal). Unchecked = ongoing (amber).',
+        ],
+    ],
+]);
+$rm->addFieldToTemplate('map_title', 'home');
+$rm->addFieldToTemplate('map_district', 'home');
+
+// fill empty coverage title (admin-entered values are kept) — front-end only,
+// writing during an admin save collides with PagesEditor
+$homePage = $pages->get('/');
+if ($page->template->name !== 'admin' && $homePage->id && $homePage->hasField('map_title') && trim($homePage->map_title ?? '') === '') {
+    try {
+        $prevOf = $homePage->of();
+        $homePage->of(false);
+        $homePage->map_title = 'Our Reach';
+        $homePage->save('map_title');
+        $homePage->of($prevOf);
+    } catch (\Throwable $e) {
+        wire('log')->save('errors', 'map_title seed failed: ' . $e->getMessage());
+    }
+}
+$rm->addFieldToTemplate('map_district_sel', 'repeater_map_district');
+$rm->addFieldToTemplate('map_district_metric', 'repeater_map_district');
+$rm->addFieldToTemplate('map_district_completed', 'repeater_map_district');
+
+// migrate old free-text map_district_name values into the select, then drop the old field
+// (writes repeater items — front-end only so it can't collide with an admin save)
+$repT = $templates->get('repeater_map_district');
+if ($page->template->name !== 'admin' && $repT && $repT->fieldgroup->has('map_district_name')) {
+    $selField = $fields->get('map_district_sel');
+    $optByTitle = [];
+    if ($selField) {
+        foreach ($selField->type->getOptions($selField) as $opt) {
+            $optByTitle[strtoupper(preg_replace('/[^A-Z]/i', '', $opt->title))] = $opt->id;
+        }
+    }
+    // legacy spellings from the old district list
+    $selAliases = ['CHITWAN' => 'CHITAWAN', 'MAKWANPUR' => 'MAKAWANPUR', 'NAWALPARASI' => 'NAWALPARASIEASTWEST'];
+    try {
+        foreach ($pages->get('/')->map_district as $row) {
+            $old = strtoupper(preg_replace('/[^A-Z]/i', '', $row->map_district_name ?? ''));
+            $existing = $row->map_district_sel;
+            if (!$old || ($existing && $existing->id)) continue;
+            $key = $selAliases[$old] ?? $old;
+            if (isset($optByTitle[$key])) {
+                $row->of(false);
+                $row->map_district_sel = $optByTitle[$key];
+                $row->save('map_district_sel');
+            }
+        }
+    } catch (\Throwable $e) {
+        wire('log')->save('errors', 'map_district_sel migration failed: ' . $e->getMessage());
+    }
+    $repT->fieldgroup->remove('map_district_name');
+    $repT->fieldgroup->save();
+    if ($fields->get('map_district_name')) $fields->delete($fields->get('map_district_name'));
+}
+
+// Seed coverage districts once — only when the repeater is empty (front-end only)
+$dummyMetrics = "Ongoing projects";
+if ($page->template->name !== 'admin' && $homePage->id && $homePage->hasField('map_district') && !count($homePage->map_district)) {
+    // district name => completed flag (1 = teal/completed, 0 = amber/ongoing)
+    $seedDistricts = [
+        'Lalitpur' => 1, 'Kathmandu' => 0, 'Sunsari' => 0, 'Morang' => 0,
+        'Makwanpur' => 0, 'Bara' => 0, 'Banke' => 0, 'Bhaktapur' => 1,
+        'Chitwan' => 0, 'Kaski' => 1, 'Tanahu' => 0, 'Kailali' => 0,
+        'Nawalparasi' => 0, 'Parsa' => 0, 'Kanchanpur' => 0, 'Saptari' => 0,
+        'Rupandehi' => 0, 'Surkhet' => 0, 'Mahottari' => 0, 'Dailekh' => 0,
+        'Dang' => 0, 'Dhankuta' => 0, 'Gorkha' => 0, 'Sindhupalchok' => 0,
+        'Syangja' => 0,
+    ];
+    $selField = $fields->get('map_district_sel');
+    $optByTitle = [];
+    if ($selField) {
+        foreach ($selField->type->getOptions($selField) as $opt) {
+            $optByTitle[strtoupper(preg_replace('/[^A-Z]/i', '', $opt->title))] = $opt->id;
+        }
+    }
+    $selAliases = ['CHITWAN' => 'CHITAWAN', 'MAKWANPUR' => 'MAKAWANPUR', 'NAWALPARASI' => 'NAWALPARASIEASTWEST'];
+    $prevOf = $homePage->of();
+    try {
+        $homePage->of(false);
+        foreach ($seedDistricts as $dn => $completed) {
+            $row = $homePage->map_district->getNewItem();
+            $key = $selAliases[strtoupper($dn)] ?? strtoupper($dn);
+            if (isset($optByTitle[$key])) $row->map_district_sel = $optByTitle[$key];
+            $row->map_district_metric = $dummyMetrics;
+            $row->map_district_completed = $completed;
+            $row->of(false);
+            $row->save();
+        }
+        $homePage->save('map_district');
+        $homePage->of($prevOf);
+    } catch (\Throwable $e) {
+        $homePage->of($prevOf);
+        wire('log')->save('errors', 'map_district seed failed: ' . $e->getMessage());
+    }
+}
+
+// keep the map fields in page order in admin — after the Find-us section fields
+$names = [];
+foreach ($homeFg as $f) $names[] = $f->name;
+$anchor = array_search('title_change2', $names, true) !== false ? 'title_change2' : 'stats_cards';
+$ai = array_search($anchor, $names, true);
+$mti = array_search('map_title', $names, true);
+$mdi = array_search('map_district', $names, true);
+if ($ai !== false && $mti !== false && $mdi !== false && !($mti === $ai + 1 && $mdi === $ai + 2)) {
+    $homeFg->insertAfter($fields->get('map_title'), $fields->get($anchor));
+    $homeFg->insertAfter($fields->get('map_district'), $fields->get('map_title'));
+    $homeFg->save();
+}
 
 /* adding Field to Template OUR-WORK  */
 // Section titles for the two sections on Our Work page
@@ -1063,13 +1314,81 @@ $rm->migrate([
         'contact_germany_address' => ['type' => 'textarea', 'label' => 'Germany Office Address'],
         'contact_office_phone' => ['type' => 'text', 'label' => 'Phone Number'],
         'contact_office_email' => ['type' => 'text', 'label' => 'Email Address'],
+        'contact_findus_title' => ['type' => 'text', 'label' => 'Find Us Section Title'],
+        'contact_pills' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Reaching-Out Groups (pills + info cards)',
+            'fields' => ['pill_label', 'pill_tagline', 'pill_desc', 'pill_you_bring', 'pill_we_bring'],
+        ],
+        'pill_label' => ['type' => 'text', 'label' => 'Group Label', 'notes' => 'Used as the pill text, the radio value, and the card title.'],
+        'pill_tagline' => ['type' => 'text', 'label' => 'Tagline'],
+        'pill_desc' => ['type' => 'textarea', 'label' => 'Description'],
+        'pill_you_bring' => ['type' => 'textarea', 'label' => 'What You Bring', 'notes' => 'One item per line.'],
+        'pill_we_bring' => ['type' => 'textarea', 'label' => 'What We Bring', 'notes' => 'One item per line.'],
     ],
 ]);
 
-// contact page fields — under title, in page order (nepal, germany, phone, email, admin email)
-$contactFields = ['contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
+// contact page fields — under title, in page order (find-us heading, nepal, germany, phone, email, admin email)
+$contactFields = ['contact_findus_title', 'contact_nepal_address', 'contact_germany_address', 'contact_office_phone', 'contact_office_email', 'contact_admin_email'];
 foreach ($contactFields as $cf) {
     $rm->addFieldToTemplate($cf, 'contact');
+}
+$rm->addFieldToTemplate('contact_pills', 'contact');
+// keep contact_pills right before the submissions table in admin
+$cpFg = $templates->get('contact')->fieldgroup;
+$_cn = []; foreach ($cpFg as $_f) $_cn[] = $_f->name;
+$_pi = array_search('contact_pills', $_cn, true);
+$_si = array_search('contact_submissions_list', $_cn, true);
+if ($_pi !== false && $_si !== false && $_pi !== $_si - 1) {
+    $cpFg->insertBefore($fields->get('contact_pills'), $fields->get('contact_submissions_list'));
+    $cpFg->save();
+}
+$rm->addFieldToTemplate('pill_label', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_tagline', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_desc', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_you_bring', 'repeater_contact_pills');
+$rm->addFieldToTemplate('pill_we_bring', 'repeater_contact_pills');
+
+// seed the four reaching-out groups once — only when the repeater is empty (front-end only)
+$contactPillsPg = $pages->get('/contact/');
+if ($page->template->name !== 'admin' && $contactPillsPg->id && $contactPillsPg->hasField('contact_pills') && !count($contactPillsPg->contact_pills)) {
+    $pillSeed = [
+        ['NGOs & CBOs', 'Partners, not sub-grantees',
+            "We work with community organisations in Nepal and NGOs across the region on joint proposals, shared advocacy, and bringing our peer model to new districts. You know your community; we bring the funding, safeguarding, and reporting experience most calls demand.",
+            "A community you are accountable to\nRegistration and accounts, or the will to build them\nA concrete idea: a call, a district, a policy goal",
+            "21 years of beneficiary-led programming\nA documented, proven peer-to-peer model\nLinks into global mental health networks"],
+        ['Volunteers & Interns', 'Eight weeks minimum',
+            "Most roles are remote: grant research, translation, data, film and photo editing, web and social media. Some placements are in Lalitpur. We don't offer short visits to our communities — volunteers support the organisation; peers support the community.",
+            "Eight weeks or more, at agreed weekly hours\nA specific skill, and working English\nA police check and a signed safeguarding policy",
+            "A named supervisor and a written role\nInduction on safeguarding and confidentiality\nA reference and certificate for your work"],
+        ['Private Sector', 'Flexible funding goes furthest',
+            "Unrestricted, multi-year support pays for what grants don't: peer educators' transport, a counsellor between grant cycles, an audit. Skills help too when they fill a gap — legal, accounting, IT, logistics.",
+            "Unrestricted, matched, or multi-year giving\nPro bono skills with real hours behind them\nRespect for our communities' privacy in any publicity",
+            "Audited accounts and clear reporting\nConsent-cleared stories and images\nStaff talks on gender, HIV, and mental health"],
+        ['Researchers', 'Designed with us, not about us',
+            "We co-design research on women's and maternal mental health, HIV, harm reduction, stigma, and climate stress. Come early enough for us to shape the questions. Participants are paid for their time, community researchers are named as authors, and findings return to the community in Nepali.",
+            "Ethics approval, including NHRC clearance\nBudget for participants and community researchers\nAgreement on authorship and data ownership",
+            "Two decades of trust with hard-to-reach groups\nTrained peer researchers and safe settings\nHonest review of your tools before fieldwork"],
+    ];
+    $prevOf = $contactPillsPg->of();
+    try {
+        $contactPillsPg->of(false);
+        foreach ($pillSeed as $g) {
+            $row = $contactPillsPg->contact_pills->getNewItem();
+            $row->pill_label = $g[0];
+            $row->pill_tagline = $g[1];
+            $row->pill_desc = $g[2];
+            $row->pill_you_bring = $g[3];
+            $row->pill_we_bring = $g[4];
+            $row->of(false);
+            $row->save();
+        }
+        $contactPillsPg->save('contact_pills');
+        $contactPillsPg->of($prevOf);
+    } catch (\Throwable $e) {
+        $contactPillsPg->of($prevOf);
+        wire('log')->save('errors', 'contact_pills seed failed: ' . $e->getMessage());
+    }
 }
 $contactFg = $templates->get('contact')->fieldgroup;
 if ($contactFg->id) {
@@ -1094,9 +1413,11 @@ if ($contactFg->id) {
 }
 
 // seed contact page field values once (per-field, only when empty — respects admin edits)
+// front-end only — writing during an admin save collides with PagesEditor
 $contactPg = $pages->get('/contact/');
-if ($contactPg->id) {
+if ($page->template->name !== 'admin' && $contactPg->id) {
     $defaults = [
+        'contact_findus_title' => 'Find us on Map',
         'contact_nepal_address' => "Chudabikram Street\nKupondole -1\nLalitpur 44600, Nepal",
         'contact_germany_address' => "Bornkampsweg 24\nAhrensburg 22926,\nGermany",
         'contact_office_phone' => '+977 01 5412012',
@@ -1287,6 +1608,12 @@ $wire->addHookAfter('Pages::saved', function ($event) {
     $p->date = $p->created ?: time();
     $p->save('date');
 });
+
+// onework: re-attach project fields detached when the fieldgroup was reset
+// (data survives in the field tables — attaching makes it editable again)
+foreach (['objective', 'outputs', 'duration', 'donor', 'project_areas', 'budget'] as $f) {
+    $rm->addFieldToTemplate($f, 'onework');
+}
 
 // news page manages cards via the same album_card repeater as home
 $rm->addFieldToTemplate('album_card', 'news');

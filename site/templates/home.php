@@ -103,6 +103,7 @@ namespace ProcessWire;
             </div>
 
         </section>
+        <!-- Find-us Google map moved to the contact page — kept commented, restore by removing the wrapper
         <section id="stats2" class="stats" data-nav-color="dark">
             <div class="stats-heading">
                 <div class="heading-left">
@@ -112,7 +113,7 @@ namespace ProcessWire;
                     </div>
                     <h2 edit="title_change2"><?= $page->title_change2 ?: 'Find us.' ?></h2>
                 </div>
-            </div> <!---end stats-heading-->
+            </div> <!---end stats-heading
             <div class="cards-section">
             <div class="map-area"><iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7065.95801099961!2d85.30852979709088!3d27.687043755168673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b4ad7096dd%3A0x29fa3d73b99dcc97!2sKupondole%2C%20Patan%2C%20Zona%20de%20Bagmati%2044600%2C%20Nepal!5e0!3m2!1ses!2sde!4v1789045329645!5m2!1sen!2sde"
@@ -122,6 +123,39 @@ namespace ProcessWire;
             </div>
 
         </section>
+        -->
+        <section id="coverage" class="coverage" data-nav-color="dark">
+            <div class="stats-heading">
+                <div class="heading-left">
+                    <div class="eyebrow">
+                        <img src="<?= $config->urls->templates ?>icons/star.png" alt="icon">
+                        <h5 style="text-transform: uppercase;">where we work</h5>
+                    </div>
+                    <h2 edit="map_title"><?= $page->map_title ?: 'Our Reach' ?></h2>
+                </div>
+            </div>
+            <?php
+            $coverageData = [];
+            foreach (($page->map_district ?? []) as $row) {
+                $opt = $row->map_district_sel;
+                $dn = strtoupper(trim($opt ? (string)$opt->title : ''));
+                if ($dn) $coverageData[$dn] = [
+                    'm' => trim($row->map_district_metric ?? ''),
+                    'c' => $row->map_district_completed ? 1 : 0,
+                ];
+            }
+            ?>
+            <div class="coverage-map-wrap">
+                <div class="coverage-legend">
+                    <span><i class="dot dot-completed"></i> Completed</span>
+                    <span><i class="dot dot-ongoing"></i> Ongoing</span>
+                </div>
+                <div id="coverage-map" data-geojson="<?= $config->urls->templates ?>assets/nepal-districts.geojson" data-provinces="<?= $config->urls->templates ?>assets/nepal-provinces.geojson"></div>
+            </div>
+        </section>
+        <link rel="stylesheet" href="<?= $config->urls->templates ?>vendor/leaflet.css">
+        <script src="<?= $config->urls->templates ?>vendor/leaflet.js"></script>
+        <script>window.coverageDistricts = <?= json_encode($coverageData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;</script>
         <section id="born" class="born" data-nav-color="light">
             <div class="born-container">
                 <div class="b-heading">
