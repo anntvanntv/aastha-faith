@@ -25,8 +25,13 @@ namespace ProcessWire;
         <ul>
             <li edit="<?= $donors->id ?>:card_number"><?= $donors->card_number ?: 'Account holder: FAITH Nepal' ?></li>
             <li edit="<?= $donors->id ?>:card_number2"><?= $donors->card_number2 ?: 'Account number: [XXXX]' ?></li>
-            <li edit="<?= $donors->id ?>:card_number3"><?= $donors->card_number3 ?: 'SWIFT: [XXXX]' ?></li>
-            <li edit="<?= $donors->id ?>:card_number4"><?= $donors->card_number4 ?: 'Bank: [Bank name and branch, Lalitpur]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number3"><?= $donors->card_number3 ?: 'Account number: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number4"><?= $donors->card_number4 ?: 'Account number: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number5"><?= $donors->card_number5 ?: 'Account number: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number6"><?= $donors->card_number6 ?: 'Account number: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number7"><?= $donors->card_number7 ?: 'Account number: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number8"><?= $donors->card_number8 ?: 'SWIFT: [XXXX]' ?></li>
+            <li edit="<?= $donors->id ?>:card_number9"><?= $donors->card_number9 ?: 'Bank: [Bank name and branch, Lalitpur]' ?></li>
             <li edit="<?= $donors->id ?>:card_title"><?= $donors->card_title ?: 'Reference: your email address (so we can thank you and send updates)' ?></li>
         </ul>
     </section>

@@ -1114,20 +1114,96 @@ $rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 /* adding Fields to Template INDIVIDUAL-GIVING */
 
+// drop the split account/currency fields — bank lines are plain whole-line
+// text rows replicated from card_number2 (card_number5-9 already exist as
+// shared FieldtypeText fields, same family used on the impact template)
+foreach (['account_number_usd', 'account_number_eur', 'account_currency_npr', 'account_currency_usd', 'account_currency_eur'] as $f) {
+    $rm->removeFieldFromTemplate($f, 'donors');
+    $rm->removeFieldFromTemplate($f, 'individual-giving');
+    if (($fld = $fields->get($f)) && $fld->id) $fields->delete($fld);
+}
+
 $rm->addFieldToTemplate('title', 'individual-giving');
 $rm->addFieldToTemplate('hero_description', 'individual-giving');
 $rm->addFieldToTemplate('card_number', 'donors');
 $rm->addFieldToTemplate('card_number2', 'donors');
 $rm->addFieldToTemplate('card_number3', 'donors');
 $rm->addFieldToTemplate('card_number4', 'donors');
+$rm->addFieldToTemplate('card_number5', 'donors');
+$rm->addFieldToTemplate('card_number6', 'donors');
+$rm->addFieldToTemplate('card_number7', 'donors');
+$rm->addFieldToTemplate('card_number8', 'donors');
+$rm->addFieldToTemplate('card_number9', 'donors');
 $rm->addFieldToTemplate('card_title', 'donors');
 $rm->addFieldToTemplate('born_title', 'donors');
 $rm->removeFieldFromTemplate('card_number', 'individual-giving');
 $rm->removeFieldFromTemplate('card_number2', 'individual-giving');
 $rm->removeFieldFromTemplate('card_number3', 'individual-giving');
 $rm->removeFieldFromTemplate('card_number4', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number5', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number6', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number7', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number8', 'individual-giving');
+$rm->removeFieldFromTemplate('card_number9', 'individual-giving');
 $rm->removeFieldFromTemplate('card_title', 'individual-giving');
 $rm->removeFieldFromTemplate('born_title', 'individual-giving');
+
+// keep card_number-9 sequential in the donors fieldgroup so the admin
+// edit form lists them in numeric order (only saves when order is wrong)
+$donorsFg = $templates->get('donors')->fieldgroup;
+$cardSeq = ['card_number', 'card_number2', 'card_number3', 'card_number4', 'card_number5', 'card_number6', 'card_number7', 'card_number8', 'card_number9'];
+$fgNames = [];
+foreach ($donorsFg as $fld) $fgNames[] = $fld->name;
+$positions = [];
+foreach ($cardSeq as $n) {
+    $p = array_search($n, $fgNames);
+    if ($p !== false) $positions[] = $p;
+}
+if (count($positions) > 1 && $positions !== range($positions[0], $positions[0] + count($positions) - 1)) {
+    // rebuild order: everything except card_number5-9, with them spliced in
+    // right after card_number4; persist via fieldgroups_fields.sort
+    $move = array_slice($cardSeq, 4);
+    $newOrder = [];
+    foreach ($fgNames as $n) {
+        if (in_array($n, $move)) continue;
+        $newOrder[] = $n;
+        if ($n === 'card_number4') {
+            foreach ($move as $m) if (in_array($m, $fgNames)) $newOrder[] = $m;
+        }
+    }
+    $db = wire('database');
+    $fgId = (int) $donorsFg->id;
+    foreach ($newOrder as $i => $n) {
+        $fid = (int) $fields->get($n)->id;
+        if ($fid) $db->query("UPDATE fieldgroups_fields SET sort=$i WHERE fieldgroups_id=$fgId AND fields_id=$fid");
+    }
+}
+
+// one-time renumber on /donors/: the five spare rows take card_number3-7, so
+// the SWIFT line moves card_number3 -> card_number8 and the Bank line
+// card_number4 -> card_number9 (runs only while 8/9 are still empty)
+if ($page->template->name !== 'admin') {
+    $donorsPg = $pages->get('/donors/');
+    try {
+        if ($donorsPg->id && $donorsPg->template->hasField('card_number8') && !$donorsPg->get('card_number8')) {
+            $prevOf = $donorsPg->of();
+            $donorsPg->of(false);
+            $dirty = false;
+            foreach (['card_number3' => 'card_number8', 'card_number4' => 'card_number9'] as $src => $dst) {
+                $v = trim((string) $donorsPg->get($src));
+                if ($v !== '' && !$donorsPg->get($dst)) {
+                    $donorsPg->set($dst, $v);
+                    $donorsPg->set($src, '');
+                    $dirty = true;
+                }
+            }
+            if ($dirty) $donorsPg->save();
+            $donorsPg->of($prevOf);
+        }
+    } catch (\Throwable $e) {
+        wire('log')->save('errors', 'donors card_number renumber failed: ' . $e->getMessage());
+    }
+}
 
 
 /* adding Fields to Template IMPACT */
