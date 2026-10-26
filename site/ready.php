@@ -1114,6 +1114,22 @@ $rm->addFieldToTemplate('projects_section_title', 'our-work');
 
 /* adding Fields to Template INDIVIDUAL-GIVING */
 
+$rm->migrate([
+    'fields' => [
+        'bank_logo' => [
+            'type' => 'image',
+            'label' => 'Bank Logo (optional)',
+            'description' => 'Optional. Shown as a faint watermark behind the bank details card. If left empty, the card appears normally without it.',
+            'maxFiles' => 1,
+            'extensions' => 'jpg jpeg png webp svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+            'icon' => 'picture-o',
+        ],
+    ],
+]);
+$rm->addFieldToTemplate('bank_logo', 'donors');
+$rm->removeFieldFromTemplate('bank_logo', 'individual-giving');
+
 // drop the split account/currency fields — bank lines are plain whole-line
 // text rows replicated from card_number2 (card_number5-9 already exist as
 // shared FieldtypeText fields, same family used on the impact template)

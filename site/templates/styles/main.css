@@ -4222,7 +4222,7 @@ form {
 
 .individual-giving .bank-details {
   padding: 0 40px 100px;
-  max-width: 700px;
+  max-width: 920px;
   margin: 0 auto;
 }
 
@@ -4231,15 +4231,37 @@ form {
   color: var(--text-heading);
 }
 
-.individual-giving .bank-details ul {
+.individual-giving .bank-details .bank-card {
+  position: relative;
+  overflow: hidden;
   background: var(--white-900);
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.07);
   border-radius: 12px;
-  padding: 32px;
+  padding: 40px 32px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+}
+
+/* faint bank logo watermark spanning the whole card */
+.individual-giving .bank-details .bank-card .bank-logo {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(560px, 62%);
+  max-height: 70%;
+  object-fit: contain;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.individual-giving .bank-details .bank-card ul {
   display: flex;
   flex-direction: column;
   gap: 16px;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .individual-giving .bank-details ul li {
@@ -5324,8 +5346,13 @@ border-top-style: solid;
     width: 82%;
   }
 
-  .individual-giving .bank-details ul {
+  .individual-giving .bank-details .bank-card {
     padding: 24px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .individual-giving .bank-details .bank-card ul {
     gap: 14px;
   }
 
