@@ -53,3 +53,16 @@ pwx.php
 
 # Composer dependencies in project root
 /vendor/
+# -----------------------------------------------------------------------------
+# Production data — NEVER in Git. Production is the source of truth for content.
+# Uploaded files live in the DB + site/assets/files/ and are synced from prod,
+# never committed (a commit that adds/changes/removes them could overwrite or
+# delete real uploads if production ever deploys via git).
+# The protective files site/assets/{.htaccess,index.php,active.php,installed.php}
+# stay tracked on purpose — installed.php keeps the installer locked.
+# -----------------------------------------------------------------------------
+/site/assets/files/
+
+# deploy / editor leftovers
+*.orig
+*.bak
