@@ -130,9 +130,9 @@ namespace ProcessWire;
                         // 2. CSRF — bots posting without loading the page fail here
                         $csrfOk = $session->CSRF->hasValidToken($csrfId);
 
-                        // 3. time trap — people need more than 3 seconds to fill the form
+                        // 3. time trap — people need at least 5 seconds to fill the form
                         $shownAt = (int) $session->getFor('contact', 'shown_at');
-                        if (!$silentDrop && $csrfOk && $shownAt && (time() - $shownAt) < 3) $silentDrop = 'too fast';
+                        if (!$silentDrop && $csrfOk && $shownAt && (time() - $shownAt) < 5) $silentDrop = 'too fast';
 
                         $formValues = [
                             'name'    => $input->post->text('name', ['maxLength' => 500]),
