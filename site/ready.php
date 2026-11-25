@@ -1611,26 +1611,10 @@ if ($subParentPage->id && $subChild->id) {
 }
 $rm->addFieldToTemplate('contact_submissions_list', 'contact');
 
-// keep the submissions table in sync with the submission children (guarded — writes only on diff)
-$contactPgForList = $pages->get('/contact/');
-if ($subParentPage->id && $contactPgForList->id && $contactPgForList->template->hasField('contact_submissions_list')) {
-    $kidIds = $pages->findIds("parent=$subParentPage->id, template=contact_submission");
-    $haveIds = $contactPgForList->contact_submissions_list->explode('id');
-    $missingIds = array_diff($kidIds, $haveIds);
-    if ($missingIds) {
-        $prevOf = $contactPgForList->of();
-        try {
-            $contactPgForList->of(false);
-            foreach ($missingIds as $mid) {
-                $contactPgForList->contact_submissions_list->add($pages->get((int) $mid));
-            }
-            $contactPgForList->save('contact_submissions_list');
-        } catch (\Throwable $e) {
-            wire()->log->error('contact_submissions_list sync failed: ' . $e->getMessage());
-        }
-        $contactPgForList->of($prevOf);
-    }
-}
+// The per-request sync of contact_submissions_list was removed (2026-11-25): it loaded every
+// submission on every page view and re-saved the Contact page, causing 25–70s responses and
+// DB lock timeouts once spam reached ~50k submissions. Submissions are browsed under
+// Pages → Contact Submissions instead. No submission data is touched.
 
 // admin: submissions table is view-only — hide Add New and row delete
 $isAdminReq = ($page && $page->template && $page->template->name === 'admin')
