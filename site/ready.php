@@ -1318,6 +1318,14 @@ $rm->migrate([
         'footer_publications' => ['type' => 'text', 'label' => 'Publications Link'],
         'footer_tagline' => ['type' => 'text', 'label' => 'Tagline'],
         'contact_admin_email' => ['type' => 'text', 'label' => 'Admin Email (receives form submissions)'],
+        'site_favicon' => [
+            'type' => 'image',
+            'label' => 'Favicon',
+            'description' => 'Browser tab icon for the whole site. Upload a square PNG (at least 180×180) or an SVG.',
+            'maxFiles' => 1,
+            'extensions' => 'png svg',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
     ],
 ]);
 
@@ -1334,6 +1342,7 @@ $footerFields = [
     'footer_vimeo',
     'footer_youtube',
     'footer_publications',
+    'site_favicon',
 ];
 
 foreach($footerFields as $field){
