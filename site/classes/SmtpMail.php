@@ -1,15 +1,15 @@
 <?php namespace ProcessWire;
 
 /**
- * WireMail that sends through an SMTP server (e.g. Gmail with an app password) instead of PHP mail().
+ * WireMail that sends through an SMTP server instead of PHP mail().
  *
  * Settings come from $config->smtp in site/config.php (never commit credentials):
- *   $config->smtp = ['user' => 'name@gmail.com', 'pass' => 'app password'];
- * Optional keys: host (smtp.gmail.com), port (465), secure (true = implicit TLS), fromName.
+ *   $config->smtp = ['user' => 'name@example.com', 'pass' => 'mailbox password'];
+ * Optional keys: host (smtp.gmail.com), port (465), secure (true = implicit TLS),
+ * starttls (true = upgrade the connection before authentication), fromName.
  *
  * Message headers/body are rendered by WireMail itself; only the transport differs.
- * ponytail: implicit TLS + AUTH LOGIN only (no STARTTLS/OAuth) — enough for Gmail/most providers;
- * switch to the WireMailSmtp module if more is ever needed.
+ * ponytail: AUTH LOGIN only (no OAuth); use an OAuth-capable transport when password auth is retired.
  */
 class SmtpMail extends WireMail {
 
@@ -17,7 +17,7 @@ class SmtpMail extends WireMail {
     protected $smtp = null;
 
     public function ___send() {
-        $s = array_merge(['host' => 'smtp.gmail.com', 'port' => 465, 'secure' => true, 'user' => '', 'pass' => ''], (array) $this->wire()->config->smtp);
+        $s = array_merge(['host' => 'smtp.gmail.com', 'port' => 465, 'secure' => true, 'starttls' => false, 'user' => '', 'pass' => ''], (array) $this->wire()->config->smtp);
         if (!strlen($this->from) && $s['user']) $this->from($s['user']);
         if (!strlen($this->fromName) && !empty($s['fromName'])) $this->fromName($s['fromName']);
 
@@ -34,6 +34,13 @@ class SmtpMail extends WireMail {
             stream_set_timeout($this->smtp, 15);
             $this->expect(220);
             $this->cmd("EHLO $host", 250);
+            if ($s['starttls']) {
+                $this->cmd('STARTTLS', 220);
+                if (!stream_socket_enable_crypto($this->smtp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                    throw new WireException('STARTTLS negotiation failed');
+                }
+                $this->cmd("EHLO $host", 250);
+            }
             if ($s['user'] !== '') {
                 $this->cmd('AUTH LOGIN', 334);
                 $this->cmd(base64_encode($s['user']), 334, 'AUTH user');
