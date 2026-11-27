@@ -105,8 +105,10 @@ namespace ProcessWire;
                      * Contact form — spam-protected (layered, no third-party services):
                      *  1. honeypot field   2. CSRF token   3. min fill time
                      *  4. per-session + site-wide rate limits   5. strict server-side validation
-                     * No auto-reply is sent to the submitter: auto-replies to unverified addresses
-                     * were abused as a spam relay (name field carried the spam).
+                     * Mail goes through SMTP when $config->smtp is set (site/config.php), else PHP mail().
+                     * Optional auto-reply ($config->contactAutoReply = true, needs SMTP): fixed text only
+                     * (no submitted content — the old one was abused as a spam relay via the name field),
+                     * sent only after every check passes, max one per address per 24 h.
                      * Rejections are logged (reason only, no personal data) to Setup → Logs → contact-spam.
                      */
                     $csrfId = 'contact_form';
@@ -120,6 +122,11 @@ namespace ProcessWire;
                     $spamLog = function (string $reason) use ($log) { $log->save('contact-spam', $reason); };
                     $hasLink = fn(string $s) => (bool) preg_match('~https?://|www\.|\.(com|net|ru|xyz|top|info|site|online|biz|io|shop|click|link|live|app|store|pro)\b|[<>\[\]]~i', $s);
                     $len = fn(string $s) => mb_strlen($s, 'UTF-8');
+                    $newMail = function () use ($config) {
+                        if (!$config->smtp) return wireMail();
+                        require_once $config->paths->classes . 'SmtpMail.php';
+                        return wire(new SmtpMail());
+                    };
 
                     if ($input->requestMethod('POST')) {
                         $silentDrop = null; // reason: pretend success so bots learn nothing
@@ -212,9 +219,10 @@ namespace ProcessWire;
 
                         // notify admin (best-effort — submission already saved)
                         try {
-                            $mail = wireMail();
+                            $mail = $newMail();
                             $mail->to($adminEmail);
-                            $mail->from($adminEmail);
+                            $mail->from($config->smtp['user'] ?? $adminEmail);
+                            $mail->fromName('FAITH website');
                             $mail->replyTo($email);
                             $mail->subject($subject);
                             $mail->body(
@@ -235,7 +243,25 @@ namespace ProcessWire;
                             wire()->log->error('contact admin mail failed: ' . $e->getMessage());
                         }
 
-                        // no confirmation mail to the submitter (spam-relay risk) — the on-page dialog confirms
+                        // auto-reply to the submitter — fixed text, nothing they typed, once per address per 24 h
+                        $replyKey = 'contact_autoreply_' . md5(strtolower($email));
+                        if ($config->contactAutoReply && $config->smtp && !$cache->get($replyKey)) {
+                            try {
+                                $cache->save($replyKey, 1, 86400);
+                                $reply = $newMail();
+                                $reply->to($email);
+                                $reply->from($config->smtp['user'] ?? $adminEmail);
+                                $reply->fromName('FAITH Nepal - no reply');
+                                $reply->replyTo($officeEmail);
+                                $reply->header('Auto-Submitted', 'auto-replied');
+                                $reply->header('X-Auto-Response-Suppress', 'All');
+                                $reply->subject('We received your message — FAITH');
+                                $reply->body("Hello,\r\n\r\nThank you for contacting FAITH. We have received your message and will get back to you soon.\r\n\r\nThis is an automatic message. If you did not contact us, please ignore it.\r\n\r\nFAITH — Friends Affected and Infected Together in Hand\r\nhttps://aastha-faith.org");
+                                $reply->send();
+                            } catch (\Throwable $e) {
+                                wire()->log->error('contact auto-reply failed: ' . $e->getMessage());
+                            }
+                        }
 
                         $mine[] = $now;
                         $all[] = $now;
