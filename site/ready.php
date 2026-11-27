@@ -25,6 +25,21 @@ $isAdminReq = ($page && $page->template && $page->template->name === 'admin')
     || strpos($_SERVER['REQUEST_URI'] ?? '', $config->urls->admin) === 0;
 if ($isAdminReq) {
     $config->styles->add($config->urls->templates . 'styles/admin.css');
+    $wire->addHookBefore('InputfieldFile::processInput', function (HookEvent $event) {
+        $inputfield = $event->object;
+        $field = $inputfield->hasField;
+        if (!$field || $field->name !== 'site_notice_attachment') return;
+
+        // admin uploads are AJAX (filename in X-FILENAME header); plain form posts use $_FILES (name is an array)
+        $upload = $_FILES[$inputfield->attr('name')]['name'] ?? null;
+        $filename = $upload !== null
+            ? (string) (is_array($upload) ? reset($upload) : $upload)
+            : rawurldecode((string) ($_SERVER['HTTP_X_FILENAME'] ?? ''));
+        if ($filename === '') return;
+
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $inputfield->maxFilesize = $extension === 'pdf' ? 10000000 : 5000000;
+    });
 }
 
 // onenews: default empty date to created timestamp (editors can still override)

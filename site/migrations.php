@@ -1389,6 +1389,96 @@ if ($footerPg->id && !$footerPg->footer_tagline) {
 //     $footerPg->of($prevOf);
 // }
 
+/*  -----  site notices  ---- */
+
+$rm->createTemplate('site-notices');
+$siteNoticesPage = $rm->createPage(
+    template: 'site-notices',
+    parent: '/',
+    name: 'site-notices',
+    title: 'Site Notices',
+    status: [Page::statusUnpublished],
+);
+if ((int) $siteNoticesPage->sort !== 0) {
+    $pages->sort($siteNoticesPage, 0);
+}
+
+$rm->migrate([
+    'fields' => [
+        'site_notices_enabled' => [
+            'type' => 'checkbox',
+            'label' => 'Enable Site Notices',
+            'description' => 'When off, no notice popup is shown on the public website.',
+        ],
+        'site_notices_count' => [
+            'type' => 'integer',
+            'label' => 'Number of notices to show',
+            'description' => 'Choose 0 to show none. The displayed count is capped at the number of visible notices.',
+            'inputType' => 'number',
+            'min' => 0,
+            'defaultValue' => 1,
+            'zeroNotEmpty' => true,
+        ],
+        'site_notices_manual_order' => [
+            'type' => 'checkbox',
+            'label' => 'Use manual notice order',
+            'description' => 'When checked, notices follow the repeater order. Otherwise, newest-created notices appear first.',
+        ],
+        'site_notice_cards' => [
+            'type' => 'FieldtypeRepeater',
+            'label' => 'Notice Cards',
+            'fields' => [
+                'site_notice_hidden',
+                'site_notice_heading',
+                'site_notice_body',
+                'site_notice_attachment',
+                'site_notice_image_alt',
+            ],
+        ],
+        'site_notice_hidden' => [
+            'type' => 'checkbox',
+            'label' => 'Hide this notice',
+            'description' => 'Check to keep this card in ProcessWire without showing it.',
+        ],
+        'site_notice_heading' => [
+            'type' => 'text',
+            'label' => 'Heading',
+            'description' => 'The popup shows at most 100 characters; longer headings are shortened.',
+        ],
+        'site_notice_body' => [
+            'type' => 'textarea',
+            'label' => 'Notice text',
+            'description' => 'The popup shows at most 200 characters; include an attachment for the full notice.',
+            'rows' => 5,
+        ],
+        'site_notice_attachment' => [
+            'type' => 'file',
+            'label' => 'Optional image or PDF (one file maximum)',
+            'description' => 'Upload one image (JPG, PNG, or WebP; maximum 5 MB) or one PDF (maximum 10 MB). Images keep their original orientation. PDFs show one page at a time; page thumbnails are available but closed by default, with a separate link to the full PDF.',
+            'maxFiles' => 1,
+            'maxFilesize' => 10000000,
+            'extensions' => 'jpg jpeg png webp pdf',
+            'outputFormat' => FieldtypeFile::outputFormatSingle,
+        ],
+        'site_notice_image_alt' => [
+            'type' => 'text',
+            'label' => 'Image alternative text',
+            'description' => 'Describe the image for screen readers. If blank, the notice heading is used as a fallback. Leave blank for PDFs.',
+        ],
+    ],
+]);
+
+foreach (['site_notices_enabled', 'site_notices_count', 'site_notices_manual_order', 'site_notice_cards'] as $siteNoticesField) {
+    $rm->addFieldToTemplate($siteNoticesField, 'site-notices');
+}
+
+if ($siteNoticesPage->modified <= $siteNoticesPage->created && !$siteNoticesPage->site_notices_count) {
+    $siteNoticesPage->of(false);
+    $siteNoticesPage->site_notices_count = 1;
+    $siteNoticesPage->save('site_notices_count');
+    $siteNoticesPage->of(true);
+}
+
 
 /*  -----  contact form submissions  ---- */
 

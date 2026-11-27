@@ -114,6 +114,11 @@ ErrorDocument 404 /index.php
   </IfModule>
 </IfModule>
 
+<IfModule mod_mime.c>
+  AddType text/javascript .mjs
+  AddType application/wasm .wasm
+</IfModule>
+
 
 # -----------------------------------------------------------------------------------------------
 # 5. Prevent access to various types of files (v301)
